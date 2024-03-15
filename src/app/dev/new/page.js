@@ -20,7 +20,7 @@ const page = () => {
             third: "1",
           },
           department: "cse",
-          date: "jan 01",
+          date: "dec 01",
         }),
       });
 

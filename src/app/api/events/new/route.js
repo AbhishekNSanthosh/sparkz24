@@ -1,5 +1,5 @@
-import Event from "@/models/events";
-import { connectToDB } from "@/utils/database";
+import Event from "@/common/models/events";
+import { connectToDB } from "@/common/utils/database";
 
 export const POST = async (request) => {
   const { name, price, department, date } = await request.json();
