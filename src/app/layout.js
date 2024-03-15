@@ -1,6 +1,8 @@
-import { Plus_Jakarta_Sans } from "next/font/google";
-import styles from '@styles/main.scss'
-const inter = Plus_Jakarta_Sans({ subsets: ["latin"] });
+import { Merienda } from "next/font/google";
+import '@styles/main.scss'
+import styles from '@styles/scss/home.module.scss'
+import Navbar from "@widgets/Navbar";
+const inter = Merienda({ subsets: ["latin"] });
 
 export const metadata = {
   title: "SPARKZ'24",
@@ -11,6 +13,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
+        <Navbar />
         <div className={styles.container}>
           {children}
         </div>

@@ -1,0 +1,17 @@
+@import 'variables';
+
+.homeContainer {
+    min-height: 100vh;
+    // margin-top: 13vh;p
+    padding-top: 6.65vw;
+    height: auto;
+}
+
+
+@media only screen and (max-width: 880px) {
+    .homeContainer {
+        min-height: 100vh;
+        margin-top: 25px;
+        height: auto;
+    }
+}

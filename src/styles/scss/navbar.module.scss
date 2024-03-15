@@ -1,0 +1,79 @@
+@import 'variables';
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 13vh;
+    padding: 1rem 5vw;
+    position: fixed;
+}
+
+.wrapper {
+    // background-color: red;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.left {
+    width: 100%;
+    flex: 4;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+
+.logoTxt {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.center {
+    flex: 4;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2vw;
+}
+
+.logo {
+    height: 2rem;
+    width: 3rem;
+}
+
+.highlight {
+    color: $primary;
+    font-weight: 700;
+}
+
+.navItem{
+    font-size: $font-size-sm;
+    text-transform: capitalize;
+}
+
+
+.right {
+    flex: 4;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.registerBtn{
+    padding: 5px 15px;
+    background-color: $primary;
+    color: $secondary;
+    border-radius: 8px;
+    outline: none;
+    border: none;
+    font-size: $font-size-sm;
+    font-weight: 500;
+}

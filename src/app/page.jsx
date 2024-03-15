@@ -1,5 +1,7 @@
+import LandingPage from "@widgets/LandingPage/view";
+
 export default function Home() {
   return (
-    <div>hi</div>
+    <LandingPage/>
   );
 }

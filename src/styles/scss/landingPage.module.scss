@@ -1,0 +1,59 @@
+@import 'variables';
+
+.container {
+    display: flex;
+    min-height: 100vh;
+    width: 100vw;
+    padding: 0 5vw;
+    background: linear-gradient(to bottom, #131517, #13151773), url('/images/bg.svg') center/cover no-repeat fixed;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.banner{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: 20vh;
+}
+
+.left{
+    flex: 6;
+}
+
+.right{
+    flex: 6;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.bannerImg{
+    width: 12rem;
+}
+
+.titleBox{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.title{
+    font-size:5rem;
+    font-weight: 700;
+}
+
+.tagline{
+    font-size: 1.7rem;
+    letter-spacing: 0.3rem;
+    font-weight: 600;
+}
