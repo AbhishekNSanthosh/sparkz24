@@ -2,6 +2,7 @@ import { Merienda } from "next/font/google";
 import '@styles/main.scss'
 import styles from '@styles/scss/home.module.scss'
 import Navbar from "@widgets/Navbar";
+import Footer from "@/widgets/Footer";
 const inter = Merienda({ subsets: ["latin"] });
 
 export const metadata = {
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
         <div className={styles.container}>
           {children}
         </div>
+        <Footer/>
       </body>
     </html>
   );
