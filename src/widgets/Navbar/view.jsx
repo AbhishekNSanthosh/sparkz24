@@ -6,16 +6,40 @@
  *
  * @author Abhishek Santhosh
  */
+'use client';
 
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import styles from '@styles/scss/navbar.module.scss'
 import Image from 'next/image'
 import Link from 'next/link'
 import { navLinks } from '../../common/constants/constants'
 
 export default function Navbar() {
+
+  const [isNavbarFixed, setIsNavbarFixed] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const handleScroll = () => {
+    setScrollPosition(window.scrollY);
+
+    if (scrollPosition > 100 && !isNavbarFixed) {
+      setIsNavbarFixed(true);
+    } else if (scrollPosition <= 100 && isNavbarFixed) {
+      setIsNavbarFixed(false);
+    }
+  };
+
+  useEffect(() => {
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [scrollPosition, isNavbarFixed]);
   return (
-    <div className={styles.container}>
+    <div className={isNavbarFixed ? styles.styledcontainer : styles.container}>
       <div className={styles.wrapper}>
         <div className={styles.left}>
           <Image src="/images/sparkzLogo.svg" width="1" height={10} className={styles.logo} />

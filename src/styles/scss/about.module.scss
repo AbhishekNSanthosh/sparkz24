@@ -1,0 +1,42 @@
+@import 'variables';
+
+.container{
+    padding: 5rem 5vw;
+    min-height: 100vh;
+    background:  linear-gradient(to bottom, #131517f6, transparent),linear-gradient(to top, #131517f6, transparent),;
+}
+
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 5vh;
+}
+
+.aboutTitle{
+    font-size: 1.5rem;
+}
+
+.row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.left{
+    flex: 8;
+}
+
+.right{
+    flex: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.para{
+    text-align: justify;
+}
+
+.logo{
+    width: 15rem;
+}

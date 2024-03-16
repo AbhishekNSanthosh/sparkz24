@@ -11,6 +11,20 @@
     position: fixed;
 }
 
+.styledcontainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 13vh;
+    // background-color: $secondary;
+    backdrop-filter: blur(16px);
+    z-index: 999;
+    padding: 1rem 5vw;
+    position: fixed;
+}
+
 .wrapper {
     // background-color: red;
     display: flex;

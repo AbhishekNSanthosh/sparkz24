@@ -6,51 +6,54 @@
 @tailwind utilities;
 
 body {
-    padding: 0;
-    margin: 0;
-    color: $font-color;
-    background: $bg-color;
-    overflow-x: hidden;
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -webkit-transition: all 600ms ease;
-    -ms-transition: all 600ms ease;
-    -o-transition: all 600ms ease;
-    -moz-transition: all 600ms ease;
-    transition: all 600ms ease
+  padding: 0;
+  margin: 0;
+  color: $font-color;
+  background: $bg-color;
+  overflow-x: hidden;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -webkit-transition: all 600ms ease;
+  -ms-transition: all 600ms ease;
+  -o-transition: all 600ms ease;
+  -moz-transition: all 600ms ease;
+  transition: all 600ms ease;
+  background: linear-gradient(to right, #131517f6, transparent),
+    /* Left side gradient */
+    linear-gradient(to left, #131517f6, transparent), url('/images/bgGraph.svg') center/cover no-repeat fixed;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
 }
 
 a {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
 }
 
 
 *::-webkit-scrollbar {
-    width: 5px;
-  }
-  
-  *::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-  }
-  
-  *::-webkit-scrollbar-track:hover {
-    background-color:$primary;
-  }
+  width: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-track:hover {
+  background-color: $primary;
+}
 
 
 //   html{
 //     font-family: $font-family;
 //   }
 
-.container{
+.container {
   // min-height: 100vh;
   margin-top: 50vh;
   background-color: red;
