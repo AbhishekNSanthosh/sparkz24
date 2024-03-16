@@ -1,42 +1,49 @@
 @import 'variables';
 
-.container{
+.container {
     padding: 15vh 5vw;
     // min-height: 100vh;
-    background:  linear-gradient(to bottom, #131517f6, transparent),linear-gradient(to top, #13151700, transparent),;
+    background: linear-gradient(to bottom, #131517f6, transparent), linear-gradient(to top, #13151700, transparent), ;
 }
 
-.wrapper{
+// .wrap{
+//     min-height: 100vh;
+//     display: flex;
+// }
+
+.wrapper {
     display: flex;
     flex-direction: column;
     gap: 5vh;
 }
 
-.aboutTitle{
+.aboutTitle {
+    font-weight: 700;
     font-size: 1.5rem;
+
 }
 
-.row{
+.row {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.left{
+.left {
     flex: 8;
 }
 
-.right{
+.right {
     flex: 4;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.para{
+.para {
     text-align: justify;
 }
 
-.logo{
+.logo {
     width: 15rem;
 }

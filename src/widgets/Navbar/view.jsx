@@ -48,7 +48,7 @@ export default function Navbar() {
         <div className={styles.center}>
           {navLinks?.map((item, index) => (
             <div className={styles.navItemBox} key={`navLink_index${item}_${index}`}>
-              <Link href="/" className={styles.navItem}>{item?.title}</Link>
+              <Link href={item?.link} className={styles.navItem}>{item?.title}</Link>
             </div>
           ))}
         </div>
