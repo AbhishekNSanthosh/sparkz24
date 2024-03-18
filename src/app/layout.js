@@ -3,6 +3,7 @@ import '@styles/main.scss'
 import styles from '@styles/scss/home.module.scss'
 import Navbar from "@widgets/Navbar";
 import Footer from "@/widgets/Footer";
+import Credits from "@/widgets/Credits";
 const inter = Merienda({ subsets: ["latin"] });
 
 export const metadata = {
@@ -19,6 +20,7 @@ export default function RootLayout({ children }) {
           {children}
         </div>
         <Footer/>
+        <Credits/>
       </body>
     </html>
   );

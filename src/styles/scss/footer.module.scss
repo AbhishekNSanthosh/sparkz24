@@ -36,7 +36,14 @@
 .right{
     flex: 1;
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+    gap: 3vh;
+}
+
+.icon{
+    cursor: pointer;
 }
 
 .center{
