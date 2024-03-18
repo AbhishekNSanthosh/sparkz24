@@ -1,0 +1,106 @@
+@import 'variables';
+
+.container {
+    padding:14vh 5vw 2rem;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $bg-color;
+}
+
+.wrapper{
+    display: flex;
+    width: 100%;
+}
+
+.box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 3vw;
+}
+
+.left{
+    flex: 4;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 3vh;
+}
+
+.right{
+    flex: 5;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gif{
+    height: 25rem;
+    width: 25rem;
+}
+
+.row{
+    display: flex;
+    width: 100%;
+    gap: 2vw;
+}
+
+.title{
+    font-size: 1.4rem;
+color: $primary;
+}
+
+.label{
+    font-size: 0.7rem;
+}
+
+.InputBox{
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+    width: 100%;
+}
+
+.txtBox{
+    background: $secondary;
+    padding: 0.6rem 0.6rem;
+    border-radius: 30px;
+    width: 100%;
+    outline: none;
+    font-size: 0.9rem;
+}
+
+.txtBox::placeholder{
+    font-size: 0.8rem;
+}
+
+.submit{
+    padding: 0.5rem;
+    background: $primary;
+    color: $bg-color;
+    border-radius: 30px;
+    outline: none;
+    border: none;
+    width: 100%;
+}
+
+.help{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content:space-between ;
+}
+
+.helpText{
+    font-size: 0.8rem;
+}
+
+.high{
+    color: $primary;
+}

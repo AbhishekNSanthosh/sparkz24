@@ -22,9 +22,9 @@ export default function Navbar() {
   const handleScroll = () => {
     setScrollPosition(window.scrollY);
 
-    if (scrollPosition > 100 && !isNavbarFixed) {
+    if (scrollPosition > 60 && !isNavbarFixed) {
       setIsNavbarFixed(true);
-    } else if (scrollPosition <= 100 && isNavbarFixed) {
+    } else if (scrollPosition <= 60 && isNavbarFixed) {
       setIsNavbarFixed(false);
     }
   };
@@ -53,7 +53,7 @@ export default function Navbar() {
           ))}
         </div>
         <div className={styles.right}>
-          <button className={styles.registerBtn}>Register</button>
+          <Link href='/register'> <button className={styles.registerBtn} >Register</button></Link>
         </div>
       </div>
     </div>
