@@ -53,7 +53,7 @@ export default function Navbar() {
           ))}
         </div>
         <div className={styles.right}>
-          <Link href='/register'> <button className={styles.registerBtn} >Register</button></Link>
+          <Link href='/login'> <button className={styles.registerBtn} >Login</button></Link>
         </div>
       </div>
     </div>

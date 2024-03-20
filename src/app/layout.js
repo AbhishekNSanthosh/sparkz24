@@ -19,8 +19,6 @@ export default function RootLayout({ children }) {
         <div className={styles.container}>
           {children}
         </div>
-        <Footer/>
-        <Credits/>
       </body>
     </html>
   );

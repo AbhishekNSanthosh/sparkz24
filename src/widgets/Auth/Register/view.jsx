@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from '@styles/scss/register.module.scss'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Register() {
   return (
@@ -63,7 +64,7 @@ export default function Register() {
              <button className={styles.submit}>Submit</button>
             </div>
             <div className={styles.help}>
-             <span className={styles.helpText}>Already have an account ? <span className={styles.high}>Login</span></span>
+             <span className={styles.helpText}>Already have an account ? <span className={styles.high}><Link href="/login">Login</Link></span></span>
              <span className={styles.helpText}>Forgot password?</span>
             </div>
 
