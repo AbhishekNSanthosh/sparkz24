@@ -1,0 +1,15 @@
+
+.container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.title{
+  font-size: 4rem;
+  font-weight: 600;
+  background: -webkit-linear-gradient(45deg, rgb(255, 255, 255), #01f77e, #01f77e, rgb(255, 255, 255)) text;
+    -webkit-text-fill-color: transparent;
+}
