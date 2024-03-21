@@ -16,3 +16,26 @@ export const navLinks = [
         link:"/contact"
     }
 ]
+
+export const depLogo = [
+    {
+        img:"/events/department/cs.svg",
+        url:"/events/cse"
+    },
+    {
+        img:"/events/department/cs.svg",
+        url:"/events/eee"
+    },
+    {
+        img:"/events/department/cs.svg",
+        url:"/events/mech"
+    },
+    {
+        img:"/events/department/cs.svg",
+        url:"/events/bsc"
+    },
+    {
+        img:"/events/department/cs.svg",
+        url:"/events/ce"
+    },
+]

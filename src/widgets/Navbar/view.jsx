@@ -22,9 +22,9 @@ export default function Navbar() {
   const handleScroll = () => {
     setScrollPosition(window.scrollY);
 
-    if (scrollPosition > 60 && !isNavbarFixed) {
+    if (scrollPosition > 40 && !isNavbarFixed) {
       setIsNavbarFixed(true);
-    } else if (scrollPosition <= 60 && isNavbarFixed) {
+    } else if (scrollPosition <= 40 && isNavbarFixed) {
       setIsNavbarFixed(false);
     }
   };
