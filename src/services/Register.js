@@ -3,23 +3,35 @@
 import { backend } from '@/common/constants/constants';
 import axios from 'axios';
 
-export const userLogin = async (
+export const userRegister = async (
+    firstName,
+    lastName,
     email,
+    mobileNo,
+    college,
+    department,
+    semester,
     password,
     toast
 ) => {
     try {
-        const response = await axios.post(backend + '/login', {
-            email, password
+        const response = await axios.post(backend + '/register', {
+            firstName,
+            lastName,
+            email,
+            mobileNo,
+            college,
+            department,
+            semester,
+            password,
         })
         toast({
             title: response?.data?.message,
             description: "Redirecting to home page",
             status: 'success',
-            duration: 4000,
+            duration: 3000,
             isClosable: true,
         });
-        localStorage.setItem('accessToken', response?.data?.accessToken);
         return true
     } catch (error) {
         toast({

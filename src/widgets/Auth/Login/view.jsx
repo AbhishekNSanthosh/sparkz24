@@ -16,10 +16,12 @@ export default function Login() {
     const token = localStorage.getItem('accessToken');
     const handleSubmit = async () => {
         try {
-            await userLogin(email, password, toast);
-            setTimeout(() => {
-                router.push('/');
-            }, 300);
+            const res = await userLogin(email, password, toast);
+            if (res) {
+                setTimeout(() => {
+                    router.push('/');
+                }, 500);
+            }
         } catch (error) {
             console.log(error)
         }

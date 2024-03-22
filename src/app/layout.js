@@ -24,8 +24,8 @@ export default function RootLayout({ children }) {
           <div className={styles.container}>
             {children}
           </div>
-        <ChakraProvider  />
       </body>
+        <ChakraProvider  />
     </html>
   );
 }
