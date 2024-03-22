@@ -1,10 +1,12 @@
+
 import { Merienda } from "next/font/google";
+import { ColorModeScript } from '@chakra-ui/react'
 import '@styles/main.scss'
 import styles from '@styles/scss/home.module.scss'
 import Navbar from "@widgets/Navbar";
-import Footer from "@/widgets/Footer";
-import Credits from "@/widgets/Credits";
+import { ChakraProvider } from '@chakra-ui/react'
 const inter = Merienda({ subsets: ["latin"] });
+import theme from '@styles/theme'
 
 export const metadata = {
   title: "SPARKZ'24",
@@ -12,13 +14,17 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar />
-        <div className={styles.container}>
-          {children}
-        </div>
+
+          <ColorModeScript initialColorMode={"dark"} />
+          <Navbar />
+          <div className={styles.container}>
+            {children}
+          </div>
+        <ChakraProvider  />
       </body>
     </html>
   );

@@ -19,6 +19,7 @@ export default function Navbar() {
   const [isNavbarFixed, setIsNavbarFixed] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  localStorage.setItem('chakra-ui-color-mode', 'dark')
   const handleScroll = () => {
     setScrollPosition(window.scrollY);
 

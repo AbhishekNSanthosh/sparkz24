@@ -39,3 +39,5 @@ export const depLogo = [
         url:"/events/ce"
     },
 ]
+
+export const backend = "https://sparkz-backend.onrender.com/api/v2/user"
