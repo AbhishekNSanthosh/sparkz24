@@ -18,7 +18,6 @@ export default function Register() {
   const [password, setPassword] = useState("");
 
   const router = useRouter();
-  const toast = useToast();
 
   const handleSubmit = async () => {
     const res = await userRegister(
@@ -30,7 +29,7 @@ export default function Register() {
       department,
       semester,
       password,
-      toast
+      // toast
     );
 
     if (res) {
