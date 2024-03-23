@@ -11,14 +11,14 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useRouter();
-    // const token = localStorage.getItem('accessToken');
+
     const handleSubmit = async () => {
         try {
             const res = await userLogin(email, password);
             if (res) {
                 setTimeout(() => {
                     window.location.replace('/')
-                }, 500);
+                }, 1000);
             }
         } catch (error) {
             console.log(error)

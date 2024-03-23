@@ -47,21 +47,28 @@ export const userLogin = async (
         },
             { next: { revalidate: 3600 } }
         );
-        if (!res.ok) {
-            throw new Error('Login failed');
-        }
+        console.log()
 
         const data = await res.json();
-        console.log(data); // or do something with data
+        if (!res.ok) {
+            throw { message: data?.message };
+        }
+        toast.success(data?.message, {
+            position: "bottom-center",
+            theme: "colored"
+        });
+
         if (typeof window !== 'undefined') {
             // Perform localStorage action
             localStorage.setItem('accessToken', data?.accessToken)
         }
-        localStorage.setItem('accessToken', data?.accessToken)
         // Optionally, you can return the data here if you want to use it outside this function
         return true;
     } catch (error) {
-        console.error('Error:', error);
-        // Handle error here, e.g., display an error message
+        toast.error(error?.message, {
+            position: "bottom-center",
+            theme: "colored"
+        });
+        console.log(error)
     }
 }
