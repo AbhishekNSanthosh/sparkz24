@@ -6,20 +6,18 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { userLogin } from '@/services/Login'
-import { useToast } from '@chakra-ui/react'
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useRouter();
-    const toast = useToast();
-    const token = localStorage.getItem('accessToken');
+    // const token = localStorage.getItem('accessToken');
     const handleSubmit = async () => {
         try {
-            const res = await userLogin(email, password, toast);
+            const res = await userLogin(email, password);
             if (res) {
                 setTimeout(() => {
-                    router.push('/');
+                    window.location.replace('/')
                 }, 500);
             }
         } catch (error) {
@@ -27,11 +25,11 @@ export default function Login() {
         }
     }
 
-    useEffect(() => {
-        if (token) {
-            router.push('/');
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (token) {
+    //         router.push('/');
+    //     }
+    // }, [])
 
     return (
         <div className={styles.container}>

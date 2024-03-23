@@ -2,6 +2,7 @@
 
 import { backend } from '@/common/constants/constants';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 
 export const userRegister = async (
     firstName,
@@ -12,7 +13,7 @@ export const userRegister = async (
     department,
     semester,
     password,
-    toast
+    // toast
 ) => {
     try {
         const response = await axios.post(backend + '/register', {
@@ -25,21 +26,13 @@ export const userRegister = async (
             semester,
             password,
         })
-        toast({
-            title: response?.data?.message,
-            description: "Redirecting to home page",
-            status: 'success',
-            duration: 3000,
-            isClosable: true,
+        toast.success(error?.response?.data?.message, {
+            position: "bottom-center"
         });
         return true
     } catch (error) {
-        toast({
-            title: error?.response?.data?.message,
-            description: error?.response?.data?.description,
-            status: 'error',
-            duration: 3000,
-            isClosable: true,
+        toast.error(error?.response?.data?.message, {
+            position: "bottom-center"
         });
         return false
     }

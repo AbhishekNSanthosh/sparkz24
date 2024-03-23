@@ -13,13 +13,16 @@ import styles from '@styles/scss/navbar.module.scss'
 import Image from 'next/image'
 import Link from 'next/link'
 import { navLinks } from '../../common/constants/constants'
+import { MdLogin } from "react-icons/md"
+import { MdAccountCircle } from "react-icons/md";
+import { revalidatePath } from 'next/cache'
 
 export default function Navbar() {
 
   const [isNavbarFixed, setIsNavbarFixed] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  localStorage.setItem('chakra-ui-color-mode', 'dark')
+  const [token, setToken] = useState(false);
+  // localStorage.setItem('chakra-ui-color-mode', 'dark')
   const handleScroll = () => {
     setScrollPosition(window.scrollY);
 
@@ -39,6 +42,11 @@ export default function Navbar() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [scrollPosition, isNavbarFixed]);
+
+  useEffect(() => {
+    setToken(localStorage.getItem('accessToken'))
+  }, [])
+
   return (
     <div className={isNavbarFixed ? styles.styledcontainer : styles.container}>
       <div className={styles.wrapper}>
@@ -54,7 +62,17 @@ export default function Navbar() {
           ))}
         </div>
         <div className={styles.right}>
-          <Link href='/login'> <button className={styles.registerBtn} >Login</button></Link>
+          {token ?
+            <Link href='/login' onClick={() => {
+              revalidatePath('/login')
+            }}>
+              <MdAccountCircle className={styles.icon} />
+            </Link>
+            :
+            <Link href='/login'>
+              <MdLogin className={styles.icon} />
+            </Link>
+          }
         </div>
       </div>
     </div>
