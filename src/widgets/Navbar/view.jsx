@@ -44,7 +44,10 @@ export default function Navbar() {
   }, [scrollPosition, isNavbarFixed]);
 
   useEffect(() => {
-    setToken(localStorage.getItem('accessToken'))
+    if (typeof window !== 'undefined') {
+      // Perform localStorage action
+      setToken(localStorage.getItem('accessToken'))
+    }
   }, [])
 
   return (

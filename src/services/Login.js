@@ -53,6 +53,10 @@ export const userLogin = async (
 
         const data = await res.json();
         console.log(data); // or do something with data
+        if (typeof window !== 'undefined') {
+            // Perform localStorage action
+            localStorage.setItem('accessToken', data?.accessToken)
+        }
         localStorage.setItem('accessToken', data?.accessToken)
         // Optionally, you can return the data here if you want to use it outside this function
         return true;
