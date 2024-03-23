@@ -5,7 +5,6 @@ import styles from '@styles/scss/register.module.scss'
 import Image from 'next/image'
 import Link from 'next/link'
 import { userRegister } from '@/services/Register'
-import { useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
 
 export default function Register() {
