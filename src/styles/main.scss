@@ -1,6 +1,5 @@
 @import "scss/variables";
 
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,6 +10,7 @@ body {
   color: $font-color;
   background: $bg-color;
   overflow-x: hidden;
+  font-family: $font-family;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -22,7 +22,7 @@ body {
   background: linear-gradient(to right, #131517f6, transparent),
     /* Left side gradient */
     linear-gradient(to left, #131517f6, transparent), url('/images/bgGraph.svg') center/cover no-repeat fixed;
-  }
+}
 
 * {
   margin: 0;
@@ -59,6 +59,6 @@ a {
   background-color: red;
 }
 
-input{
+input {
   outline: none;
 }

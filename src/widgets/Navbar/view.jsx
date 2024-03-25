@@ -21,7 +21,14 @@ export default function Navbar() {
 
   const [isNavbarFixed, setIsNavbarFixed] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [token, setToken] = useState(false);
+  const [token, setToken] = useState(true);
+
+  useEffect(() => {
+    // if (typeof window !== 'undefined') {
+    //   // Perform localStorage action
+    // }
+    setToken(localStorage.getItem('accessToken'))
+  }, [])
   // localStorage.setItem('chakra-ui-color-mode', 'dark')
   const handleScroll = () => {
     setScrollPosition(window.scrollY);
@@ -43,18 +50,11 @@ export default function Navbar() {
     };
   }, [scrollPosition, isNavbarFixed]);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // Perform localStorage action
-      setToken(localStorage.getItem('accessToken'))
-    }
-  }, [])
-
   return (
     <div className={isNavbarFixed ? styles.styledcontainer : styles.container}>
       <div className={styles.wrapper}>
         <div className={styles.left}>
-          <Image src="/images/sparkzLogo.svg" width="1" height={10} className={styles.logo} />
+          <Image src="/images/sparkzLogo.svg" alt='logo' width="1" height={10} className={styles.logo} />
           <span className={styles.logoTxt}>SPARKZ'<span className={styles.highlight}>24</span></span>
         </div>
         <div className={styles.center}>
@@ -66,8 +66,8 @@ export default function Navbar() {
         </div>
         <div className={styles.right}>
           {token ?
-            <Link href='/login' onClick={() => {
-              revalidatePath('/login')
+            <Link href='/profile' onClick={() => {
+              revalidatePath('/')
             }}>
               <MdAccountCircle className={styles.icon} />
             </Link>

@@ -10,8 +10,9 @@ import { userLogin } from '@/services/Login'
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const router = useRouter();
+    const [token, setToken] = useState(null);
 
+    const router = useRouter();
     const handleSubmit = async () => {
         try {
             const res = await userLogin(email, password);
@@ -25,18 +26,22 @@ export default function Login() {
         }
     }
 
-    // useEffect(() => {
-    //     if (token) {
-    //         router.push('/');
-    //     }
-    // }, [])
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            // Perform localStorage action
+            setToken(localStorage.getItem('accessToken'))
+        }
+        if (token) {
+            router.replace('/');
+        }
+    }, [token])
 
     return (
         <div className={styles.container}>
             <div className={styles.wrapper}>
                 <div className={styles.row}>
                     <div className={styles.left}>
-                        <Image src="/gifs/login.gif" width={1500} height={1500} className={styles.gif} />
+                        <Image unoptimized src="/gifs/login.gif" width={1500} height={1500} className={styles.gif} />
                     </div>
                     <div className={styles.right}>
                         <div className={styles.loginBox}>

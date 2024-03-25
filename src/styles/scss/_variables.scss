@@ -1,33 +1,36 @@
-// @import url('https://fonts.googleapis.com/css2?family=Plus:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet');
+ @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700;800&family=Playball&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Sofia&display=swap" rel="stylesheet');
 
-// Colors
-$primary:  #01f77e;;
-$secondary: #3b3b3b;;
-$bg-color:#131517;
-$font-color: #fff;
-$white: #fff;
+ // Colors
+ $primary: #01f77e;
+ ;
+ $secondary: #3b3b3b;
+ ;
+ $bg-color: #131517;
+ $font-color: #fff;
+ $white: #fff;
+ $font-family: "Poppins", sans-serif;
 
-// Fonts & Typography
-$font-size-base: 1rem !default;
-$font-size-sm: $font-size-base * .875 !default;
-$font-size-lg: $font-size-base *1.25 !default;
-$font-size-esm: $font-size-base - 0.2rem !default;
+ // Fonts & Typography
+ $font-size-base: 1rem !default;
+ $font-size-sm: $font-size-base * .875 !default;
+ $font-size-lg: $font-size-base *1.25 !default;
+ $font-size-esm: $font-size-base - 0.2rem !default;
 
-$font-weight-lighter: lighter !default;
-$font-weight-light: 300 !default;
-$font-weight-normal: 400 !default;
-$font-weight-medium: 500 !default;
-$font-weight-semibold: 600 !default;
-$font-weight-bold: 700 !default;
-$font-weight-bolder: bolder !default;
+ $font-weight-lighter: lighter !default;
+ $font-weight-light: 300 !default;
+ $font-weight-normal: 400 !default;
+ $font-weight-medium: 500 !default;
+ $font-weight-semibold: 600 !default;
+ $font-weight-bold: 700 !default;
+ $font-weight-bolder: bolder !default;
 
-$font-weight-base: $font-weight-normal !default;
+ $font-weight-base: $font-weight-normal !default;
 
-$h1-font-size: $font-size-base * 2.5 !default;
-$h2-font-size: $font-size-base * 2 !default;
-$h3-font-size: $font-size-base * 1.75 !default;
-$h4-font-size: $font-size-base * 1.5 !default;
-$h5-font-size: $font-size-base * 1.25 !default;
-$h6-font-size: $font-size-base !default;
+ $h1-font-size: $font-size-base * 2.5 !default;
+ $h2-font-size: $font-size-base * 2 !default;
+ $h3-font-size: $font-size-base * 1.75 !default;
+ $h4-font-size: $font-size-base * 1.5 !default;
+ $h5-font-size: $font-size-base * 1.25 !default;
+ $h6-font-size: $font-size-base !default;
 
-$zero : 0;
+ $zero : 0;

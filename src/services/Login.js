@@ -47,7 +47,6 @@ export const userLogin = async (
         },
             { next: { revalidate: 3600 } }
         );
-        console.log()
 
         const data = await res.json();
         if (!res.ok) {
@@ -62,6 +61,17 @@ export const userLogin = async (
             // Perform localStorage action
             localStorage.setItem('accessToken', data?.accessToken)
         }
+
+        const user = await fetch(backend + '/getUserDetails', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+data?.accessToken
+            },
+        },
+            { next: { revalidate: 3600 } }
+        );
+        console.log(user)
         // Optionally, you can return the data here if you want to use it outside this function
         return true;
     } catch (error) {
