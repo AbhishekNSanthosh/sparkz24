@@ -69,13 +69,13 @@ export default function LandingPage() {
           <span className={styles.time}>timer</span>
         </div> */}
         <div className={styles.banner}>
-          <Image src="/images/sparkzLogo.svg" height={100} width={100} className={styles.bannerImg} />
+          <Image alt='logo' src="/images/sparkzLogo.svg" height={100} width={100} className={styles.bannerImg} />
           <span className={styles.title}>SPARKZ'24</span>
           <span className={styles.tagline}>Innovation unleashed</span>
           <div className={styles.taglineBox}>
             <span className={styles.clg}>April 5th 2024  |  Carmel College Of Engineering & Technology</span>
-            <span className={styles.clg}>Planning to bring the best event across the globe.
-              Our own Sparkz CCET 2024.</span>
+            {/* <span className={styles.clg}>Planning to bring the best event across the globe.
+              Our own Sparkz CCET 2024.</span> */}
             <button className={styles.event}>Event Gallery</button>
           </div>
           <div className={styles.timerBox}>

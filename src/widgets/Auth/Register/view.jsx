@@ -126,7 +126,7 @@ export default function Register() {
 
 
           <div className={styles.right}>
-            <Image src="/gifs/party.gif" height={1000} width={1000} className={styles.gif} />
+            <Image alt='register' src="/gifs/party.gif" height={1000} width={1000} className={styles.gif} />
           </div>
         </div>
       </div>

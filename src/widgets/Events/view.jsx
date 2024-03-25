@@ -16,7 +16,7 @@ export default function Events() {
                 <div className={styles.imgRow}>
                     {depLogo?.map((logo, index) => (
                         <Link href={logo?.url}>
-                            <Image src={logo?.img} height={1000} width={1000} key={index} className={styles.img} />
+                            <Image src={logo?.img} height={1000} width={1000} key={index} className={styles.img} alt='events'/>
                         </Link>
                     ))}
                 </div>

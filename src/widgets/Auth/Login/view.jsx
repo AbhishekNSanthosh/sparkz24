@@ -41,7 +41,7 @@ export default function Login() {
             <div className={styles.wrapper}>
                 <div className={styles.row}>
                     <div className={styles.left}>
-                        <Image unoptimized src="/gifs/login.gif" width={1500} height={1500} className={styles.gif} />
+                        <Image alt='login' unoptimized src="/gifs/login.gif" width={1500} height={1500} className={styles.gif} />
                     </div>
                     <div className={styles.right}>
                         <div className={styles.loginBox}>
