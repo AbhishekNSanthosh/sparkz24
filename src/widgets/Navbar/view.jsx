@@ -15,7 +15,6 @@ import Link from 'next/link'
 import { navLinks } from '../../common/constants/constants'
 import { MdLogin } from "react-icons/md"
 import { MdAccountCircle } from "react-icons/md";
-import { revalidatePath } from 'next/cache'
 
 export default function Navbar() {
 
@@ -67,7 +66,7 @@ export default function Navbar() {
         <div className={styles.right}>
           {token ?
             <Link href='/profile' onClick={() => {
-              revalidatePath('/')
+              // revalidatePath('/')
             }}>
               <MdAccountCircle className={styles.icon} />
             </Link>

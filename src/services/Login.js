@@ -44,8 +44,7 @@ export const userLogin = async (
             body: JSON.stringify({
                 email, password
             })
-        },
-            { next: { revalidate: 3600 } }
+         }
         );
 
         const data = await res.json();
@@ -68,8 +67,7 @@ export const userLogin = async (
                 'Content-Type': 'application/json',
                 'Authorization':'Bearer '+data?.accessToken
             },
-        },
-            { next: { revalidate: 3600 } }
+        }
         );
         console.log(user)
         // Optionally, you can return the data here if you want to use it outside this function

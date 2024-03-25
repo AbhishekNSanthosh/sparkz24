@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react'
 import styles from '@styles/scss/landingPage.module.scss'
 import Image from 'next/image'
+import Link from 'next/link'
+
 export default function LandingPage() {
   const targetDate = new Date("April 19, 2024").getTime();
   const [days, setDays] = useState(0);
@@ -76,7 +78,7 @@ export default function LandingPage() {
             <span className={styles.clg}>April 5th 2024  |  Carmel College Of Engineering & Technology</span>
             {/* <span className={styles.clg}>Planning to bring the best event across the globe.
               Our own Sparkz CCET 2024.</span> */}
-            <button className={styles.event}>Event Gallery</button>
+            <Link href="/events"><button className={styles.event}>Event Gallery</button></Link>
           </div>
           <div className={styles.timerBox}>
             <div className={styles.box}>
