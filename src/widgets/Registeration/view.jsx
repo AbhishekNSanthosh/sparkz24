@@ -209,8 +209,8 @@ export default function Registration() {
                       onChange={event => handleFormChange(index, event)}
                     >
                       <option value="">Select Class</option>
-                      <option value="8">Class VI</option>
-                      <option value="8">Class VII</option>
+                      <option value="6">Class VI</option>
+                      <option value="7">Class VII</option>
                       <option value="8">Class VIII</option>
                       <option value="9">Class IX</option>
                       <option value="10">Class X</option>
