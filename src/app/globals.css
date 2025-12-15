@@ -1,0 +1,54 @@
+/* 1. Import Tailwind first */
+@layer theme, base, components, utilities;
+
+@import "tailwindcss";
+
+/* 3. CSS variables */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+/* 4. Inline theme */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-unbounded: var(--font-unbounded); /* <— you're using this, so add it */
+  --color-primary:#DFFF1A;
+}
+
+/* 5. Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+/* 6. Body style */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-unbounded), sans-serif;
+}
+
+
+@keyframes fade-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.9s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up 1s ease-out forwards;
+}
