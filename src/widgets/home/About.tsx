@@ -74,7 +74,7 @@ export default function About() {
         </>
       )}
       {/* CONTENT */}
-      <div className="relative z-10 mx-auto max-w-6xl px-6">
+      <div className="relative z-10  px-[5vw]">
         <div className="flex flex-col gap-16 lg:flex-row lg:items-start">
           {/* Left */}
           <motion.div

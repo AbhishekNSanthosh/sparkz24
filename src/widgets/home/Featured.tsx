@@ -64,7 +64,7 @@ export default function FeaturedEvents({ events }: { events: Event[] }) {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(79,70,229,0.1),transparent_50%)]" />
       <div className="pointer-events-none absolute inset-0 opacity-15 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-size-[100px_100px]" />
 
-      <div className="relative mx-auto max-w-7xl px-6">
+      <div className="relative px-[5vw]">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

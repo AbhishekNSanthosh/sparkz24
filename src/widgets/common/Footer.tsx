@@ -24,7 +24,7 @@ export default function Footer() {
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(56,189,248,0.06)_1px,transparent_1px),linear-gradient(rgba(56,189,248,0.04)_1px,transparent_1px)] bg-[size:120px_120px]" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 py-12 md:py-16">
+      <div className="relative px-[5vw] py-12 md:py-16">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-4 lg:gap-16">
           {/* Logo & quick details */}
           <div className="space-y-4">
@@ -46,10 +46,10 @@ export default function Footer() {
 
               <div>
                 <h4 className="text-lg font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-fuchsia-300">
-                  Sparkz &apos;25
+                  Sparkz &apos;26
                 </h4>
                 <p className="mt-1 text-xs text-white/60">
-                  March 15–16 • Campus Arena
+                  January 19–20 • Campus Arena
                 </p>
               </div>
             </motion.div>

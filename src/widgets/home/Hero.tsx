@@ -108,7 +108,7 @@ export default function Hero() {
         </>
       )}
 
-      <div className="relative mx-5 sm:mx-auto flex min-h-[92vh] max-w-6xl flex-col gap-12 pt-10 sm:px-6 pb-15 sm:pb-24 md:flex-row md:items-center md:gap-10">
+      <div className="relative  flex min-h-[92vh] px-[5vw] flex-col gap-12 pt-10  pb-15 sm:pb-24 md:flex-row md:items-center md:gap-10">
         {/* Left content */}
         <motion.div
           initial={{ opacity: 0, x: -24 }}
@@ -136,7 +136,7 @@ export default function Hero() {
             className="mx-auto md:mx-0 inline-flex items-center gap-3 rounded-full border border-cyan-300/30 bg-cyan-500/10 px-5 py-3 text-xs font-bold text-cyan-200 backdrop-blur-sm"
           >
             <span className="h-1 w-1 sm:h-3 sm:w-3 rounded-full bg-cyan-400 animate-ping" />
-            <span>January 16 - 17, 2026</span>
+            <span>January 19 - 20, 2026</span>
           </motion.div>
 
           <motion.h1
@@ -147,7 +147,7 @@ export default function Hero() {
             className="text-3xl font-bold leading-tight text-white sm:text-3xl lg:text-3xl"
           >
             <span className="relative block mt-2 text-6xl sm:text-4xl lg:text-7xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-indigo-500 via-fuchsia-500 to-amber-400">
-              Sparkz &apos;25
+              Sparkz &apos;26
             </span>
             Innvovation Unleashed
           </motion.h1>

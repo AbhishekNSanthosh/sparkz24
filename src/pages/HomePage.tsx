@@ -3,6 +3,7 @@ import Hero from "@/widgets/home/Hero";
 import Featured from "@/widgets/home/Featured";
 
 import { events } from "@/utils/constants/Constants";
+import BandCompetition from "@/widgets/home/BandCompetition";
 
 export default function HomePage() {
   return (
@@ -10,6 +11,7 @@ export default function HomePage() {
       <Hero />
       <Featured events={events} />
       <About />
+      <BandCompetition/>
     </div>
   );
 }

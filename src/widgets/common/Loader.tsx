@@ -76,7 +76,7 @@ export default function Loader() {
           >
             <Image
               src="/sparkz.svg"
-              alt="Sparkz '25"
+              alt="Sparkz '26"
               width={180}
               height={180}
               className="object-contain drop-shadow-[0_0_40px_rgba(236,72,153,0.6)]"

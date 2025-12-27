@@ -118,7 +118,7 @@ function CoordinatorCard({
   eventTitle: string;
 }) {
   const whatsappMessage = encodeURIComponent(
-    `Hello ${coordinator.name}, I have a question regarding "${eventTitle}" on Sparkz '25. Could you please help me with more details?`
+    `Hello ${coordinator.name}, I have a question regarding "${eventTitle}" on Sparkz '26. Could you please help me with more details?`
   );
 
   return (

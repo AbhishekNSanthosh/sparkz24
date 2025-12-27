@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Unbounded } from "next/font/google";
 import "./globals.css";
+import Header from "@/widgets/common/Header";
+import Footer from "@/widgets/common/Footer";
+import { Toaster } from "react-hot-toast";
 
 const unBounded = Unbounded({
   variable: "--font-unbounded",
@@ -12,8 +15,8 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://sparkz.carmelcet.in/"),
 
   title: {
-    default: "Sparkz 2025",
-    template: "%s | Sparkz 2025",
+    default: "Sparkz 2026",
+    template: "%s | Sparkz 2026",
   },
 
   description:
@@ -51,25 +54,25 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: "https://sparkz.carmelcet.in/",
-    siteName: "Sparkz 2025",
-    title: "Sparkz 2025",
+    siteName: "Sparkz 2026",
+    title: "Sparkz 2026",
     description:
-      "Join Sparkz 2025 — a celebration of innovation, technology, and creativity with exciting events and competitions.",
+      "Join Sparkz 2026 — a celebration of innovation, technology, and creativity with exciting events and competitions.",
     images: [
       {
         url: "/og-image.png", // place in /public
         width: 1200,
         height: 630,
-        alt: "Sparkz 2025 Fest Poster",
+        alt: "Sparkz 2026 Fest Poster",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Sparkz 2025 | Technical & Cultural Fest",
+    title: "Sparkz 2026 | Technical & Cultural Fest",
     description:
-      "Join Sparkz 2025 — competitions, hackathons, workshops, and more.",
+      "Join Sparkz 2026 — competitions, hackathons, workshops, and more.",
     images: ["/og-image.png"],
     creator: "@sparkzfest", // optional
   },
@@ -86,11 +89,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body className={`${unBounded.variable} antialiased font-light`}>
+        <Header />
         {children}
+        <Footer />
+        <Toaster position="bottom-center"/>
       </body>
     </html>
   );
