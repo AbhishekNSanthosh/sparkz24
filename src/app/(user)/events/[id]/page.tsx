@@ -1,9 +1,12 @@
-import React from 'react'
+import EventDetailsPage from "@/widgets/event/EventDetailsPage";
 
-const page = () => {
-  return (
-    <div>page</div>
-  )
-}
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
-export default page
+const page = async ({ params }: { params: { id: string } }) => {
+  const { id } = await params;
+
+  return <EventDetailsPage eventId={id} />;
+};
+
+export default page;

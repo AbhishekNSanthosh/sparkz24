@@ -1,54 +1,89 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 
-const particlesData = Array.from({ length: 10 }).map((_, i) => {
-  const t = (i / 10) * Math.PI * 2;
-  return {
-    id: i,
-    xSeed: Math.cos(t) * (120 + (i % 3) * 40),
-    ySeed: Math.sin(t) * (40 + (i % 4) * 30),
-    delay: (i % 5) * 0.3,
-    duration: 8 + (i % 4) * 1.3,
-    size: 6 - (i % 3),
-  };
-});
+interface FloatingParticlesProps {
+  count?: number;
+}
 
-export default function Particles() {
+// Pre-defined particle positions to avoid random generation
+const PRE_DEFINED_PARTICLES = [
+  { x: "18%", y: "35%", size: 4, color: "bg-cyan-400/30", type: 0 },
+  { x: "45%", y: "12%", size: 3, color: "bg-fuchsia-400/25", type: 1 },
+  { x: "72%", y: "28%", size: 2, color: "bg-amber-400/25", type: 2 },
+  { x: "15%", y: "68%", size: 3.5, color: "bg-cyan-400/30", type: 0 },
+  { x: "85%", y: "42%", size: 2.5, color: "bg-fuchsia-400/25", type: 1 },
+  { x: "38%", y: "85%", size: 4, color: "bg-amber-400/25", type: 2 },
+  { x: "62%", y: "15%", size: 3, color: "bg-cyan-400/30", type: 0 },
+  { x: "25%", y: "22%", size: 2.8, color: "bg-fuchsia-400/25", type: 1 },
+  { x: "78%", y: "75%", size: 3.2, color: "bg-amber-400/25", type: 2 },
+  { x: "5%", y: "45%", size: 2.2, color: "bg-cyan-400/30", type: 0 },
+  { x: "55%", y: "65%", size: 3.7, color: "bg-fuchsia-400/25", type: 1 },
+  { x: "92%", y: "18%", size: 2.9, color: "bg-amber-400/25", type: 2 },
+];
+
+export default function FloatingParticles({
+  count = 12,
+}: FloatingParticlesProps) {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Use only the first 'count' particles from the pre-defined array
+  const particles = PRE_DEFINED_PARTICLES.slice(0, count);
+
+  // Don't render on server
+  if (!isMounted) {
+    return null;
+  }
+
   return (
-    <div
-      aria-hidden
-      className="absolute left-1/2 top-36 -translate-x-1/2 w-full pointer-events-none"
-    >
-      <div className="relative h-40 w-full">
-        {particlesData.map((p) => (
-          <motion.div
-            key={p.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0.15, 0.8, 0.15], y: [0, -6, 0] }}
-            transition={{
-              duration: p.duration,
-              repeat: Infinity,
-              delay: p.delay,
-            }}
-            style={{
-              left: `calc(50% + ${p.xSeed}px)`,
-              top: `${p.ySeed}px`,
-              position: "absolute",
-            }}
-          >
-            <div
-              className="rounded-full shadow-[0_0_12px_rgba(6,182,212,0.14)]"
-              style={{
-                width: p.size,
-                height: p.size,
-                background: "rgba(6,182,212,0.9)",
-                filter: "blur(6px)",
-              }}
-            />
-          </motion.div>
-        ))}
-      </div>
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      {particles.map((particle, i) => (
+        <motion.div
+          key={i}
+          className={`absolute rounded-full ${particle.color}`}
+          style={{
+            width: particle.size,
+            height: particle.size,
+            left: particle.x,
+            top: particle.y,
+          }}
+          animate={{
+            x: [
+              null,
+              `calc(${particle.x} + ${
+                particle.type === 0
+                  ? "20px"
+                  : particle.type === 1
+                  ? "-15px"
+                  : "10px"
+              })`,
+            ],
+            y: [
+              null,
+              `calc(${particle.y} + ${
+                particle.type === 0
+                  ? "-15px"
+                  : particle.type === 1
+                  ? "20px"
+                  : "-10px"
+              })`,
+            ],
+            scale: [0, 1, 0],
+            opacity: [0, 0.8, 0],
+          }}
+          transition={{
+            duration: 4 + (i % 3),
+            repeat: Infinity,
+            delay: (i % 4) * 0.5,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
     </div>
   );
 }

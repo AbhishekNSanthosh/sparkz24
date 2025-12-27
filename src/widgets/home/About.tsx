@@ -30,26 +30,26 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative isolate overflow-hidden bg-[#04050b] py-20 text-white sm:py-24"
+      className="relative isolate overflow-hidden bg-[#04050b] pt-10 pb-20 text-white sm:py-24"
     >
       {/* TOP = PURE BLACK (no glow at the very top) */}
       {mounted && (
         <>
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#04050b] via-transparent to-transparent h-64" />
+          <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-[#04050b] via-transparent to-transparent h-64" />
 
           {/* GLOW STARTS LOWER & FLOWS DOWN — seamless from Hero */}
           <div className="pointer-events-none absolute left-[-10%] top-[10%] h-96 w-96 rounded-full bg-indigo-600/25 blur-[140px]" />
           <div className="hidden sm:block pointer-events-none absolute right-[-5%] top-[15%] h-96 w-96 rounded-full bg-fuchsia-500/25 blur-[150px]" />
-          <div className="hidden sm:block pointer-events-none absolute inset-x-0 top-[20%] h-full bg-gradient-to-b from-indigo-600/12 via-fuchsia-500/10 to-amber-400/8 blur-3xl opacity-70" />
+          <div className="hidden sm:block pointer-events-none absolute inset-x-0 top-[20%] h-full bg-linear-to-b from-indigo-600/12 via-fuchsia-500/10 to-amber-400/8 blur-3xl opacity-70" />
 
           {/* Rest of ambient effects (grid, circuits, etc.) */}
           <div className="hidden sm:block pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(79,70,229,0.15),transparent_45%),radial-gradient(circle_at_70%_70%,rgba(236,72,153,0.12),transparent_40%)]" />
-          <div className="hidden sm:block pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_transparent_1px)] bg-[size:140px_140px] opacity-20" />
+          <div className="hidden sm:block pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_transparent_1px)] bg-size-[140px_140px] opacity-20" />
           <div className="hidden sm:block pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(14,165,233,0.08),transparent_40%),linear-gradient(240deg,rgba(236,72,153,0.08),transparent_35%)] opacity-60" />
 
           {/* Circuit overlay */}
           <div className="hidden sm:block pointer-events-none absolute inset-0 mix-blend-screen opacity-25">
-            <div className="hidden sm:block absolute inset-0 bg-[linear-gradient(90deg,rgba(56,189,248,0.12)_1px,transparent_1px),linear-gradient(0deg,rgba(56,189,248,0.08)_1px,transparent_1px),linear-gradient(135deg,rgba(94,234,212,0.08)_1px,transparent_1px)] bg-[size:180px_180px,180px_180px,220px_220px]" />
+            <div className="hidden sm:block absolute inset-0 bg-[linear-gradient(90deg,rgba(56,189,248,0.12)_1px,transparent_1px),linear-gradient(0deg,rgba(56,189,248,0.08)_1px,transparent_1px),linear-gradient(135deg,rgba(94,234,212,0.08)_1px,transparent_1px)] bg-size-[180px_180px,180px_180px,220px_220px]" />
           </div>
 
           {/* Floating chips — now spread smoothly */}
@@ -92,7 +92,7 @@ export default function About() {
             <h2 className="text-4xl font-black pt-5 sm:py-10 leading-tight sm:text-5xl lg:text-6xl">
               Ignite the
               <br />
-              <span className="bg-gradient-to-r from-indigo-300 via-fuchsia-300 to-amber-200 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-indigo-300 via-fuchsia-300 to-amber-200 bg-clip-text text-transparent">
                 spark within you
               </span>
             </h2>

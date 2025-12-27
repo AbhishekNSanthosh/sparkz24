@@ -3,23 +3,23 @@
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 
 interface Event {
-  id: number;
+  id: string;
   title: string;
-  imageUrl: string;
+  image: string;
   description?: string; // Optional for future hover tooltips
 }
 
-const SWIPE_THRESHOLD = 80;
+const SWIPE_THRESHOLD = 30;
 
 export default function FeaturedEvents({ events }: { events: Event[] }) {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const total = events.length;
-  const getIndex = (i: number) => (i + total) % total;
+  const getIndex = useCallback((i: number) => (i + total) % total, [total]);
   const sectionRef = useRef<HTMLElement | null>(null);
 
   const isInView = useInView(sectionRef, {
@@ -37,7 +37,7 @@ export default function FeaturedEvents({ events }: { events: Event[] }) {
     }, 3250);
 
     return () => clearInterval(interval);
-  }, [shouldPause, total]);
+  }, [getIndex, shouldPause, total]);
 
   const visibleEvents = [
     events[getIndex(active - 1)],
@@ -62,14 +62,14 @@ export default function FeaturedEvents({ events }: { events: Event[] }) {
       <div className="pointer-events-none absolute left-0 top-0 h-80 w-80 rounded-full bg-indigo-600/20 blur-[140px]" />
       <div className="pointer-events-none absolute right-0 bottom-0 h-96 w-96 rounded-full bg-fuchsia-500/20 blur-[150px]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(79,70,229,0.1),transparent_50%)]" />
-      <div className="pointer-events-none absolute inset-0 opacity-15 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:100px_100px]" />
+      <div className="pointer-events-none absolute inset-0 opacity-15 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-size-[100px_100px]" />
 
       <div className="relative mx-auto max-w-7xl px-6">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-16 text-center text-4xl font-bold leading-tight sm:text-5xl"
+          className="mb-20 sm:mb-28 text-center text-4xl font-bold leading-tight sm:text-5xl"
         >
           Featured{" "}
           <span className="bg-linear-to-r from-indigo-300 via-fuchsia-300 to-amber-200 bg-clip-text text-transparent animate-[pulse_6s_ease-in-out_infinite]">
@@ -98,7 +98,7 @@ export default function FeaturedEvents({ events }: { events: Event[] }) {
                   animate={{
                     opacity: isCenter ? 1 : 0.5,
                     scale: isCenter ? 1.05 : 0.85,
-                    y: isCenter ? -20 : 0,
+                    y: isCenter ? -35 : 0,
                     rotate: isCenter ? 0 : idx === 0 ? -8 : 8,
                   }}
                   exit={{ opacity: 0, scale: 0.8 }}
@@ -112,28 +112,24 @@ export default function FeaturedEvents({ events }: { events: Event[] }) {
                 >
                   <Link href={`/events/${event.id}`} className="group">
                     <div
-                      className={`relative aspect-3/4 w-70 overflow-hidden rounded-3xl border
+                      className={`relative aspect-4/5 w-70 overflow-hidden rounded-3xl border
                         ${
                           isCenter
                             ? "border-fuchsia-400/40 group-hover:scale-105 shadow-2xl shadow-fuchsia-500/30"
                             : "border-white/10"
                         }
-                        bg-black/40 backdrop-blur-md transition-all duration-500`}
+                         transition-all duration-500`}
                     >
                       {/* Inner glow */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-fuchsia-500/10 to-amber-400/10" />
+                      <div className="absolute inset-0" />
                       <Image
-                        src={event.imageUrl}
+                        src={event.image}
                         alt={event.title}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        priority={idx < 3}
                         fill
                         className="object-contain transition-transform duration-700"
                       />
-                      {/* Title overlay */}
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-                        {/* <h3 className="text-xl font-bold text-white drop-shadow-md">
-                          {event.title}
-                        </h3> */}
-                      </div>
                     </div>
                   </Link>
                 </motion.div>

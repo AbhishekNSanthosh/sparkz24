@@ -1,7 +1,7 @@
 "use client";
 
 import Image, { ImageLoaderProps } from "next/image";
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import Particles from "@/widgets/common/Particles";
@@ -15,13 +15,7 @@ const loader = ({ src, width, quality }: ImageLoaderProps) => {
 export default function EventsPage() {
   const [selectedDept, setSelectedDept] = useState<string>("All");
 
-  const filteredEvents = useMemo(
-    () =>
-      eventsData.filter(
-        (e) => selectedDept === "All" || e.department === selectedDept
-      ),
-    [selectedDept]
-  );
+  const filteredEvents = useMemo(() => eventsData, [selectedDept]);
 
   return (
     <section className="relative isolate overflow-hidden bg-[#04050b] text-white min-h-screen py-20">
@@ -40,10 +34,10 @@ export default function EventsPage() {
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-12"
       >
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(56,189,248,0.06)_1px,transparent_1px),linear-gradient(rgba(56,189,248,0.04)_1px,transparent_1px)] bg-[size:140px_140px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(56,189,248,0.06)_1px,transparent_1px),linear-gradient(rgba(56,189,248,0.04)_1px,transparent_1px)] bg-size-[140px_140px]" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6">
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
         <motion.header
           initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -51,7 +45,7 @@ export default function EventsPage() {
           className="text-center mb-12"
         >
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
-            <span className="bg-gradient-to-r from-indigo-400 via-fuchsia-400 to-amber-300 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-indigo-400 via-fuchsia-400 to-amber-300 bg-clip-text text-transparent">
               Sparkz Events
             </span>
           </h1>
@@ -72,8 +66,8 @@ export default function EventsPage() {
                   onClick={() => setSelectedDept(dept)}
                   className={`px-5 py-2.5 rounded-full font-semibold text-sm transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/30 ${
                     active
-                      ? "bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-amber-400 text-white shadow-lg"
-                      : "border border-white/12 bg-white/[0.04] text-white/80 hover:bg-white/[0.06]"
+                      ? "bg-linear-to-r from-indigo-500 via-fuchsia-500 to-amber-400 text-white shadow-lg"
+                      : "border border-white/12 bg-white/4 text-white/80 hover:bg-white/6"
                   }`}
                 >
                   {dept === "All" ? "All Events" : dept}
@@ -84,46 +78,52 @@ export default function EventsPage() {
         </motion.header>
 
         {/* Events grid */}
-        <motion.div
-          layout
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+        <Suspense
+          fallback={<div className="h-8 w-full bg-white/10 rounded-lg"></div>}
         >
-          <AnimatePresence>
-            {filteredEvents.map((event, idx) => (
-              <motion.div
-                key={event.id}
-                layout
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{
-                  duration: 0.28,
-                  ease: [0.16, 1, 0.3, 1],
-                  delay: idx * 0.03,
-                }}
-                whileHover={{ y: -6 }}
-                className="group"
-              >
-                <Link
-                  href={`/events/${event.id}`}
-                  className="block rounded-2xl max-w-[360px] border border-white/10 bg-black/40 backdrop-blur transition-all duration-300hover:border-fuchsia-400/40 hover:shadow-lg hover:shadow-fuchsia-500/15"
+          <motion.div
+            layout
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            <AnimatePresence>
+              {filteredEvents.map((event, idx) => (
+                <motion.div
+                  key={event.id}
+                  layout
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{
+                    duration: 0.28,
+                    ease: [0.16, 1, 0.3, 1],
+                    delay: idx * 0.03,
+                  }}
+                  whileHover={{ y: -6 }}
+                  className="group"
                 >
-                  {/* Poster frame */}
-                  <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-black">
-                    <Image
-                      src={event.imageUrl}
-                      alt={event.title}
-                      loader={loader}
-                      fill
-                      className="object-contain transition-transform duration-500"
-                      priority={false}
-                    />
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+                  <Link
+                    href={`/events/${event.id}`}
+                    className="block rounded-2xl max-w-90 border border-white/10 bg-black/40 backdrop-blur transition-all duration-300hover:border-fuchsia-400/40 hover:shadow-lg hover:shadow-fuchsia-500/15"
+                  >
+                    {/* Poster frame */}
+                    <div className="relative aspect-4/5 w-full rounded-2xl overflow-hidden bg-black">
+                      <Image
+                        src={event.image}
+                        alt={event.title}
+                        loader={loader}
+                        fill
+                        sizes="(100vw - 2rem) / 3 * 100vw / 100vw"
+                        quality={75}
+                        className="object-contain  rounded-2xl transition-transform duration-500"
+                        priority={idx < 3}
+                      />
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        </Suspense>
 
         {/* Decorative particles near header (subtle, not full-screen) */}
         <Particles />

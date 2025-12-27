@@ -12,7 +12,7 @@ export default function Header() {
       <header className="sticky top-0 z-30 w-full border-b border-white/10 bg-[#04050b]/90 backdrop-blur-lg">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(79,70,229,0.12),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(236,72,153,0.12),transparent_35%)] opacity-60" />
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(79,70,229,0.1),transparent_50%),linear-gradient(240deg,rgba(236,72,153,0.1),transparent_50%)]" />
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-white/30 to-transparent" />
         <div className="relative mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:flex-nowrap sm:gap-6 sm:px-6 sm:py-5">
           {/* Left nav - Desktop Only */}
           <div className="hidden flex-1 items-center gap-4 text-sm text-white/80 sm:flex sm:gap-6">
@@ -33,7 +33,7 @@ export default function Header() {
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
               <h1 className="text-xl font-bold">
                 Sparkz{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-fuchsia-300 to-amber-200 animate-[pulse_7s_ease-in-out_infinite]">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-300 via-fuchsia-300 to-amber-200 animate-[pulse_7s_ease-in-out_infinite]">
                   &apos;25
                 </span>
               </h1>
@@ -51,9 +51,12 @@ export default function Header() {
                 {item?.title}
               </Link>
             ))}
-            <button className="inline-flex items-center justify-center z-3 bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-amber-400 gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:from-indigo-600 hover:via-fuchsia-600 hover:to-amber-500 hover:scale-[1.02] active:scale-95">
+            <Link
+              href={"/login"}
+              className="inline-flex overflow-hidden items-center justify-center bg-linear-to-r from-indigo-500 via-fuchsia-500 to-amber-400 gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition-all hover:from-indigo-600 hover:via-fuchsia-600 hover:to-amber-500 hover:scale-[1.02] active:scale-95"
+            >
               Login
-            </button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -101,12 +104,13 @@ export default function Header() {
             ))}
 
             {/* Mobile CTA Button */}
-            <button
+            <Link
+              href={"/login"}
               onClick={() => setIsMenuOpen(false)}
-              className="w-full mt-6 py-4 text-lg font-semibold text-white rounded-2xl bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-amber-400 hover:from-indigo-600 hover:via-fuchsia-600 hover:to-amber-500 transition-all hover:scale-[1.02] active:scale-95"
+              className="w-full mt-6 py-4 text-lg font-semibold text-white rounded-2xl bg-linear-to-r from-indigo-500 via-fuchsia-500 to-amber-400 hover:from-indigo-600 hover:via-fuchsia-600 hover:to-amber-500 transition-all hover:scale-[1.02] active:scale-95"
             >
               Login
-            </button>
+            </Link>
 
             {/* Close Hint */}
             {/* <p className="mt-8 text-sm text-white/50">Tap anywhere to close</p> */}
