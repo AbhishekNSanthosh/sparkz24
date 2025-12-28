@@ -214,7 +214,7 @@ export default function AbheriPage() {
       </section>
 
       {/* Rules Section */}
-      <section className="relative py-20">
+      <section id="rules" className="relative py-20">
         {mounted && (
           <>
             <div className="pointer-events-none absolute left-[-10%] top-0 h-96 w-96 rounded-full bg-indigo-600/10 blur-[100px]" />
