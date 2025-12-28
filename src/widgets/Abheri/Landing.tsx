@@ -140,7 +140,8 @@ export default function AbheriPage() {
                   ABHERI
                 </span>
                 <br />
-                Rock the Stage on 20 Jan 2026
+                Rock the Stage on <br />
+                <span className="text-orange-400">20 Jan 2026</span>
               </h1>
               <p className="text-xl text-white/70 max-w-2xl mx-auto">
                 Unleash your band's energy at Sparkz '26 – Prizes up to ₹30,000
