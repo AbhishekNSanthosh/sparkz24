@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/widgets/common/Header";
 import Footer from "@/widgets/common/Footer";
 import { Toaster } from "react-hot-toast";
+import { AuthProvider } from "@/context/AuthContext";
 
 const unBounded = Unbounded({
   variable: "--font-unbounded",
@@ -97,10 +98,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${unBounded.variable} antialiased font-light`}>
-        <Header />
-        {children}
-        <Footer />
-        <Toaster position="bottom-center"/>
+        <AuthProvider>
+          <Header />
+            {children}
+          <Footer />
+          <Toaster position="bottom-center"/>
+        </AuthProvider>
       </body>
     </html>
   );

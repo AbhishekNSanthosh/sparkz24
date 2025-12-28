@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, arrayUnion, query, where, getDocs, limit } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import Link from "next/link";
 import { toastSuccess,toastError } from "@/utils/common/Toast";
 import { Loader2, Smartphone, ExternalLink } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Register() {
   const [loading, setLoading] = useState(false);
@@ -26,6 +28,7 @@ export default function Register() {
   const [isAddingCustom, setIsAddingCustom] = useState(false);
   const [customInstrument, setCustomInstrument] = useState("");
   const [acknowledged, setAcknowledged] = useState(false);
+  const [existingRegistrationId, setExistingRegistrationId] = useState<string | null>(null);
 
   // TODO: Replace with actual UPI ID
   const UPI_ID = "jacsjjacobnellickal-1@oksbi"; 
@@ -38,20 +41,77 @@ export default function Register() {
 
   // Load from local storage on mount
   useEffect(() => {
-    const savedData = localStorage.getItem(STORAGE_KEY);
-    if (savedData) {
-      try {
-        const parsed = JSON.parse(savedData);
-        setFormData(parsed.formData);
-        setSelectedInstruments(parsed.selectedInstruments);
-      } catch (error) {
-        console.error("Failed to parse saved registration data:", error);
-      }
+    // Only load from local storage if we haven't already loaded an existing registration
+    if (!existingRegistrationId) {
+        const savedData = localStorage.getItem(STORAGE_KEY);
+        if (savedData) {
+        try {
+            const parsed = JSON.parse(savedData);
+            setFormData(parsed.formData);
+            setSelectedInstruments(parsed.selectedInstruments);
+        } catch (error) {
+            console.error("Failed to parse saved registration data:", error);
+        }
+        }
     }
-  }, []);
+  }, [existingRegistrationId]);
+
+  const { user, loading: authLoading, refetchUserProfile } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+        toastError("Please login to register for Abheri");
+        router.push('/');
+    }
+  }, [user, authLoading, router]);
+
+  // Fetch existing registration
+  useEffect(() => {
+    const fetchRegistration = async () => {
+      if (user) {
+        try {
+          const q = query(
+            collection(db, "abheri_registrations"), 
+            where("userId", "==", user.uid),
+            limit(1)
+          );
+          const querySnapshot = await getDocs(q);
+          if (!querySnapshot.empty) {
+            const docSnap = querySnapshot.docs[0];
+            const data = docSnap.data();
+            setExistingRegistrationId(docSnap.id);
+            setFormData({
+              bandName: data.bandName || "",
+              collegeName: data.collegeName || "",
+              managerName: data.managerName || "",
+              managerMobile: data.managerMobile || "",
+              leaderName: data.leaderName || "",
+              leaderMobile: data.leaderMobile || "",
+              musiciansCount: data.musiciansCount || "",
+              vocalistCount: data.vocalistCount || "",
+              instrumentalistCount: data.instrumentalistCount || "",
+              transactionId: data.transactionId || "",
+            });
+            setSelectedInstruments(data.instruments || []);
+            setAcknowledged(true); // Assuming if they registered, they acknowledged
+            toastSuccess("Loaded your existing registration.");
+          }
+        } catch (error) {
+          console.error("Error fetching registration:", error);
+        }
+      }
+    };
+
+    if (!authLoading && user) {
+        fetchRegistration();
+    }
+  }, [user, authLoading]);
 
   // Save to local storage with debounce
   useEffect(() => {
+    // Don't overwrite local storage with fetched data, only user edits
+    // But simpliest approach is to just save current state
     const timeoutId = setTimeout(() => {
       localStorage.setItem(
         STORAGE_KEY,
@@ -105,34 +165,63 @@ export default function Register() {
     setLoading(true);
 
     try {
-      await addDoc(collection(db, "abheri_registrations"), {
+      const registrationData = {
         ...formData,
         instruments: selectedInstruments,
-        createdAt: new Date(),
-      });
-      toastSuccess("Registration successful!");
+        // Only set createdAt on new docs, maybe updatedAt on updates?
+        // createdAt: new Date(), 
+        userId: user?.uid,
+        userEmail: user?.email,
+        updatedAt: new Date()
+      };
+
+      if (existingRegistrationId) {
+          // Update existing
+          await updateDoc(doc(db, "abheri_registrations", existingRegistrationId), registrationData);
+          toastSuccess("Registration updated successfully!");
+      } else {
+          // Create new
+          await addDoc(collection(db, "abheri_registrations"), {
+              ...registrationData,
+              createdAt: new Date()
+          });
+
+          if (user) {
+            const userRef = doc(db, "users", user.uid);
+            await updateDoc(userRef, {
+                registeredEvents: arrayUnion("Abheri Battle of Bands")
+            });
+            await refetchUserProfile();
+          }
+          toastSuccess("Registration successful!");
+      }
       
       localStorage.removeItem(STORAGE_KEY); // Clear saved data on success
+      
+      // If creating new, reset form. If updating, usually we keep the data there.
+      if (!existingRegistrationId) {
+        setFormData({
+            bandName: "",
+            collegeName: "",
+            managerName: "",
+            managerMobile: "",
+            leaderName: "",
+            leaderMobile: "",
+            musiciansCount: "",
+            vocalistCount: "",
+            instrumentalistCount: "",
+            transactionId: "",
+        });
+        setSelectedInstruments([]);
+        setIsAddingCustom(false);
+        setCustomInstrument("");
+        setAcknowledged(false);
+        router.push('/abheri');
+      }
 
-      setFormData({
-        bandName: "",
-        collegeName: "",
-        managerName: "",
-        managerMobile: "",
-        leaderName: "",
-        leaderMobile: "",
-        musiciansCount: "",
-        vocalistCount: "",
-        instrumentalistCount: "",
-        transactionId: "",
-      });
-      setSelectedInstruments([]);
-      setIsAddingCustom(false);
-      setCustomInstrument("");
-      setAcknowledged(false);
     } catch (error) {
       console.error("Error registering:", error);
-      toastError("Registration failed. Please try again.");
+      toastError("Operation failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -409,7 +498,7 @@ export default function Register() {
           <button
             type="submit"
             disabled={loading || !acknowledged}
-            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-4 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6 grayscale disabled:grayscale-100"
+            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-4 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6 disabled:grayscale"
           >
             {loading ? (
                 <>
@@ -417,7 +506,7 @@ export default function Register() {
                 Registering...
                 </>
             ) : (
-                "Register Band"
+                existingRegistrationId ? "Update Registration" : "Register Band"
             )}
           </button>
         </form>
