@@ -18,7 +18,7 @@ export default function EventsPage() {
   const filteredEvents = useMemo(() => eventsData, [selectedDept]);
 
   return (
-    <section className="relative isolate overflow-hidden bg-[#04050b] text-white min-h-screen py-20">
+    <section className="relative isolate overflow-hidden bg-[#04050b] text-white min-h-screen py-10">
       {/* Ambient glows */}
       <div
         aria-hidden
@@ -37,7 +37,7 @@ export default function EventsPage() {
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(56,189,248,0.06)_1px,transparent_1px),linear-gradient(rgba(56,189,248,0.04)_1px,transparent_1px)] bg-size-[140px_140px]" />
       </div>
 
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="relative mx-auto max-w-348 px-4 sm:px-6">
         <motion.header
           initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -83,7 +83,7 @@ export default function EventsPage() {
         >
           <motion.div
             layout
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
           >
             <AnimatePresence>
               {filteredEvents.map((event, idx) => (

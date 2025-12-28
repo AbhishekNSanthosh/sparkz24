@@ -140,7 +140,8 @@ export default function AbheriPage() {
                   ABHERI
                 </span>
                 <br />
-                Rock the Stage on 20 Jan 2026
+                Rock the Stage on <br />
+                <span className="text-orange-400">20 Jan 2026</span>
               </h1>
               <p className="text-xl text-white/70 max-w-2xl mx-auto">
                 Unleash your band's energy at Sparkz '26 – Prizes up to ₹30,000
@@ -214,7 +215,7 @@ export default function AbheriPage() {
       </section>
 
       {/* Rules Section */}
-      <section className="relative py-20">
+      <section id="rules" className="relative py-20">
         {mounted && (
           <>
             <div className="pointer-events-none absolute left-[-10%] top-0 h-96 w-96 rounded-full bg-indigo-600/10 blur-[100px]" />

@@ -2,17 +2,23 @@
 import { navItems } from "@/utils/constants/Constants";
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import { toastInfo, toastSuccess } from "@/utils/common/Toast";
+import { Menu, X, User as UserIcon, LogOut } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { toastSuccess, toastError } from "@/utils/common/Toast";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, login } = useAuth();
 
-  const handleLoginClick = (e: React.MouseEvent) => {
+  const handleLoginClick = async (e: React.MouseEvent) => {
     e.preventDefault();
-    toastInfo("We're working on it – login will launch soon!");
-    // toastSuccess("Stay tuned for updates!");
-    setIsMenuOpen(false);
+    try {
+      await login();
+      toastSuccess("Successfully logged in!");
+      setIsMenuOpen(false);
+    } catch (error) {
+      toastError("Failed to login.");
+    }
   };
 
   return (
@@ -37,7 +43,7 @@ export default function Header() {
 
           {/* Brand - Centered in Desktop */}
           <div className="flex flex-[1.2] items-center justify-start sm:justify-center">
-            <div className="relative flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-white/90 shadow-[0_10px_40px_rgba(79,70,229,0.25)]">
+            <Link href="/" className="relative flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-white/90 shadow-[0_10px_40px_rgba(79,70,229,0.25)]">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
               <h1 className="text-xl font-bold">
                 Sparkz{" "}
@@ -45,7 +51,7 @@ export default function Header() {
                   &apos;26
                 </span>
               </h1>
-            </div>
+            </Link>
           </div>
 
           {/* Right nav + CTA - Desktop Only */}
@@ -59,13 +65,27 @@ export default function Header() {
                 {item?.title}
               </Link>
             ))}
-            <Link
-              href={"/login"}
-              onClick={handleLoginClick}
-              className="inline-flex overflow-hidden items-center justify-center bg-linear-to-r from-indigo-500 via-fuchsia-500 to-amber-400 gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition-all hover:from-indigo-600 hover:via-fuchsia-600 hover:to-amber-500 hover:scale-[1.02] active:scale-95"
-            >
-              Login
-            </Link>
+            
+            {user ? (
+              <Link
+                href="/profile"
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+              >
+                {user.photoURL ? (
+                    <img src={user.photoURL} alt="Profile" className="w-5 h-5 rounded-full" />
+                ) : (
+                    <UserIcon size={18} />
+                )}
+                <span>Profile</span>
+              </Link>
+            ) : (
+                <button
+                onClick={handleLoginClick}
+                className="inline-flex overflow-hidden items-center justify-center bg-linear-to-r from-indigo-500 via-fuchsia-500 to-amber-400 gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition-all hover:from-indigo-600 hover:via-fuchsia-600 hover:to-amber-500 hover:scale-[1.02] active:scale-95 cursor-pointer"
+                >
+                Login
+                </button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -86,20 +106,6 @@ export default function Header() {
         }`}
       >
         <div className="flex flex-col items-center justify-center min-h-screen p-6">
-          {/* Brand in Menu */}
-          {/* <div className="mb-12">
-            <div className="relative flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-white/90 shadow-[0_10px_40px_rgba(79,70,229,0.25)]">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              <h1 className="text-2xl font-bold">
-                Sparkz{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-fuchsia-300 to-amber-200">
-                  &apos;25
-                </span>
-              </h1>
-            </div>
-          </div> */}
-
-          {/* Mobile Navigation Links */}
           <nav className="flex flex-col items-center gap-6 w-full max-w-sm">
             {navItems?.map((item, index) => (
               <Link
@@ -112,17 +118,27 @@ export default function Header() {
               </Link>
             ))}
 
-            {/* Mobile CTA Button */}
-            <Link
-              href={"/login"}
-              onClick={handleLoginClick}
-              className="w-full mt-6 py-4 text-lg font-semibold text-white rounded-2xl bg-linear-to-r from-indigo-500 via-fuchsia-500 to-amber-400 hover:from-indigo-600 hover:via-fuchsia-600 hover:to-amber-500 transition-all hover:scale-[1.02] active:scale-95"
-            >
-              Login
-            </Link>
-
-            {/* Close Hint */}
-            {/* <p className="mt-8 text-sm text-white/50">Tap anywhere to close</p> */}
+            {user ? (
+               <Link
+               href="/profile"
+               onClick={() => setIsMenuOpen(false)}
+               className="w-full mt-6 py-4 text-lg font-semibold text-white rounded-2xl border border-white/20 bg-white/10 hover:bg-white/20 transition-all flex items-center justify-center gap-2"
+             >
+                {user.photoURL ? (
+                    <img src={user.photoURL} alt="Profile" className="w-6 h-6 rounded-full" />
+                ) : (
+                    <UserIcon size={20} />
+                )}
+               Profile
+             </Link>
+            ) : (
+                <button
+                onClick={handleLoginClick}
+                className="w-full mt-6 py-4 text-lg font-semibold text-white rounded-2xl bg-linear-to-r from-indigo-500 via-fuchsia-500 to-amber-400 hover:from-indigo-600 hover:via-fuchsia-600 hover:to-amber-500 transition-all hover:scale-[1.02] active:scale-95"
+                >
+                Login
+                </button>
+            )}
           </nav>
         </div>
       </div>

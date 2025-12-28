@@ -200,7 +200,7 @@ export default function EventPage({ eventId }: { eventId: string }) {
             Desktop Layout: Split Screen 
             Mobile Layout: Stacked
         */}
-        <main className="relative z-10 lg:flex max-w-6xl mx-auto">
+        <main className="relative z-10 lg:flex max-w-7xl mx-auto">
           {/* LEFT PANEL - Sticky on Desktop */}
           <section className="w-full lg:w-[45%] xl:w-[45%] lg:h-screen lg:sticky lg:top-0 pt-4 sm:p-6 flex flex-col gap-5 overflow-y-auto no-scrollbar">
             {/* Poster Image */}
