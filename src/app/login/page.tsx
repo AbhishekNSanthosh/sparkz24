@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { motion } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
@@ -8,8 +8,9 @@ import { toastError, toastSuccess } from "@/utils/common/Toast";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
-  const { user, login } = useAuth();
+  const { user, login, loading: authLoading, refetchUserProfile } = useAuth();
   const router = useRouter();
+
   const handleLoginClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     try {
@@ -20,6 +21,13 @@ export default function Page() {
       toastError("Failed to login.");
     }
   };
+
+  useEffect(() => {
+    if (user) {
+    //   toastError("Please login to register for Abheri");
+      router.push("/abheri/register");
+    }
+  }, [user, authLoading, router]);
 
   if (user) {
     return (
