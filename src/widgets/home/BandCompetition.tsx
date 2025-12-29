@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 const accentGradient =
   "bg-gradient-to-r from-indigo-500/30 via-fuchsia-500/25 to-amber-400/25";
@@ -188,15 +189,15 @@ export default function BandCompetition() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-center pt-2"
               >
-                <a
-                  href="https://sparkz.carmelcet.in"
+                <Link
+                  href="https://sparkz.carmelcet.in/abheri/register"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-gradient-to-r from-indigo-500/20 via-fuchsia-500/15 to-amber-400/20 px-8 py-3 text-sm font-bold uppercase tracking-widest text-white/90 backdrop-blur hover:border-white/30 hover:bg-white/5 transition-all duration-300 w-full lg:w-auto"
                 >
                   View More & Register
                   <span className="text-xs">→</span>
-                </a>
+                </Link>
               </motion.div>
             </motion.div>
           </div>

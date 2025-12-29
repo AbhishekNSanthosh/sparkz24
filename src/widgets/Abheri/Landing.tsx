@@ -148,11 +148,8 @@ export default function AbheriPage() {
                 | Teams of 6-10 | Reg: ₹1,000
               </p>
               <Link
-                href=""
+                href="/abheri/register"
                 // target="_blank"
-                onClick={() => {
-                  toastInfo("Registrations opening soon. Stay tuned!");
-                }}
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-gradient-to-r from-indigo-500/20 via-fuchsia-500/15 to-amber-400/20 px-8 py-3 text-sm font-bold uppercase tracking-widest text-white/90 backdrop-blur hover:border-white/30 hover:bg-white/5 transition-all duration-300"
               >
@@ -308,11 +305,9 @@ export default function AbheriPage() {
                 </div>
               </div>
               <Link
-                href=""
+                href="/abheri/register"
                 // target="_blank"
-                 onClick={() => {
-                  toastInfo("Registrations opening soon. Stay tuned!");
-                }}
+               
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-gradient-to-r from-orange-500/20 via-amber-400/15 to-orange-500/20 px-8 py-3 text-sm font-bold uppercase tracking-widest text-white/90 backdrop-blur hover:border-white/30 hover:bg-white/5 transition-all duration-300 w-full md:w-auto"
               >
