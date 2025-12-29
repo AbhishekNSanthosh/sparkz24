@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { events } from "@/utils/constants/Constants";
 import Image from "next/image";
+import GradientBackground from "@/components/ui/GradientBackground";
 
 export default function Register() {
   const params = useParams();
@@ -258,165 +259,168 @@ export default function Register() {
   const amount = event.registrationFee;
 
   return (
-    <div className="min-h-screen bg-black text-white px-4 py-12 flex items-center justify-center font-sans relative overflow-hidden">
-        {/* Background Gradients */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-900/20 rounded-full blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-900/20 rounded-full blur-[120px]" />
-        </div>
+    <div className="min-h-screen text-white selection:bg-indigo-500/30 font-sans relative overflow-hidden">
+        {/* Global Gradient Background */}
+        <GradientBackground />
 
-        <div className="max-w-3xl w-full bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-6 md:p-10 shadow-2xl">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-                <div>
-                    <h1 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-blue-400">
-                        {event.title} Registration
-                    </h1>
-                     <p className="text-gray-400 mt-1 flex items-center gap-2">
-                        <Calendar className="w-4 h-4" />
-                        Date: {event.date}
-                    </p>
-                </div>
-                {isRegistrationClosed && (
-                    <div className="px-4 py-2 bg-red-500/20 border border-red-500/50 rounded-lg text-red-200 flex items-center gap-2 font-semibold">
-                        <AlertCircle className="w-5 h-5" />
-                        Registration Closed
+        <div className="relative z-10 min-h-screen flex items-center justify-center py-12 px-4">
+            <div className="max-w-3xl w-full bg-white/3 backdrop-blur-xl rounded-3xl border border-white/10 p-6 md:p-10 shadow-2xl">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                    <div>
+                        <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
+                             <span className="bg-linear-to-r from-white via-indigo-100 to-indigo-300 bg-clip-text text-transparent">
+                                {event.title} Registration
+                             </span>
+                        </h1>
+                        <p className="text-white/60 mt-2 flex items-center gap-2 text-sm md:text-base">
+                            <Calendar className="w-4 h-4 text-indigo-400" />
+                            Date: {event.date}
+                        </p>
                     </div>
-                )}
-            </div>
-
-            {isRegistrationClosed && !existingRegistrationId ? (
-                <div className="text-center py-10">
-                    <p className="text-xl text-gray-300">Registration for this event is currently closed.</p>
-                    <Link href="/events" className="inline-block mt-6 px-6 py-3 bg-white/10 hover:bg-white/20 rounded-lg transition-colors">
-                        Browse other events
-                    </Link>
-                </div>
-            ) : (
-                <form onSubmit={handleSubmit} className="space-y-8">
-                    {/* Leader Details */}
-                    <div className="space-y-4">
-                        <h3 className="text-xl font-semibold text-purple-300 border-b border-white/10 pb-2">
-                            {event.eveType === 'team' ? "Team Leader Details" : "Participant Details"}
-                        </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300">Name <span className="text-red-500">*</span></label>
-                                <input required type="text" name="leaderName" value={formData.leaderName} onChange={handleInputChange} placeholder="Full Name" className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500/50 outline-none transition-all" />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300">Mobile <span className="text-red-500">*</span></label>
-                                <input required type="tel" name="leaderMobile" value={formData.leaderMobile} onChange={handleInputChange} placeholder="Mobile Number" className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500/50 outline-none transition-all" />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300">College <span className="text-red-500">*</span></label>
-                                <input required type="text" name="leaderCollege" value={formData.leaderCollege} onChange={handleInputChange} placeholder="College Name" className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500/50 outline-none transition-all" />
-                            </div>
-                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300">Department/Year <span className="text-red-500">*</span></label>
-                                <input required type="text" name="leaderDepartment" value={formData.leaderDepartment} onChange={handleInputChange} placeholder="e.g. CSE S5" className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500/50 outline-none transition-all" />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Team Members */}
-                    {event.eveType === 'team' && (
-                        <div className="space-y-4">
-                             <div className="flex justify-between items-center border-b border-white/10 pb-2">
-                                <h3 className="text-xl font-semibold text-purple-300">Team Members</h3>
-                                <div className="text-sm text-gray-400">
-                                    Size: {teamMembers.length + 1} / {event.memberMaxCount} (Min: {event.memberMinCount})
-                                </div>
-                            </div>
-                            
-                            {teamMembers.map((member, idx) => (
-                                <div key={idx} className="p-4 bg-white/5 rounded-xl border border-white/5 space-y-3 relative group">
-                                     <button type="button" onClick={() => removeTeamMember(idx)} className="absolute top-2 right-2 text-gray-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                                    </button>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <input required type="text" placeholder={`Member ${idx + 2} Name`} value={member.name} onChange={(e) => handleTeamMemberChange(idx, 'name', e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500/50 outline-none" />
-                                        <input required type="tel" placeholder={`Member ${idx + 2} Mobile`} value={member.mobile} onChange={(e) => handleTeamMemberChange(idx, 'mobile', e.target.value)} className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500/50 outline-none" />
-                                    </div>
-                                </div>
-                            ))}
-
-                            {teamMembers.length + 1 < (event.memberMaxCount || 99) && (
-                                <button type="button" onClick={addTeamMember} className="w-full py-3 border-2 border-dashed border-white/20 rounded-xl text-gray-400 hover:border-purple-500/50 hover:text-purple-300 transition-all font-medium">
-                                    + Add Team Member
-                                </button>
-                            )}
+                    {isRegistrationClosed && (
+                        <div className="px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-xl text-red-200 flex items-center gap-2 font-semibold">
+                            <AlertCircle className="w-5 h-5" />
+                            Registration Closed
                         </div>
                     )}
+                </div>
 
-                    {/* Extra Fields */}
-                    {event.requiresExtraData && event.extraFields && (
-                         <div className="space-y-4">
-                            <h3 className="text-xl font-semibold text-purple-300 border-b border-white/10 pb-2">Additional Information</h3>
-                            <div className="grid grid-cols-1 gap-5">
-                                {event.extraFields.map((field) => (
-                                    <div key={field.name} className="space-y-2">
-                                        <label className="text-sm font-medium text-gray-300">{field.name} <span className="text-red-500">*</span></label>
-                                        <input required type={field.type || "text"} name={field.name} value={formData[field.name] || ""} onChange={handleInputChange} placeholder={`Enter ${field.name}`} className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500/50 outline-none transition-all" />
+                {isRegistrationClosed && !existingRegistrationId ? (
+                    <div className="text-center py-12 bg-white/5 rounded-2xl border border-white/5">
+                        <p className="text-xl text-gray-300">Registration for this event is currently closed.</p>
+                        <Link href="/events" className="inline-block mt-6 px-6 py-3 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-200 border border-indigo-500/30 rounded-xl transition-all">
+                            Browse other events
+                        </Link>
+                    </div>
+                ) : (
+                    <form onSubmit={handleSubmit} className="space-y-8">
+                        {/* Leader Details */}
+                        <div className="space-y-5">
+                            <h3 className="text-lg font-semibold text-indigo-200 border-b border-indigo-500/20 pb-2">
+                                {event.eveType === 'team' ? "Team Leader Details" : "Participant Details"}
+                            </h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-white/70">Name <span className="text-red-400">*</span></label>
+                                    <input required type="text" name="leaderName" value={formData.leaderName} onChange={handleInputChange} placeholder="Full Name" className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 outline-none transition-all placeholder:text-white/20" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-white/70">Mobile <span className="text-red-400">*</span></label>
+                                    <input required type="tel" name="leaderMobile" value={formData.leaderMobile} onChange={handleInputChange} placeholder="Mobile Number" className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 outline-none transition-all placeholder:text-white/20" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-white/70">College <span className="text-red-400">*</span></label>
+                                    <input required type="text" name="leaderCollege" value={formData.leaderCollege} onChange={handleInputChange} placeholder="College Name" className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 outline-none transition-all placeholder:text-white/20" />
+                                </div>
+                                 <div className="space-y-2">
+                                    <label className="text-sm font-medium text-white/70">Department/Year <span className="text-red-400">*</span></label>
+                                    <input required type="text" name="leaderDepartment" value={formData.leaderDepartment} onChange={handleInputChange} placeholder="e.g. CSE S5" className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 outline-none transition-all placeholder:text-white/20" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Team Members */}
+                        {event.eveType === 'team' && (
+                            <div className="space-y-5">
+                                 <div className="flex justify-between items-center border-b border-indigo-500/20 pb-2">
+                                    <h3 className="text-lg font-semibold text-indigo-200">Team Members</h3>
+                                    <div className="text-sm text-indigo-300 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
+                                        Limit: {event.memberMinCount}-{event.memberMaxCount} members
+                                    </div>
+                                </div>
+                                
+                                {teamMembers.map((member, idx) => (
+                                    <div key={idx} className="p-5 bg-white/5 rounded-2xl border border-white/5 space-y-3 relative group hover:bg-white/8 transition-colors">
+                                         <button type="button" onClick={() => removeTeamMember(idx)} className="absolute top-3 right-3 text-white/40 hover:text-red-400 transition-colors">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                                        </button>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="space-y-1">
+                                                <label className="text-xs text-white/50 ml-1">Member {idx + 2} Name</label>
+                                                <input required type="text" value={member.name} onChange={(e) => handleTeamMemberChange(idx, 'name', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 outline-none transition-all" />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-xs text-white/50 ml-1">Mobile</label>
+                                                <input required type="tel" value={member.mobile} onChange={(e) => handleTeamMemberChange(idx, 'mobile', e.target.value)} className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 outline-none transition-all" />
+                                            </div>
+                                        </div>
                                     </div>
                                 ))}
+
+                                {teamMembers.length + 1 < (event.memberMaxCount || 99) && (
+                                    <button type="button" onClick={addTeamMember} className="w-full py-3 border border-dashed border-white/20 rounded-2xl text-white/60 hover:border-indigo-500/50 hover:text-indigo-300 hover:bg-indigo-500/5 transition-all font-medium flex items-center justify-center gap-2">
+                                        <div className="w-5 h-5 rounded-full border border-current flex items-center justify-center text-xs">+</div>
+                                        Add Team Member
+                                    </button>
+                                )}
                             </div>
+                        )}
+
+                        {/* Extra Fields */}
+                        {event.requiresExtraData && event.extraFields && (
+                             <div className="space-y-5">
+                                <h3 className="text-lg font-semibold text-indigo-200 border-b border-indigo-500/20 pb-2">Additional Information</h3>
+                                <div className="grid grid-cols-1 gap-5">
+                                    {event.extraFields.map((field) => (
+                                        <div key={field.name} className="space-y-2">
+                                            <label className="text-sm font-medium text-white/70">{field.name} <span className="text-red-400">*</span></label>
+                                            <input required type={field.type || "text"} name={field.name} value={formData[field.name] || ""} onChange={handleInputChange} placeholder={`Enter ${field.name}`} className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 outline-none transition-all placeholder:text-white/20" />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Payment Section */}
+                        {event.registrationFee && event.registrationFee !== "0" && (
+                             <div className="space-y-6 pt-4">
+                                <h3 className="text-xl font-bold bg-linear-to-r from-indigo-300 to-fuchsia-300 bg-clip-text text-transparent">
+                                    Payment Details <span className="text-white/50 text-base font-normal ml-2">(Fee: ₹{event.registrationFee})</span>
+                                </h3>
+                                 <div className="flex flex-col items-center justify-center gap-4 bg-indigo-500/5 border border-indigo-500/20 p-6 rounded-2xl">
+                                      <a href={upiLink} className="w-full max-w-sm flex items-center justify-between bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-4 transition-all group cursor-pointer hover:border-indigo-500/30">
+                                        <div className="flex items-center gap-4">
+                                          <div className="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
+                                            <Smartphone className="w-6 h-6" />
+                                          </div>
+                                          <div className="text-left">
+                                            <div className="font-bold text-white group-hover:text-indigo-300 text-sm transition-colors">Pay via UPI App</div>
+                                            <div className="text-xs text-white/40">{event.upi1 ? "Tap to pay" : "UPI ID not available"}</div>
+                                          </div>
+                                        </div>
+                                        <ExternalLink className="w-5 h-5 text-white/30 group-hover:text-white transition-colors" />
+                                      </a>
+
+                                      {event.upi1 && (
+                                         <div className="text-sm text-white/50 font-mono bg-black/30 px-3 py-1 rounded border border-white/5">
+                                            UPI ID: {event.upi1}
+                                         </div>
+                                      )}
+                                 </div>
+
+                                 <div className="space-y-2">
+                                    <label className="text-sm font-medium text-white/70">Transaction ID / Reference No <span className="text-red-400">*</span></label>
+                                    <input required type="text" name="transactionId" value={formData.transactionId} onChange={handleInputChange} placeholder="Enter UPI Transaction ID" className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 outline-none font-mono placeholder:text-white/20" />
+                                 </div>
+                             </div>
+                        )}
+
+                        {/* Acknowledgement */}
+                        <div className="flex items-start gap-3 p-4 bg-indigo-500/5 rounded-xl border border-indigo-500/10">
+                            <input id="ack" type="checkbox" checked={acknowledged} onChange={(e) => setAcknowledged(e.target.checked)} className="mt-1 w-5 h-5 rounded border-white/10 text-indigo-600 focus:ring-indigo-500 bg-black/40 cursor-pointer" />
+                            <label htmlFor="ack" className="text-sm text-white/70 cursor-pointer select-none">
+                                I confirm that the details provided are accurate and I agree to the event rules.
+                            </label>
                         </div>
-                    )}
 
-                    {/* Payment Section */}
-                    {event.registrationFee && event.registrationFee !== "0" && (
-                         <div className="space-y-6 pt-4">
-                            <h3 className="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
-                                Payment Details (Fee: ₹{event.registrationFee})
-                            </h3>
-                             <div className="flex flex-col items-center justify-center gap-4 bg-black/40 border border-white/10 p-6 rounded-xl">
-                                  {/* Using a placeholder or the abheri QR logic if generic QR not available. 
-                                      Since specific QRs aren't provided in event types, using UPI link mainly. 
-                                      If there's a generic QR for common pool, we could use it. 
-                                      For now, sticking to UPI intent + manual Trx ID. 
-                                  */}
-                                  
-                                  <a href={upiLink} className="w-full max-w-sm flex items-center justify-between bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-4 transition-all group cursor-pointer">
-                                    <div className="flex items-center gap-4">
-                                      <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
-                                        <Smartphone className="w-6 h-6" />
-                                      </div>
-                                      <div className="text-left">
-                                        <div className="font-bold text-white group-hover:text-purple-300 text-sm transition-colors">Pay via UPI App</div>
-                                        <div className="text-xs text-gray-400">{event.upi1 ? "Tap to pay" : "UPI ID not available"}</div>
-                                      </div>
-                                    </div>
-                                    <ExternalLink className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors" />
-                                  </a>
-
-                                  {event.upi1 && (
-                                     <div className="text-sm text-gray-400 font-mono bg-black/50 px-3 py-1 rounded">
-                                        UPI ID: {event.upi1}
-                                     </div>
-                                  )}
-                             </div>
-
-                             <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300">Transaction ID / Reference No <span className="text-red-500">*</span></label>
-                                <input required type="text" name="transactionId" value={formData.transactionId} onChange={handleInputChange} placeholder="Enter UPI Transaction ID" className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:ring-2 focus:ring-purple-500/50 outline-none font-mono" />
-                             </div>
-                         </div>
-                    )}
-
-                    {/* Acknowledgement */}
-                    <div className="flex items-start gap-3 p-4 bg-white/5 rounded-xl border border-white/10">
-                        <input id="ack" type="checkbox" checked={acknowledged} onChange={(e) => setAcknowledged(e.target.checked)} className="mt-1 w-5 h-5 rounded border-gray-300 text-purple-600 focus:ring-purple-500 bg-black/40 border-white/10 cursor-pointer" />
-                        <label htmlFor="ack" className="text-sm text-gray-300 cursor-pointer select-none">
-                            I confirm that the details provided are accurate and I agree to the event rules.
-                        </label>
-                    </div>
-
-                    <button type="submit" disabled={loading || !acknowledged} className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-4 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg disabled:grayscale">
-                        {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Processing...</> : existingRegistrationId ? "Update Registration" : "Confirm Registration"}
-                    </button>
-                </form>
-            )}
+                        <button type="submit" disabled={loading || !acknowledged} className="w-full bg-linear-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-500 hover:to-fuchsia-500 text-white font-bold py-4 rounded-2xl transition-all transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-xl shadow-indigo-900/20 disabled:grayscale disabled:shadow-none">
+                            {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Processing...</> : existingRegistrationId ? "Update Registration" : "Confirm Registration"}
+                        </button>
+                    </form>
+                )}
+            </div>
         </div>
     </div>
   );
+
 }
