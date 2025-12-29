@@ -69,7 +69,7 @@ export default function Register() {
   useEffect(() => {
     if (!authLoading && !user) {
         toastError("Please login to register for Abheri");
-        router.push('/');
+        router.push('/login');
     }
   }, [user, authLoading, router]);
 
