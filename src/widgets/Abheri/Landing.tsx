@@ -133,7 +133,7 @@ export default function AbheriPage() {
             >
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[13px] font-bold uppercase tracking-widest backdrop-blur mx-auto">
                 <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                Inter-College Band Competition
+                Inter-Collegiate Band Competition
               </div>
               <h1 className="text-4xl font-black leading-tight sm:text-5xl lg:text-7xl">
                 <span className="bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent">
@@ -144,7 +144,7 @@ export default function AbheriPage() {
                 <span className="text-orange-400">20 Jan 2026</span>
               </h1>
               <p className="text-xl text-white/70 max-w-2xl mx-auto">
-                Unleash your band's energy at Sparkz '26 – Prizes up to ₹30,000
+                Unleash your band's energy at Sparkz '26 – Prize pool up to ₹60,000
                 | Teams of 6-10 | Reg: ₹1,000
               </p>
               <Link
