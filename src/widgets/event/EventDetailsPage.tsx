@@ -19,6 +19,7 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { shimmer, toBase64 } from "@/utils/imageUtils";
+import GradientBackground from "@/components/ui/GradientBackground";
 
 // Loading component for suspense
 function EventDetailsSkeleton() {
@@ -41,32 +42,7 @@ function EventDetailsSkeleton() {
   );
 }
 
-// Gradient background component
-function GradientBackground() {
-  return (
-    <div
-      className="fixed inset-0 overflow-hidden pointer-events-none"
-      aria-hidden="true"
-    >
-      <div className="absolute inset-0 bg-[#020205]" />
-        
-      {/* Soft Ambient Glows */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-fuchsia-600/10 rounded-full blur-[120px]" />
-      </div>
 
-      {/* Grid pattern overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-         style={{
-          backgroundImage: `linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)`,
-          backgroundSize: "50px 50px",
-        }}
-      />
-    </div>
-  );
-}
 
 // InfoCard component (Bento Style)
 interface InfoCardProps {

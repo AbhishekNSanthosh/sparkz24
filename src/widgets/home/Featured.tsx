@@ -69,15 +69,15 @@ export default function FeaturedEvents({ events }: { events: Event[] }) {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-20 sm:mb-28 text-center text-4xl font-bold leading-tight sm:text-5xl"
+          className="mb-20 sm:mb-28 text-center text-white text-4xl font-bold leading-tight sm:text-5xl"
         >
           Featured{" "}
-          <span className="bg-linear-to-r from-indigo-300 via-fuchsia-300 to-amber-200 bg-clip-text text-transparent animate-[pulse_6s_ease-in-out_infinite]">
+          <span className="bg-linear-to-r from-indigo-300 via-fuchsia-300 to-amber-200 bg-clip-text text-transparent">
             Events
           </span>
         </motion.h2>
 
-        <div className="relative flex items-center justify-center gap-12">
+        <div className="relative flex items-center justify-center gap-4 sm:gap-12">
           <AnimatePresence initial={false}>
             {visibleEvents.map((event, idx) => {
               const isCenter = idx === 1;
@@ -103,16 +103,16 @@ export default function FeaturedEvents({ events }: { events: Event[] }) {
                   }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
-                  className={`relative ${isCenter ? "z-30" : "z-10"}`}
+                  className={`relative ${isCenter ? "z-30 w-[70vw] sm:w-72" : "z-10 hidden sm:block w-64"} flex-shrink-0`}
                   whileHover={isCenter ? { scale: 1.08, y: -30 } : {}}
                   onMouseEnter={() => isCenter && setPaused(true)}
                   onMouseLeave={() => isCenter && setPaused(false)}
                   onFocus={() => isCenter && setPaused(true)}
                   onBlur={() => isCenter && setPaused(false)}
                 >
-                  <Link href={`/events/${event.id}`} className="group">
+                  <Link href={`/events/${event.id}`} className="group block w-full">
                     <div
-                      className={`relative aspect-4/5 w-70 overflow-hidden rounded-3xl border
+                      className={`relative aspect-4/5 w-full overflow-hidden rounded-3xl border
                         ${
                           isCenter
                             ? "border-fuchsia-400/40 group-hover:scale-105 shadow-2xl shadow-fuchsia-500/30"
@@ -140,15 +140,15 @@ export default function FeaturedEvents({ events }: { events: Event[] }) {
           {/* Glowing nav buttons */}
           <button
             onClick={() => setActive((i) => getIndex(i - 1))}
-            className="absolute left-4 z-40 rounded-full bg-white/5 p-4 backdrop-blur hover:bg-white/10 hover:scale-110 transition"
+            className="absolute left-2 sm:left-4 z-40 rounded-full bg-white/5 p-2 sm:p-4 backdrop-blur hover:bg-white/10 hover:scale-110 transition"
           >
-            <span className="text-4xl text-white/80">‹</span>
+            <span className="text-2xl sm:text-4xl text-white/80">‹</span>
           </button>
           <button
             onClick={() => setActive((i) => getIndex(i + 1))}
-            className="absolute right-4 z-40 rounded-full bg-white/5 p-4 backdrop-blur hover:bg-white/10 hover:scale-110 transition"
+            className="absolute right-2 sm:right-4 z-40 rounded-full bg-white/5 p-2 sm:p-4 backdrop-blur hover:bg-white/10 hover:scale-110 transition"
           >
-            <span className="text-4xl text-white/80">›</span>
+            <span className="text-2xl sm:text-4xl text-white/80">›</span>
           </button>
         </div>
       </div>

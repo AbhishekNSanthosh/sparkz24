@@ -5,12 +5,17 @@ import { Suspense, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import Particles from "@/widgets/common/Particles";
+import GradientBackground from "@/components/ui/GradientBackground";
 
 import { events as eventsData, departments } from "@/utils/constants/Constants";
 
 const loader = ({ src, width, quality }: ImageLoaderProps) => {
   return `${src}?w=${width}&q=${quality || 50}`; // Default quality to 75 if not provided
 };
+
+
+
+// ... (rest of imports)
 
 export default function EventsPage() {
   const [selectedDept, setSelectedDept] = useState<string>("All");
@@ -19,23 +24,7 @@ export default function EventsPage() {
 
   return (
     <section className="relative isolate overflow-hidden bg-[#04050b] text-white min-h-screen py-10">
-      {/* Ambient glows */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-32 -top-24 h-72 w-72 rounded-full bg-indigo-600/18 blur-[120px] animate-[pulse_8s_ease-in-out_infinite]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute right-0 top-10 h-80 w-80 rounded-full bg-fuchsia-500/14 blur-[130px] animate-[pulse_10s_ease-in-out_infinite]"
-      />
-
-      {/* Gentle grid for 'circuit' texture */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-12"
-      >
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(56,189,248,0.06)_1px,transparent_1px),linear-gradient(rgba(56,189,248,0.04)_1px,transparent_1px)] bg-size-[140px_140px]" />
-      </div>
+      <GradientBackground />
 
       <div className="relative mx-auto max-w-348 px-4 sm:px-6">
         <motion.header
