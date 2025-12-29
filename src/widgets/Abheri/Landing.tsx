@@ -86,7 +86,7 @@ export default function AbheriPage() {
   return (
     <div className="min-h-screen bg-[#04050b] text-white overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative isolate overflow-hidden pt-10 pb-20 sm:py-24">
+      <section className="relative isolate overflow-hidden pt-10 pb-20 sm:py-15">
         {mounted && (
           <>
             <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-[#04050b] via-transparent to-transparent h-64" />

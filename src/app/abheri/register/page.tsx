@@ -5,9 +5,11 @@ import { collection, addDoc, doc, updateDoc, arrayUnion, query, where, getDocs, 
 import { db } from "@/utils/firebase";
 import Link from "next/link";
 import { toastSuccess,toastError } from "@/utils/common/Toast";
-import { Loader2, Smartphone, ExternalLink } from "lucide-react";
+import { Loader2, Smartphone, ExternalLink, Copy } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { ref, uploadBytes, getDownloadURL, deleteObject, uploadBytesResumable } from "firebase/storage";
+import { storage } from "@/utils/firebase";
 
 export default function Register() {
   const [loading, setLoading] = useState(false);
@@ -23,6 +25,11 @@ export default function Register() {
     instrumentalistCount: "",
     transactionId: "",
   });
+
+  const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null);
+  const [screenshotUrl, setScreenshotUrl] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const [selectedInstruments, setSelectedInstruments] = useState<string[]>([]);
   const [isAddingCustom, setIsAddingCustom] = useState(false);
@@ -49,9 +56,9 @@ export default function Register() {
             const parsed = JSON.parse(savedData);
             setFormData(parsed.formData);
             setSelectedInstruments(parsed.selectedInstruments);
-        } catch (error) {
-            console.error("Failed to parse saved registration data:", error);
-        }
+    } catch (error) {
+       toastError("Failed to load saved data.");
+    }
         }
     }
   }, [existingRegistrationId]);
@@ -94,11 +101,12 @@ export default function Register() {
               transactionId: data.transactionId || "",
             });
             setSelectedInstruments(data.instruments || []);
+            setScreenshotUrl(data.screenshotUrl || null);
             setAcknowledged(true); // Assuming if they registered, they acknowledged
             toastSuccess("Loaded your existing registration.");
           }
         } catch (error) {
-          console.error("Error fetching registration:", error);
+          toastError("Failed to fetch existing registration.");
         }
       }
     };
@@ -160,14 +168,131 @@ export default function Register() {
     }
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (file.size > 5 * 1024 * 1024) {
+        toastError("File size should be less than 5MB");
+        return;
+      }
+      
+      // Start background upload
+      setUploading(true);
+      setUploadProgress(0);
+      setPaymentScreenshot(file); // Keep for display name or logic, though we upload immediately
+
+      const storageRef = ref(storage, `abheri_payment_screenshots/${Date.now()}_${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on('state_changed', 
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setUploadProgress(progress);
+        }, 
+        (error) => {
+          console.error("Upload error:", error);
+          toastError("Upload failed. Please try again.");
+          setUploading(false);
+          setPaymentScreenshot(null);
+        }, 
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setScreenshotUrl(downloadURL);
+            setUploading(false);
+            toastSuccess("Screenshot uploaded successfully!");
+          });
+        }
+      );
+    }
+  };
+
+  const handleDeleteFile = async () => {
+    // If we have a URL, trying to delete it from storage would be clean
+    if (screenshotUrl) {
+        try {
+            const fileRef = ref(storage, screenshotUrl);
+            await deleteObject(fileRef);
+            toastSuccess("File removed.");
+        } catch (error) {
+            console.error("Delete error", error);
+            // Ignore error, maybe it was already gone or typical permission issue?
+            // Just clear UI state.
+        }
+    }
+    setPaymentScreenshot(null);
+    setScreenshotUrl(null);
+    setUploading(false);
+    setUploadProgress(0);
+  };
+
+  const handleCopyUPI = () => {
+    navigator.clipboard.writeText(UPI_ID);
+    toastSuccess("UPI ID copied to clipboard!");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      // Logic Validation: Check member counts
+      const totalMembers = parseInt(formData.musiciansCount) || 0;
+      const vocalists = parseInt(formData.vocalistCount) || 0;
+      const instrumentalists = parseInt(formData.instrumentalistCount) || 0;
+
+      if (vocalists + instrumentalists > totalMembers) {
+         toastError(`Total members (${totalMembers}) cannot be less than sum of vocalists and instrumentalists (${vocalists + instrumentalists})`);
+         setLoading(false);
+         return;
+      }
+      
+      // Allow a small buffer? Or strict equality? 
+      // Usually Total = Vocalists + Instrumentalists. 
+      // Sometimes there are non-musical members? "Manager" is separate. 
+      // Let's enforce strictly or leniently? The form says "Musicians count". 
+      // Vocalist + Instrumentalist = Musicians.
+      if (vocalists + instrumentalists !== totalMembers) {
+          toastError(`Sum of vocalists and instrumentalists must equal total musicians count.`);
+          setLoading(false);
+          return;
+      }
+
+      if (uploading) {
+        toastError("Please wait for the screenshot upload to complete.");
+        setLoading(false);
+        return;
+      }
+
+      if (!screenshotUrl) {
+        toastError("Please upload the payment screenshot");
+        setLoading(false);
+        return;
+      }
+
+      // Check for duplicate Transaction ID
+      const transactionQuery = query(
+        collection(db, "abheri_registrations"),
+        where("transactionId", "==", formData.transactionId),
+        limit(1)
+      );
+      const transactionSnapshot = await getDocs(transactionQuery);
+
+      if (!transactionSnapshot.empty) {
+        // If we are updating, allow same ID if it belongs to this registration
+        const existingDoc = transactionSnapshot.docs[0];
+        if (existingRegistrationId && existingDoc.id === existingRegistrationId) {
+          // It's our own ID, proceed
+        } else {
+          toastError("This Transaction ID has already been used.");
+          setLoading(false);
+          return;
+        }
+      }
+
       const registrationData = {
         ...formData,
         instruments: selectedInstruments,
+        screenshotUrl: screenshotUrl,
         // Only set createdAt on new docs, maybe updatedAt on updates?
         // createdAt: new Date(), 
         userId: user?.uid,
@@ -220,8 +345,7 @@ export default function Register() {
       }
 
     } catch (error) {
-      console.error("Error registering:", error);
-      toastError("Operation failed. Please try again.");
+      toastError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -236,7 +360,7 @@ export default function Register() {
       </div>
 
       <div className="max-w-3xl w-full bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-8 md:p-12 shadow-2xl">
-        <h1 className="text-4xl md:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+        <h1 className="text-4xl md:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-blue-400">
           Abheri Registration
         </h1>
         <p className="text-gray-400 mb-8">Register your band for the ultimate musical showdown.</p>
@@ -437,7 +561,7 @@ export default function Register() {
 
            {/* Payment Section */}
            <div className="space-y-6">
-              <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">Payment Details</h3>
+              <h3 className="text-xl font-bold text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-blue-400">Payment Details</h3>
               
               <div className="flex flex-col items-center justify-center gap-4 bg-black/40 border border-white/10 p-6 sm:p-8 rounded-xl">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -462,6 +586,22 @@ export default function Register() {
                     </div>
                     <ExternalLink className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors" />
                   </a>
+
+                  <button 
+                    type="button"
+                    onClick={handleCopyUPI}
+                    className="w-full flex md:hidden items-center justify-between bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-3 gap-3 transition-all group cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform shrink-0">
+                        <Copy className="w-5 h-5" />
+                      </div>
+                      <div className="text-left min-w-0 overflow-hidden flex-1">
+                        <div className="font-bold text-white group-hover:text-blue-300 text-sm transition-colors truncate">Copy UPI ID</div>
+                        <div className="text-xs text-gray-400 truncate font-mono text-[10px] sm:text-xs">{UPI_ID}</div>
+                      </div>
+                    </div>
+                  </button>
               </div>
 
               <div className="space-y-2">
@@ -476,6 +616,68 @@ export default function Register() {
                   className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-all font-mono"
                 />
               </div>
+
+               <div className="space-y-2">
+                 <label className="text-sm font-medium text-gray-300">Payment Screenshot <span className="text-red-500">*</span></label>
+                 <div className="w-full bg-black/40 border border-white/10 rounded-lg p-4 flex flex-col items-center justify-center gap-4">
+                   {(paymentScreenshot || screenshotUrl) ? (
+                     <div className="relative w-full">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                       <img 
+                         src={paymentScreenshot ? URL.createObjectURL(paymentScreenshot) : screenshotUrl!} 
+                         alt="Payment Screenshot" 
+                         className={`w-full h-auto max-h-64 object-contain rounded-lg border border-white/20 ${uploading ? 'opacity-50' : ''}`}
+                       />
+                       
+                       {uploading && (
+                         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 rounded-lg backdrop-blur-sm p-4">
+                           <Loader2 className="w-8 h-8 text-purple-500 animate-spin mb-2" />
+                           <div className="w-full max-w-[200px] h-2 bg-white/20 rounded-full overflow-hidden">
+                             <div 
+                               className="h-full bg-linear-to-r from-purple-500 to-blue-500 transition-all duration-300 ease-out"
+                               style={{ width: `${uploadProgress}%` }}
+                             />
+                           </div>
+                           <p className="text-sm text-gray-300 mt-2 font-medium">{Math.round(uploadProgress)}% Uploading...</p>
+                         </div>
+                       )}
+
+                       {!uploading && (
+                        <button
+                          type="button"
+                          onClick={handleDeleteFile}
+                          className="absolute top-2 right-2 bg-red-500/80 hover:bg-red-600 text-white p-2 rounded-full transition-colors"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                       )}
+                       
+                       <p className="text-center text-xs text-gray-400 mt-2">{paymentScreenshot ? paymentScreenshot.name : "Uploaded Screenshot"}</p>
+                     </div>
+                   ) : (
+                     <>
+                        <input
+                          type="file"
+                          id="screenshot-upload"
+                          accept="image/*"
+                          onChange={handleFileChange}
+                          className="hidden"
+                          required
+                        />
+                        <label 
+                          htmlFor="screenshot-upload"
+                          className="flex flex-col items-center justify-center gap-2 cursor-pointer w-full py-8 border-2 border-dashed border-white/10 hover:border-purple-500/50 rounded-lg transition-colors group"
+                        >
+                          <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
+                            <svg className="w-6 h-6 text-gray-400 group-hover:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                          </div>
+                          <span className="text-sm text-gray-300 font-medium">Click to upload screenshot</span>
+                          <span className="text-xs text-gray-500">JPG, PNG up to 5MB</span>
+                        </label>
+                     </>
+                   )}
+                 </div>
+               </div>
            </div>
 
           <div className="flex items-start gap-3 mt-6 p-4 bg-white/5 rounded-xl border border-white/10">
@@ -497,13 +699,13 @@ export default function Register() {
 
           <button
             type="submit"
-            disabled={loading || !acknowledged}
-            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-4 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6 disabled:grayscale"
+            disabled={loading || !acknowledged || uploading}
+            className="w-full bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-4 rounded-xl transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6 disabled:grayscale"
           >
-            {loading ? (
+            {loading || uploading ? (
                 <>
                 <Loader2 className="w-5 h-5 animate-spin"/>
-                Registering...
+                {uploading ? "Uploading Proof..." : "Registering..."}
                 </>
             ) : (
                 existingRegistrationId ? "Update Registration" : "Register Band"
