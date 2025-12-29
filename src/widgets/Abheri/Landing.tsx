@@ -133,7 +133,7 @@ export default function AbheriPage() {
             >
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[13px] font-bold uppercase tracking-widest backdrop-blur mx-auto">
                 <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                Inter-College Band Competition
+                Inter-Collegiate Band Competition
               </div>
               <h1 className="text-4xl font-black leading-tight sm:text-5xl lg:text-7xl">
                 <span className="bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent">
@@ -144,15 +144,12 @@ export default function AbheriPage() {
                 <span className="text-orange-400">20 Jan 2026</span>
               </h1>
               <p className="text-xl text-white/70 max-w-2xl mx-auto">
-                Unleash your band's energy at Sparkz '26 – Prizes up to ₹30,000
+                Unleash your band's energy at Sparkz '26 – Prize pool up to ₹60,000
                 | Teams of 6-10 | Reg: ₹1,000
               </p>
               <Link
-                href=""
+                href="/abheri/register"
                 // target="_blank"
-                onClick={() => {
-                  toastInfo("Registrations opening soon. Stay tuned!");
-                }}
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-gradient-to-r from-indigo-500/20 via-fuchsia-500/15 to-amber-400/20 px-8 py-3 text-sm font-bold uppercase tracking-widest text-white/90 backdrop-blur hover:border-white/30 hover:bg-white/5 transition-all duration-300"
               >
@@ -306,7 +303,6 @@ export default function AbheriPage() {
                    </span>
                 </div>
               </div>
-
               <div className="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
                 {[
                   { title: "Faculty Coordinator", name: "Ashin Sabu", phone: "+91 9487752512" },
@@ -323,19 +319,16 @@ export default function AbheriPage() {
                    </div>
                 ))}
               </div>
-
-              <div className="pt-8">
-                <Link
-                  href=""
-                   onClick={() => {
-                    toastInfo("Registrations opening soon. Stay tuned!");
-                  }}
-                  className="inline-flex items-center justify-center gap-3 rounded-full border border-orange-500/50 bg-gradient-to-r from-orange-600 to-amber-600 px-10 py-4 text-base font-bold uppercase tracking-widest text-white shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:scale-105 transition-all duration-300 w-full md:w-auto"
-                >
-                  Register Your Band
-                  <span className="text-lg">→</span>
-                </Link>
-              </div>
+              <Link
+                href="/abheri/register"
+                // target="_blank"
+               
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-gradient-to-r from-orange-500/20 via-amber-400/15 to-orange-500/20 px-8 py-3 text-sm font-bold uppercase tracking-widest text-white/90 backdrop-blur hover:border-white/30 hover:bg-white/5 transition-all duration-300 w-full md:w-auto"
+              >
+                Register Your Band
+                <span className="text-xs">→</span>
+              </Link>
             </motion.div>
           </div>
         </div>
