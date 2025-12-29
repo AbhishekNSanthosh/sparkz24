@@ -120,7 +120,7 @@ export default function About() {
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 font-bold">
                       {i + 1}
                     </div>
-                    <div>
+                    <div className="flex-1 min-w-0">
                       <h3 className="text-xl font-bold">{point.title}</h3>
                       <p className="mt-1 text-white/70">{point.body}</p>
                     </div>

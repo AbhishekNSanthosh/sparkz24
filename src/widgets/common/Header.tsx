@@ -1,6 +1,7 @@
 "use client";
 import { navItems } from "@/utils/constants/Constants";
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Menu, X, User as UserIcon, LogOut } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
@@ -30,27 +31,47 @@ export default function Header() {
         <div className="relative  flex  flex-wrap items-center justify-between gap-3 px-[5vw] py-4 sm:flex-nowrap sm:gap-6  sm:py-5">
           {/* Left nav - Desktop Only */}
           <div className="hidden flex-1 items-center gap-4 text-sm text-white/80 sm:flex sm:gap-6">
-            {navItems?.slice(0, 3).map((item, index) => (
-              <Link
-                key={index}
-                href={item?.to}
-                className="rounded-full border border-transparent px-3 py-2 transition hover:border-white/20 hover:bg-white/5 hover:text-white"
-              >
-                {item?.title}
-              </Link>
-            ))}
+            {navItems?.slice(0, 3).map((item, index) => {
+              const isSpecial = item.title === "ABHERI";
+              return (
+                <Link
+                  key={index}
+                  href={item?.to}
+                  className={`relative rounded-full border px-3 py-2 transition duration-300 ${
+                    isSpecial
+                      ? "group border-fuchsia-500/30 bg-fuchsia-500/10 hover:bg-fuchsia-500/20 hover:border-fuchsia-500/60 hover:shadow-[0_0_20px_rgba(236,72,153,0.4)]"
+                      : "border-transparent hover:border-white/20 hover:bg-white/5 hover:text-white"
+                  }`}
+                >
+                  {isSpecial ? (
+                    <span className="flex items-center gap-2">
+                      <span className="bg-linear-to-r from-indigo-300 via-fuchsia-300 to-amber-200 bg-clip-text text-transparent font-bold">
+                        {item.title}
+                      </span>
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-fuchsia-500"></span>
+                      </span>
+                    </span>
+                  ) : (
+                    item.title
+                  )}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Brand - Centered in Desktop */}
           <div className="flex flex-[1.2] items-center justify-start sm:justify-center">
-            <Link href="/" className="relative flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-white/90 shadow-[0_10px_40px_rgba(79,70,229,0.25)]">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              <h1 className="text-xl font-bold">
-                Sparkz{" "}
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-indigo-300 via-fuchsia-300 to-amber-200 animate-[pulse_7s_ease-in-out_infinite]">
-                  &apos;26
-                </span>
-              </h1>
+            <Link href="/" className="relative flex items-center justify-center transition-transform hover:scale-105">
+              <Image 
+                src="/sparkz.svg" 
+                alt="Sparkz Logo" 
+                width={120} 
+                height={40} 
+                className="h-8 w-auto sm:h-10 object-contain drop-shadow-[0_0_15px_rgba(236,72,153,0.5)]"
+                priority
+              />
             </Link>
           </div>
 
@@ -107,16 +128,35 @@ export default function Header() {
       >
         <div className="flex flex-col items-center justify-center min-h-screen p-6">
           <nav className="flex flex-col items-center gap-6 w-full max-w-sm">
-            {navItems?.map((item, index) => (
-              <Link
-                key={index}
-                href={item?.to}
-                onClick={() => setIsMenuOpen(false)}
-                className="w-full text-center py-4 text-lg font-medium text-white/90 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 transition-all hover:scale-[1.02]"
-              >
-                {item?.title}
-              </Link>
-            ))}
+            {navItems?.map((item, index) => {
+              const isSpecial = item.title === "ABHERI";
+              return (
+                <Link
+                  key={index}
+                  href={item?.to}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`w-full text-center py-4 text-lg font-medium rounded-2xl border transition-all hover:scale-[1.02] ${
+                    isSpecial
+                      ? "text-white border-fuchsia-500/40 bg-fuchsia-500/10 shadow-[0_0_15px_rgba(236,72,153,0.2)]"
+                      : "text-white/90 border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20"
+                  }`}
+                >
+                  {isSpecial ? (
+                     <span className="flex items-center justify-center gap-2">
+                        <span className="bg-linear-to-r from-indigo-300 via-fuchsia-300 to-amber-200 bg-clip-text text-transparent font-bold">
+                            {item.title}
+                        </span>
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-fuchsia-500"></span>
+                        </span>
+                     </span>
+                  ) : (
+                    item.title
+                  )}
+                </Link>
+              );
+            })}
 
             {user ? (
                <Link
