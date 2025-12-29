@@ -136,7 +136,7 @@ export default function BandCompetition() {
                 className="pt-2"
               >
                 <Link
-                  href="https://sparkz.carmelcet.in/abheri/register"
+                  href="/abheri"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-gradient-to-r from-indigo-500/20 via-fuchsia-500/15 to-amber-400/20 px-8 py-3 text-sm font-bold uppercase tracking-widest text-white/90 backdrop-blur hover:border-white/30 hover:bg-white/5 transition-all duration-300 transform hover:-translate-y-1 w-full sm:w-auto"
