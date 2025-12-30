@@ -18,6 +18,8 @@ interface UserProfile {
   college: string;
   isProfileComplete: boolean;
   registeredEvents?: string[];
+  role?: 'superAdmin' | 'admin' | 'abheriAdmin' | 'user';
+  department?: string; // For department admins
 }
 
 interface AuthContextType {
@@ -43,15 +45,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const userDoc = await getDoc(userDocRef);
 
       if (userDoc.exists()) {
-        setUserData(userDoc.data() as UserProfile);
+        const data = userDoc.data() as UserProfile;
+        
+        // Auto-promote specific user to superAdmin
+        // if (email === 'joeljoy1237@gmail.com' && data.role !== 'superAdmin') {
+        //     await setDoc(userDocRef, { ...data, role: 'superAdmin' }, { merge: true });
+        //     data.role = 'superAdmin';
+        // }
+
+        // Ensure role exists, default to user if not
+        if (!data.role) {
+             data.role = 'user'; 
+        }
+        setUserData(data);
       } else {
         // Create initial user doc if it doesn't exist
+        const isSuperAdmin = email === 'joeljoy1237@gmail.com';
         const initialData: UserProfile = {
           name: '',
           email: email,
           college: '',
           isProfileComplete: false,
-          registeredEvents: []
+          registeredEvents: [],
+          role: isSuperAdmin ? 'superAdmin' : 'user'
         };
         await setDoc(userDocRef, initialData);
         setUserData(initialData);

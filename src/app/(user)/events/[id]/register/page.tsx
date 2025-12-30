@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, addDoc, doc, updateDoc, arrayUnion, query, where, getDocs, limit } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, arrayUnion, query, where, getDocs, limit, getDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import Link from "next/link";
 import { toastSuccess, toastError, toastInfo } from "@/utils/common/Toast";
@@ -9,14 +9,16 @@ import { Loader2, Smartphone, ExternalLink, AlertCircle, Calendar } from "lucide
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
-import { events } from "@/utils/constants/Constants";
+import { Event } from "@/utils/types/event";
 import Image from "next/image";
 import GradientBackground from "@/components/ui/GradientBackground";
 
 export default function Register() {
   const params = useParams();
   const id = params?.id as string;
-  const event = events.find((e) => e.id === id);
+  
+  const [event, setEvent] = useState<Event | null>(null);
+  const [pageLoading, setPageLoading] = useState(true);
 
   const [loading, setLoading] = useState(false);
   // Dynamic form state
@@ -40,6 +42,32 @@ export default function Register() {
   const router = useRouter();
 
   const STORAGE_KEY = `event_registration_${id}`;
+
+  // Fetch Event Data
+  useEffect(() => {
+    const fetchEvent = async () => {
+        try {
+            const docRef = doc(db, "events", id);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                setEvent({ id: docSnap.id, ...docSnap.data() } as Event);
+            } else {
+                toastError("Event not found");
+                // router.push('/events'); // Optional: redirect
+            }
+        } catch (error) {
+            console.error("Error fetching event:", error);
+            toastError("Failed to load event details");
+        } finally {
+            setPageLoading(false);
+        }
+    };
+
+    if (id) {
+        fetchEvent();
+    }
+  }, [id]);
 
   // Check deadline
   useEffect(() => {
@@ -253,9 +281,19 @@ export default function Register() {
     }
   };
 
+  if (pageLoading) {
+      return (
+          <div className="min-h-screen flex items-center justify-center text-white">
+              <Loader2 className="w-10 h-10 animate-spin text-indigo-500" />
+          </div>
+      );
+  }
+
   if (!event) return <div className="min-h-screen flex items-center justify-center text-white">Event not found</div>;
 
-  const upiLink = event.upi1 ? `upi://pay?pa=${event.upi1}&pn=Sparkz24&tn=${encodeURIComponent(`${event.title} Reg`)}` : "#";
+  // Handle UPI Link - checking both single string upi1 (legacy) and array upi (new)
+  const upiId = (event.upi && event.upi.length > 0) ? event.upi[0] : (event as any).upi1; 
+  const upiLink = upiId ? `upi://pay?pa=${upiId}&pn=Sparkz24&tn=${encodeURIComponent(`${event.title} Reg`)}` : "#";
   const amount = event.registrationFee;
 
   return (
@@ -385,15 +423,15 @@ export default function Register() {
                                           </div>
                                           <div className="text-left">
                                             <div className="font-bold text-white group-hover:text-indigo-300 text-sm transition-colors">Pay via UPI App</div>
-                                            <div className="text-xs text-white/40">{event.upi1 ? "Tap to pay" : "UPI ID not available"}</div>
+                                            <div className="text-xs text-white/40">{upiId ? "Tap to pay" : "UPI ID not available"}</div>
                                           </div>
                                         </div>
                                         <ExternalLink className="w-5 h-5 text-white/30 group-hover:text-white transition-colors" />
                                       </a>
 
-                                      {event.upi1 && (
+                                      {upiId && (
                                          <div className="text-sm text-white/50 font-mono bg-black/30 px-3 py-1 rounded border border-white/5">
-                                            UPI ID: {event.upi1}
+                                            UPI ID: {upiId}
                                          </div>
                                       )}
                                  </div>

@@ -1,26 +1,64 @@
 "use client";
 
 import Image, { ImageLoaderProps } from "next/image";
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useMemo, useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import Particles from "@/widgets/common/Particles";
 import GradientBackground from "@/components/ui/GradientBackground";
 
-import { events as eventsData, departments } from "@/utils/constants/Constants";
+import { db } from "@/utils/firebase";
+import { collection, getDocs } from "firebase/firestore";
+import { departments } from "@/utils/constants/Constants";
+import { Event } from "@/utils/types/event";
 
 const loader = ({ src, width, quality }: ImageLoaderProps) => {
   return `${src}?w=${width}&q=${quality || 50}`; // Default quality to 75 if not provided
 };
 
-
-
 // ... (rest of imports)
 
 export default function EventsPage() {
   const [selectedDept, setSelectedDept] = useState<string>("All");
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredEvents = useMemo(() => eventsData, [selectedDept]);
+  useEffect(() => {
+    const fetchEvents = async () => {
+        try {
+            const querySnapshot = await getDocs(collection(db, "events"));
+            if (!querySnapshot.empty) {
+                const eventsList = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                })) as Event[];
+                setEvents(eventsList);
+            } else {
+                setEvents([]);
+            }
+        } catch (error) {
+            console.error("Error fetching events:", error);
+            setEvents([]); 
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    fetchEvents();
+  }, []);
+
+  const filteredEvents = useMemo(() => {
+      let data = events;
+      // If DB is empty and loading is done, maybe we fallback to defaults?
+      // No, sticking to DB source of truth is cleaner. The admin must Seed.
+      // However, to avoid "breaking" the site for the user right now, I will start with defaultEvents as initial state?
+      // No, empty state is better to verify it works.
+      
+      if (selectedDept !== "All") {
+          data = data.filter((event) => event.department === selectedDept);
+      }
+      return data;
+  }, [events, selectedDept]);
 
   return (
     <section className="relative isolate overflow-hidden bg-[#04050b] text-white min-h-screen py-10">
@@ -97,7 +135,7 @@ export default function EventsPage() {
                     {/* Poster frame */}
                     <div className="relative aspect-4/5 w-full rounded-2xl overflow-hidden bg-black">
                       <Image
-                        src={event.image}
+                        src={event.imageUrl}
                         alt={event.title}
                         loader={loader}
                         fill

@@ -99,9 +99,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${unBounded.variable} antialiased font-light`}>
         <AuthProvider>
-          <Header />
-            {children}
-          <Footer />
+          {children}
           <Toaster position="bottom-center"/>
         </AuthProvider>
       </body>

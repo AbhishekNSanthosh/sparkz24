@@ -1,7 +1,6 @@
 "use client";
-import { events } from "@/utils/constants/Constants";
 import { notFound } from "next/navigation";
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -16,13 +15,18 @@ import RegisterButtonSection from "@/widgets/event/RegisterButtonSection";
 import {
   FaWhatsapp,
   FaCalendarDay,
+  FaClock,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { shimmer, toBase64 } from "@/utils/imageUtils";
 import GradientBackground from "@/components/ui/GradientBackground";
+import { db } from "@/utils/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { Event } from "@/utils/types/event";
 
 // Loading component for suspense
 function EventDetailsSkeleton() {
+// ... existing skeleton code ...
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
       <div className="flex flex-col lg:flex-row max-w-7xl mx-auto">
@@ -45,6 +49,7 @@ function EventDetailsSkeleton() {
 
 
 // InfoCard component (Bento Style)
+// ... existing InfoCard and other components ...
 interface InfoCardProps {
   icon: React.ReactNode;
   title: string;
@@ -161,10 +166,34 @@ function PrizeCard({
 }
 
 export default function EventPage({ eventId }: { eventId: string }) {
-  const event = events.find((e) => e.id === eventId);
+  const [event, setEvent] = useState<Event | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEvent = async () => {
+        try {
+            const docRef = doc(db, "events", eventId);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                setEvent({ id: docSnap.id, ...docSnap.data() } as Event);
+            } else {
+                setEvent(null);
+            }
+        } catch (error) {
+            console.error("Error fetching event:", error);
+            setEvent(null);
+        } finally {
+            setLoading(false);
+        }
+    };
+    fetchEvent();
+  }, [eventId]);
+
+  if (loading) return <EventDetailsSkeleton />;
 
   if (!event) {
-    notFound();
+    notFound(); 
   }
 
   return (
@@ -187,7 +216,7 @@ export default function EventPage({ eventId }: { eventId: string }) {
               className="relative aspect-4/5 w-full mt-12 max-w-lg mx-auto lg:max-w-none rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-indigo-500/10 group"
             >
               <Image
-                src={event.image}
+                src={event.imageUrl}
                 alt={`${event.title} poster`}
                 fill
                 quality={50}
@@ -202,9 +231,27 @@ export default function EventPage({ eventId }: { eventId: string }) {
               <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-60" />
 
               {/* Category Tag on Image */}
-              <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-xs font-medium text-white/80 uppercase">
-                {event.type}
+              <div className="absolute top-4 right-4 flex gap-2">
+                  {/* Department Tag */}
+                  {event.department && (
+                     <div className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-xs font-medium text-white/80 uppercase">
+                        {event.department}
+                    </div>
+                  )}
+                  {/* Category Tag */}
+                  <div className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-xs font-medium text-white/80 uppercase">
+                    {event.type}
+                  </div>
               </div>
+
+               {/* Online Banner if applicable */}
+               {event.isOnline && (
+                <div className="absolute bottom-4 left-4 right-4">
+                  <div className="w-full py-2 bg-indigo-600/90 backdrop-blur text-center text-sm font-bold tracking-wide uppercase rounded-xl border border-indigo-400/30">
+                    Online Event
+                  </div>
+                </div>
+               )}
             </motion.div>
 
             {/* Desktop: Coordinators Below Image (Mobile: moved to bottom) */}
@@ -244,7 +291,12 @@ export default function EventPage({ eventId }: { eventId: string }) {
               </h1>
 
               <div className="flex flex-wrap gap-3">
-                {/* Quick Tags maybe? */}
+                {/* Event Type / Subtype Tags */}
+                {event.eveType && (
+                    <span className="px-2 py-0.5 rounded text-xs border border-white/10 bg-white/5 text-white/60 uppercase">
+                        {event.eveType === 'ind' ? 'Individual' : 'Team Event'}
+                    </span>
+                )}
               </div>
 
               <p className="text-base md:text-lg text-white/70 leading-relaxed max-w-3xl border-l-2 border-indigo-500/30 pl-4">
@@ -256,35 +308,45 @@ export default function EventPage({ eventId }: { eventId: string }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <InfoCard
                 icon={<FaCalendarDay size={18} />}
-                title="Date & Time"
-                value={event.date}
+                title="Date"
+                value={event.date || "TBA"}
                 delay={0.3}
                 variant="highlight"
+              />
+               <InfoCard
+                icon={<FaClock size={18} />}
+                title="Reg Closes"
+                value={event.regFinalDate || "TBA"}
+                delay={0.32}
               />
               <InfoCard
                 icon={<LuMapPin size={18} />}
                 title="Venue"
-                value={event.venue}
+                value={event.isOnline ? "Online" : event.venue || "TBA"}
                 delay={0.35}
               />
               <InfoCard
                 icon={<LuIndianRupee size={18} />}
                 title="Registration Fee"
-                value={event.registrationFee}
+                value={event.registrationFee || "Free"}
                 delay={0.4}
               />
-              {event.maxParticipation && (
+              {(event.maxParticipation || event.memberMaxCount > 0) && (
                 <InfoCard
                   icon={<LuUsers size={18} />}
-                  title="Team Size"
-                  value={event.maxParticipation}
+                  title="Participation"
+                  value={
+                      event.maxParticipation 
+                      ? event.maxParticipation 
+                      : (event.memberMaxCount > 1 ? `${event.memberMinCount}-${event.memberMaxCount} Members` : "Individual")
+                  }
                   delay={0.45}
                 />
               )}
             </div>
 
             {/* Prize Pool */}
-            {(event.firstPrize || event.secondPrize) && (
+            {(event.firstPrize || event.secondPrize || event.thirdPrize) && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -312,6 +374,14 @@ export default function EventPage({ eventId }: { eventId: string }) {
                       icon={<LuAward />}
                     />
                   )}
+                  {event.thirdPrize && (
+                    <PrizeCard
+                      prize={event.thirdPrize}
+                      title="3rd Place"
+                      color="bronze"
+                      icon={<LuAward />}
+                    />
+                  )}
                 </div>
               </motion.div>
             )}
@@ -319,7 +389,7 @@ export default function EventPage({ eventId }: { eventId: string }) {
             {/* Rules & Details Split */}
             <div className="grid md:grid-cols-1 gap-6">
               {/* Rules */}
-              {event.rules && (
+              {event.rules && event.rules.length > 0 && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -357,9 +427,24 @@ export default function EventPage({ eventId }: { eventId: string }) {
                   </ul>
                 </motion.div>
               )}
+              
+               {/* Extra Fields Notice */}
+               {event.extraFields && event.extraFields.length > 0 && (
+                 <div className="p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5">
+                     <p className="text-indigo-200 text-sm font-medium mb-2">Registration Information Required:</p>
+                     <div className="flex flex-wrap gap-2">
+                         {event.extraFields.map((f, i) => (
+                             <span key={i} className="px-2 py-1 text-xs rounded bg-indigo-500/10 text-indigo-300 border border-indigo-500/10">
+                                 {f.name}
+                             </span>
+                         ))}
+                     </div>
+                 </div>
+               )}
+
               {/* Primary CTA Section - Centered or Prominent */}
               <div className="pt-2">
-                <RegisterButtonSection eventId={eventId} />
+                <RegisterButtonSection event={event} />
               </div>
             </div>
 

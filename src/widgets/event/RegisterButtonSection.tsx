@@ -1,36 +1,29 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import CountdownTimer from "@/widgets/event/CountdownTimer";
-import { events } from "@/utils/constants/Constants";
 import parseDate from "@/utils/parseDate";
 import {
   FaClock,
   FaArrowLeft,
   FaLock,
   FaArrowRight,
+  FaExternalLinkAlt,
 } from "react-icons/fa";
+import { Event } from "@/utils/types/event";
 
 interface Props {
-  eventId: string;
+  event: Event;
 }
 
-const RegisterButtonSection: React.FC<Props> = ({ eventId }) => {
-  const [registrationsByEvent, setRegistrationsByEvent] = useState<
-    Record<string, number>
-  >({});
+const RegisterButtonSection: React.FC<Props> = ({ event }) => {
+  const [registrationsCount, setRegistrationsCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
-  const event = events.find((e) => e.id === eventId);
-
   useEffect(() => {
-    const fetchRegistrations = async () => {
-      setRegistrationsByEvent({ "just-imagine": 12, "code-battle": 5 });
-      setLoading(false);
-    };
-    fetchRegistrations();
-  }, []);
+    // TODO: Fetch actual registration count from Firestore if needed for limits
+    // For now, using a mock delay or just proceeding
+    setLoading(false);
+  }, [event.id]);
 
   if (loading) {
     return (
@@ -38,35 +31,21 @@ const RegisterButtonSection: React.FC<Props> = ({ eventId }) => {
         <div className="animate-pulse space-y-6">
           <div className="h-8 w-48 bg-white/10 rounded-lg"></div>
           <div className="h-32 bg-white/5 rounded-xl"></div>
-          <div className="flex gap-4">
-            <div className="h-12 flex-1 bg-white/10 rounded-full"></div>
-            <div className="h-12 w-32 bg-white/5 rounded-full"></div>
-          </div>
+          <div className="h-12 w-full bg-white/10 rounded-full"></div>
         </div>
       </div>
     );
   }
 
-  if (!event) {
-    return null;
-  }
-
   const isOpenForRegistration =
-    event?.regFinalDate &&
+    event.regFinalDate &&
     parseDate(
       event.regFinalDate,
       event.RegCloseTime?.hours,
       event.RegCloseTime?.minutes
-    ) >= new Date() &&
-    (typeof event.maxParticipation !== "undefined"
-      ? registrationsByEvent[event.id] <
-        Number(
-          event.maxParticipation
-            .replace(/Teams?/i, "")
-            .replace(/Participants?/i, "")
-            .trim()
-        )
-      : true);
+    ) >= new Date();
+    // Note: Participation limit check removed for now as we don't have live count here yet.
+    // Can be re-added when we implement count fetching.
 
   return (
     <div className="relative">
@@ -87,8 +66,8 @@ const RegisterButtonSection: React.FC<Props> = ({ eventId }) => {
               </div>
               <div className="">
                 <CountdownTimer
-                  targetDate={event!.regFinalDate}
-                  RegCloseTime={event!.RegCloseTime}
+                  targetDate={event.regFinalDate!}
+                  RegCloseTime={event.RegCloseTime}
                 />
               </div>
             </div>
@@ -113,15 +92,31 @@ const RegisterButtonSection: React.FC<Props> = ({ eventId }) => {
           <div className="pt-4">
             {isOpenForRegistration ? (
               <div className="space-y-4">
-                <Link
-                  href={`./${eventId}/register`}
-                  className="group opacity-50 pointer-events-none relative flex items-center justify-center gap-3 w-full rounded-xl bg-linear-to-r from-indigo-600 via-fuchsia-600 to-amber-500 p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_2rem_-0.5rem_#4f46e5]"
-                >
-                  <span className="text-lg font-bold text-white">
-                    Starting Soon
-                  </span>
-                  <FaArrowRight className="text-white transition-transform duration-300 group-hover:translate-x-1" />
-                </Link>
+                {event.regLink ? (
+                    // External Link
+                    <Link
+                      href={event.regLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group relative flex items-center justify-center gap-3 w-full rounded-xl bg-linear-to-r from-indigo-600 via-fuchsia-600 to-amber-500 p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_2rem_-0.5rem_#4f46e5]"
+                    >
+                      <span className="text-lg font-bold text-white">
+                        Register Now
+                      </span>
+                      <FaExternalLinkAlt className="text-white text-sm transition-transform duration-300 group-hover:translate-x-1" />
+                    </Link>
+                ) : (
+                    // Internal Link
+                    <Link
+                      href={`./${event.id}/register`}
+                      className="group relative flex items-center justify-center gap-3 w-full rounded-xl bg-linear-to-r from-indigo-600 via-fuchsia-600 to-amber-500 p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_2rem_-0.5rem_#4f46e5]"
+                    >
+                      <span className="text-lg font-bold text-white">
+                        Register Now
+                      </span>
+                      <FaArrowRight className="text-white transition-transform duration-300 group-hover:translate-x-1" />
+                    </Link>
+                )}
               </div>
             ) : (
               <Link
