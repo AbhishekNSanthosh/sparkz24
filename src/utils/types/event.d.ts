@@ -1,10 +1,10 @@
 export type Event = {
     id: string;
     title: string;
-    image: string;
+    imageUrl: string;
     regFinalDate: string;
-    bgImage: string;
-    featured?: boolean;
+    bgImageUrl?: string;
+    isFeatured?: boolean;
     RegCloseTime?: {
         hours: number;
         minutes: number;
@@ -14,12 +14,11 @@ export type Event = {
     date?: string;
     description: string;
     venue?: string;
-    eventType: string;
+    // eventType: string;
     memberMaxCount: number;
     memberMinCount: number;
     isOnline?: boolean;
-    upi1?: string;
-    upi2?: string;
+    upi:string[]
     gpay?: string;
     maxParticipation?: string;
     minParticipation?: string;
@@ -28,6 +27,7 @@ export type Event = {
     registrationFee: string;
     firstPrize: string;
     secondPrize?: string;
+    thirdPrize?: string;
     requiresExtraData?: boolean;
     extraFields?: { name: string; type: string }[]
     coordinators: { name: string; phone: string }[];
