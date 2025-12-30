@@ -5,6 +5,7 @@ export type Event = {
     regFinalDate: string;
     bgImageUrl?: string;
     isFeatured?: boolean;
+    department?: string;
     RegCloseTime?: {
         hours: number;
         minutes: number;

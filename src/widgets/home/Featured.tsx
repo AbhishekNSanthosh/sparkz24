@@ -5,29 +5,55 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
-
-interface Event {
-  id: string;
-  title: string;
-  image: string;
-  description?: string; // Optional for future hover tooltips
-}
+import { db } from "@/utils/firebase";
+import { collection, getDocs, query, where, limit } from "firebase/firestore";
+import { Event } from "@/utils/types/event";
 
 const SWIPE_THRESHOLD = 30;
 
-export default function FeaturedEvents({ events }: { events: Event[] }) {
+export default function FeaturedEvents() {
+  const [events, setEvents] = useState<Event[]>([]);
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
-  const total = events.length;
-  const getIndex = useCallback((i: number) => (i + total) % total, [total]);
   const sectionRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const fetchFeaturedEvents = async () => {
+        try {
+            // Try fetching featured events first
+            const q = query(collection(db, "events"), where("featured", "==", true), limit(5));
+            const snapshot = await getDocs(q);
+            
+            let fetchedEvents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Event));
+
+            // Fallback if no featured events, just get few recent
+            if (fetchedEvents.length === 0) {
+                 const qAll = query(collection(db, "events"), limit(5));
+                 const snapAll = await getDocs(qAll);
+                 fetchedEvents = snapAll.docs.map(doc => ({ id: doc.id, ...doc.data() } as Event));
+            }
+             
+            setEvents(fetchedEvents);
+
+        } catch (err) {
+            console.error("Failed to fetch featured events", err);
+        }
+    }
+    fetchFeaturedEvents();
+  }, []);
+
+  const total = events.length;
+  const getIndex = useCallback((i: number) => {
+      if (total === 0) return 0;
+      return (i + total) % total
+  }, [total]);
 
   const isInView = useInView(sectionRef, {
     amount: 0.1, // at least 10% visible
     margin: "-80px",
   });
 
-  const shouldPause = paused || !isInView;
+  const shouldPause = paused || !isInView || total === 0;
 
   useEffect(() => {
     if (shouldPause) return;
@@ -38,6 +64,8 @@ export default function FeaturedEvents({ events }: { events: Event[] }) {
 
     return () => clearInterval(interval);
   }, [getIndex, shouldPause, total]);
+
+  if (total === 0) return null; // Or render skeleton
 
   const visibleEvents = [
     events[getIndex(active - 1)],
@@ -123,7 +151,7 @@ export default function FeaturedEvents({ events }: { events: Event[] }) {
                       {/* Inner glow */}
                       <div className="absolute inset-0" />
                       <Image
-                        src={event.image}
+                        src={event.imageUrl || "/event.png"}
                         alt={event.title}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         priority={idx < 3}
