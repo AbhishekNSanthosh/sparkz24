@@ -9,7 +9,9 @@ import { FiPlus, FiTrash2, FiEdit2, FiSave, FiX, FiUploadCloud } from "react-ico
 import { toastError, toastSuccess } from "@/utils/common/Toast";
 import { departments } from "@/utils/constants/Constants";
 import { Event } from "@/utils/types/event";
+import { compressImage } from "@/utils/imageUtils";
 import Image from "next/image";
+
 
 export default function EventsManagement() {
     const { userData } = useAuth();
@@ -48,6 +50,10 @@ export default function EventsManagement() {
     const [formData, setFormData] = useState<Partial<Event>>(initialFormState);
     const [posterFile, setPosterFile] = useState<File | null>(null);
     const [bgFile, setBgFile] = useState<File | null>(null);
+    const [posterPreview, setPosterPreview] = useState<string>("");
+    const [bgPreview, setBgPreview] = useState<string>("");
+    const [regCloseTime, setRegCloseTime] = useState<{ hours: number; minutes: number }>({ hours: 23, minutes: 59 });
+
     const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
@@ -169,22 +175,70 @@ export default function EventsManagement() {
         if (event) {
             setFormData(event);
         } else {
-            setFormData(initialFormState);
+            // Default to admin's department if not superAdmin
+            const defaultDept = userData?.role !== 'superAdmin' && userData?.department 
+                ? userData.department 
+                : "CSE";
+                
+            setFormData({
+                ...initialFormState,
+                department: defaultDept
+            });
         }
         setPosterFile(null);
         setBgFile(null);
+        setPosterPreview(event?.imageUrl || "");
+        setBgPreview(event?.bgImageUrl || "");
+        
+        if (event?.RegCloseTime) {
+            setRegCloseTime(event.RegCloseTime);
+        } else {
+            setRegCloseTime({ hours: 23, minutes: 59 });
+        }
+
         setIsEditing(true);
     };
 
     const handleImageUpload = async (file: File, path: string) => {
-        const storageRef = ref(storage, path);
-        const snapshot = await uploadBytes(storageRef, file);
-        return await getDownloadURL(snapshot.ref);
+        try {
+            const compressedFile = await compressImage(file);
+            const storageRef = ref(storage, path);
+            const snapshot = await uploadBytes(storageRef, compressedFile);
+            return await getDownloadURL(snapshot.ref);
+        } catch (error) {
+           console.error("Image compression failed, uploading original:", error);
+           const storageRef = ref(storage, path);
+           const snapshot = await uploadBytes(storageRef, file);
+           return await getDownloadURL(snapshot.ref);
+        }
     };
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
+
+        // Strict Validation
+        if (!formData.title?.trim()) return toastError("Title is required");
+        if (!formData.description?.trim()) return toastError("Description is required");
+        if (!formData.date) return toastError("Event Date is required");
+        if (!formData.regFinalDate) return toastError("Registration Closing Date is required");
+        if (!formData.registrationFee) return toastError("Registration Fee is required");
+        if (!formData.firstPrize) return toastError("First Prize is required");
+        if (!formData.coordinators || formData.coordinators.length === 0 || !formData.coordinators[0].name || !formData.coordinators[0].phone) {
+            return toastError("At least one Coordinator is required");
+        }
+        if (!formData.upi || formData.upi.length === 0 || !formData.upi[0]) {
+             return toastError("At least one UPI ID is required");
+        }
+
+        if (!formData.id && !posterFile) {
+             toastError("Event Poster is required for new events.");
+             return;
+        }
+
         setUploading(true);
+
 
         try {
             let imageUrl = formData.imageUrl;
@@ -195,14 +249,25 @@ export default function EventsManagement() {
             const eventId = (formData as any).id || formData.title?.toLowerCase().replace(/\s+/g, '-') || 'new-event';
 
             if (posterFile) {
-                imageUrl = await handleImageUpload(posterFile, `events/${eventId}/poster_${Date.now()}`);
+                // Determine path based on if it's new or existing to avoid clutter, though timestamp handles it. 
+                // Ideally delete old image if replacing, but that's an optimization for later.
+                imageUrl = await handleImageUpload(posterFile, `events/${eventId}/poster_${Date.now()}.webp`);
             }
             if (bgFile) {
-                bgImageUrl = await handleImageUpload(bgFile, `events/${eventId}/bg_${Date.now()}`);
+                bgImageUrl = await handleImageUpload(bgFile, `events/${eventId}/bg_${Date.now()}.webp`);
+            }
+
+
+            // Enforce department for non-superAdmins
+            let finalDepartment = formData.department;
+            if (userData && userData.role !== 'superAdmin' && userData.department) {
+                finalDepartment = userData.department;
             }
 
             const eventData = {
                 ...formData,
+                department: finalDepartment,
+                RegCloseTime: regCloseTime,
                 id: eventId,
                 imageUrl,
                 bgImageUrl,
@@ -233,15 +298,17 @@ export default function EventsManagement() {
 
     return (
         <div className="text-white max-w-7xl mx-auto">
-            <div className="flex justify-between items-center mb-8">
-                <h1 className="text-3xl font-bold">Event Management</h1>
-                <div className="flex gap-4">
-
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                <div>
+                   <h1 className="text-3xl font-bold bg-linear-to-r from-indigo-400 to-fuchsia-400 bg-clip-text text-transparent">Event Management</h1>
+                   <p className="text-gray-400 text-sm mt-1">Manage and organize all college events</p>
+                </div>
+                <div className="flex gap-4 w-full md:w-auto">
                     <button 
                         onClick={() => startEdit()}
-                        className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg flex items-center gap-2 font-medium transition-colors shadow-lg shadow-indigo-500/20"
+                        className="w-full md:w-auto px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 rounded-xl flex justify-center items-center gap-2 font-medium transition-colors shadow-lg shadow-indigo-500/20"
                     >
-                        <FiPlus /> Add Event
+                        <FiPlus size={20} /> Create New Event
                     </button>
                 </div>
             </div>
@@ -261,7 +328,7 @@ export default function EventsManagement() {
                             <div className="space-y-4">
                                 <h3 className="text-lg font-semibold text-indigo-400 border-b border-gray-800 pb-2">Basic Info</h3>
                                 <div>
-                                    <label className="block text-sm text-gray-400 mb-1">Title</label>
+                                    <label className="block text-sm text-gray-400 mb-1">Title <span className="text-red-500">*</span></label>
                                     <input 
                                         type="text" 
                                         required
@@ -271,23 +338,25 @@ export default function EventsManagement() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm text-gray-400 mb-1">Description</label>
+                                    <label className="block text-sm text-gray-400 mb-1">Description <span className="text-red-500">*</span></label>
                                     <textarea 
                                         rows={5}
+                                        required
                                         value={formData.description} 
                                         onChange={(e) => setFormData({...formData, description: e.target.value})}
                                         className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
                                     />
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
-                                     <div>
+                                    <div>
                                         <label className="block text-sm text-gray-400 mb-1">Department</label>
                                         <select 
                                             value={formData.department} 
                                             onChange={(e) => setFormData({...formData, department: e.target.value})}
-                                            className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
+                                            className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                                            disabled={userData.role !== 'superAdmin'}
                                         >
-                                            {departments.map(d => <option key={d} value={d}>{d}</option>)}
+                                            {userData?.department ?  <option key={userData?.department} value={userData?.department}>{userData?.department}</option> : departments.map(d => <option key={d} value={d}>{d}</option>)}
                                         </select>
                                     </div>
                                     <div>
@@ -309,15 +378,55 @@ export default function EventsManagement() {
                             <div className="space-y-4">
                                 <h3 className="text-lg font-semibold text-indigo-400 border-b border-gray-800 pb-2">Media & Details</h3>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div className="border border-dashed border-gray-700 rounded-lg p-6 text-center hover:bg-gray-800/50 transition-colors cursor-pointer relative flex flex-col items-center justify-center">
-                                        <input type="file" onChange={(e) => setPosterFile(e.target.files?.[0] || null)} className="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
-                                        <FiUploadCloud className="text-gray-400 mb-2" size={32} />
-                                        <span className="text-xs text-gray-400 font-medium">{posterFile ? posterFile.name : "Upload Poster"}</span>
+                                    <div className="border border-dashed border-gray-700 rounded-lg p-6 text-center hover:bg-gray-800/50 transition-colors cursor-pointer relative flex flex-col items-center justify-center overflow-hidden h-64">
+                                        <input 
+                                            type="file" 
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                    setPosterFile(file);
+                                                    setPosterPreview(URL.createObjectURL(file));
+                                                }
+                                            }} 
+                                            className="absolute inset-0 opacity-0 cursor-pointer z-10" 
+                                            accept="image/*" 
+                                        />
+                                        {posterPreview ? (
+                                            <div className="relative w-full h-full">
+                                                 <Image src={posterPreview} alt="Poster Preview" fill className="object-contain" />
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <FiUploadCloud className="text-gray-400 mb-2" size={32} />
+                                                <span className="text-xs text-gray-400 font-medium">Upload Poster (Required)</span>
+                                            </>
+                                        )}
                                     </div>
-                                    <div className="border border-dashed border-gray-700 rounded-lg p-6 text-center hover:bg-gray-800/50 transition-colors cursor-pointer relative flex flex-col items-center justify-center">
-                                         <input type="file" onChange={(e) => setBgFile(e.target.files?.[0] || null)} className="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" />
-                                        <FiUploadCloud className="text-gray-400 mb-2" size={32} />
-                                        <span className="text-xs text-gray-400 font-medium">{bgFile ? bgFile.name : "Upload Background"}</span>
+                                    <div className="border border-dashed border-gray-700 rounded-lg p-6 text-center hover:bg-gray-800/50 transition-colors cursor-pointer relative flex flex-col items-center justify-center overflow-hidden h-64">
+                                         <input 
+                                            type="file" 
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if(file) {
+                                                    setBgFile(file);
+                                                    setBgPreview(URL.createObjectURL(file));
+                                                }
+                                            }} 
+                                            className="absolute inset-0 opacity-0 cursor-pointer z-10" 
+                                            accept="image/*" 
+                                        />
+                                        {bgPreview ? (
+                                             <div className="relative w-full h-full">
+                                                <Image src={bgPreview} alt="Bg Preview" fill className="object-cover opacity-50" />
+                                                <span className="absolute inset-0 flex items-center justify-center text-xs font-medium z-20">Click to Change</span>
+                                             </div>
+                                        ) : (
+                                            <>
+                                                <FiUploadCloud className="text-gray-400 mb-2" size={32} />
+                                                <span className="text-xs text-gray-400 font-medium">{bgFile ? bgFile.name : "Upload Background"}</span>
+                                            </>
+                                        )}
+
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
@@ -361,25 +470,63 @@ export default function EventsManagement() {
                                 <h3 className="text-lg font-semibold text-indigo-400 border-b border-gray-800 pb-2">Registration</h3>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
+
                                         <label className="block text-sm text-gray-400 mb-1">Event Date</label>
                                         <input 
-                                            type="text" 
-                                            placeholder="DD-MM-YYYY"
-                                            value={formData.date} 
-                                            onChange={(e) => setFormData({...formData, date: e.target.value})}
-                                            className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
+                                            type="date" 
+                                            required
+                                            value={formData.date ? formData.date.split('-').reverse().join('-') : ''}
+                                            onChange={(e) => {
+                                                // Convert YYYY-MM-DD to DD-MM-YYYY
+                                                 const val = e.target.value;
+                                                 if (val) {
+                                                     setFormData({...formData, date: val.split('-').reverse().join('-')});
+                                                 } else {
+                                                     setFormData({...formData, date: ''});
+                                                 }
+                                            }}
+                                            className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none date-picker-invert"
                                         />
                                     </div>
+
                                     <div>
-                                        <label className="block text-sm text-gray-400 mb-1">Reg Ends On</label>
+                                        <label className="block text-sm text-gray-400 mb-1">Reg Ends On <span className="text-red-500">*</span></label>
                                         <input 
-                                            type="text" 
-                                            placeholder="DD-MM-YYYY"
-                                            value={formData.regFinalDate} 
-                                            onChange={(e) => setFormData({...formData, regFinalDate: e.target.value})}
-                                            className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
+                                            type="date" 
+                                            required
+                                            value={formData.regFinalDate ? formData.regFinalDate.split('-').reverse().join('-') : ''}
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                if(val) {
+                                                    setFormData({...formData, regFinalDate: val.split('-').reverse().join('-')});
+                                                } else {
+                                                     setFormData({...formData, regFinalDate: ''});
+                                                }
+                                            }}
+                                            className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none date-picker-invert"
                                         />
                                     </div>
+                                    <div className="col-span-2">
+                                        <label className="block text-sm text-gray-400 mb-1">Reg Ends Time <span className="text-red-500">*</span></label>
+                                        <div className="flex items-center gap-2 bg-black/50 border border-gray-700 rounded-lg px-4 py-2 w-full sm:w-1/2">
+                                            <input 
+                                              type="number" min="0" max="23"
+                                              value={regCloseTime.hours}
+                                              onChange={e => setRegCloseTime({...regCloseTime, hours: Number(e.target.value)})}
+                                              className="w-full bg-transparent text-center outline-none text-lg font-mono"
+                                              placeholder="HH"
+                                            />
+                                            <span className="text-gray-500">:</span>
+                                             <input 
+                                              type="number" min="0" max="59"
+                                              value={regCloseTime.minutes}
+                                              onChange={e => setRegCloseTime({...regCloseTime, minutes: Number(e.target.value)})}
+                                              className="w-full bg-transparent text-center outline-none text-lg font-mono"
+                                              placeholder="MM"
+                                            />
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div>
                                     <label className="block text-sm text-gray-400 mb-1">External Reg Link (Optional)</label>
@@ -445,9 +592,10 @@ export default function EventsManagement() {
                                 <h3 className="text-lg font-semibold text-indigo-400 border-b border-gray-800 pb-2">Financials</h3>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm text-gray-400 mb-1">Fee</label>
+                                        <label className="block text-sm text-gray-400 mb-1">Fee <span className="text-red-500">*</span></label>
                                         <input 
                                             type="text" 
+                                            required
                                             value={formData.registrationFee} 
                                             onChange={(e) => setFormData({...formData, registrationFee: e.target.value})}
                                             className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
@@ -464,8 +612,8 @@ export default function EventsManagement() {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-sm text-gray-400 mb-1 flex justify-between items-center">
-                                        <span>UPI IDs</span>
+                                    <label className="text-sm text-gray-400 mb-1 flex justify-between items-center">
+                                        <span>UPI IDs <span className="text-red-500">*</span></span>
                                         <button type="button" onClick={() => addArrayItem('upi')} className="text-xs px-2 py-1 bg-indigo-500/10 text-indigo-400 rounded hover:bg-indigo-500/20 transition-colors">+ Add UPI</button>
                                     </label>
                                     <div className="space-y-2 mt-2">
@@ -473,6 +621,7 @@ export default function EventsManagement() {
                                             <div key={idx} className="flex gap-2">
                                                 <input 
                                                     type="text" 
+                                                    required
                                                     value={u} 
                                                     onChange={(e) => handleArrayInput('upi', e.target.value, idx)}
                                                     placeholder="UPI ID"
@@ -484,10 +633,11 @@ export default function EventsManagement() {
                                     </div>
                                 </div>
                                 <div className="space-y-2 mt-4">
-                                    <label className="block text-sm text-gray-400 mb-1">Prizes</label>
+                                    <label className="block text-sm text-gray-400 mb-1">Prizes <span className="text-red-500">*</span> (1st Prize Required)</label>
                                     <div className="grid grid-cols-3 gap-2">
                                         <input 
                                             type="text" 
+                                            required
                                             placeholder="1st Prize"
                                             value={formData.firstPrize} 
                                             onChange={(e) => setFormData({...formData, firstPrize: e.target.value})}
@@ -514,7 +664,7 @@ export default function EventsManagement() {
                              <div className="space-y-4">
                                 <h3 className="text-lg font-semibold text-indigo-400 border-b border-gray-800 pb-2">Rules & Guidelines</h3>
                                 <div>
-                                    <label className="block text-sm text-gray-400 mb-1 flex justify-between items-center">
+                                    <label className="text-sm text-gray-400 mb-1 flex justify-between items-center">
                                         <span>Rules List</span>
                                         <button type="button" onClick={() => addArrayItem('rules')} className="text-xs px-2 py-1 bg-indigo-500/10 text-indigo-400 rounded hover:bg-indigo-500/20 transition-colors">+ Add Rule</button>
                                     </label>
@@ -543,27 +693,29 @@ export default function EventsManagement() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div>
                                     <div className="flex justify-between items-center mb-2">
-                                        <label className="text-sm text-gray-400">Coordinators</label>
+                                        <label className="text-sm text-gray-400">Coordinators <span className="text-red-500">*</span></label>
                                         <button type="button" onClick={addCoordinator} className="text-xs px-2 py-1 bg-indigo-500/10 text-indigo-400 rounded hover:bg-indigo-500/20 transition-colors">+ Add Coordinator</button>
                                     </div>
                                     <div className="space-y-3">
                                         {formData.coordinators?.map((coord, idx) => (
-                                            <div key={idx} className="flex gap-2">
+                                            <div key={idx} className="flex flex-col sm:flex-row gap-2 items-start sm:items-center bg-gray-900/50 p-3 rounded-lg border border-gray-800/50">
                                                 <input 
                                                     type="text" 
+                                                    required
                                                     placeholder="Name"
                                                     value={coord.name} 
                                                     onChange={(e) => updateCoordinator(idx, 'name', e.target.value)}
-                                                    className="flex-1 bg-black/50 border border-gray-700 rounded-lg px-4 py-2 outline-none text-sm"
+                                                    className="w-full sm:flex-1 bg-black/50 border border-gray-700 rounded-lg px-4 py-2 outline-none text-sm"
                                                 />
                                                  <input 
                                                     type="text" 
+                                                    required
                                                     placeholder="Phone"
                                                     value={coord.phone} 
                                                     onChange={(e) => updateCoordinator(idx, 'phone', e.target.value)}
-                                                    className="flex-1 bg-black/50 border border-gray-700 rounded-lg px-4 py-2 outline-none text-sm"
+                                                    className="w-full sm:flex-1 bg-black/50 border border-gray-700 rounded-lg px-4 py-2 outline-none text-sm"
                                                 />
-                                                <button type="button" onClick={() => removeCoordinator(idx)} className="text-red-400 hover:text-red-300 p-2"><FiTrash2 /></button>
+                                                <button type="button" onClick={() => removeCoordinator(idx)} className="text-red-400 hover:text-red-300 p-2 ml-auto sm:ml-0"><FiTrash2 /></button>
                                             </div>
                                         ))}
                                     </div>
@@ -576,24 +728,24 @@ export default function EventsManagement() {
                                     </div>
                                     <div className="space-y-3">
                                         {formData.extraFields?.map((field, idx) => (
-                                            <div key={idx} className="flex gap-2">
+                                            <div key={idx} className="flex flex-col sm:flex-row gap-2 items-start sm:items-center bg-gray-900/50 p-3 rounded-lg border border-gray-800/50">
                                                 <input 
                                                     type="text" 
                                                     placeholder="Field Name"
                                                     value={field.name} 
                                                     onChange={(e) => updateExtraField(idx, 'name', e.target.value)}
-                                                    className="flex-1 bg-black/50 border border-gray-700 rounded-lg px-4 py-2 outline-none text-sm"
+                                                    className="w-full sm:flex-1 bg-black/50 border border-gray-700 rounded-lg px-4 py-2 outline-none text-sm"
                                                 />
                                                  <select 
                                                     value={field.type} 
                                                     onChange={(e) => updateExtraField(idx, 'type', e.target.value)}
-                                                    className="w-32 bg-black/50 border border-gray-700 rounded-lg px-2 py-2 outline-none text-sm"
+                                                    className="w-full sm:w-32 bg-black/50 border border-gray-700 rounded-lg px-2 py-2 outline-none text-sm"
                                                 >
                                                     <option value="text">Text</option>
                                                     <option value="number">Number</option>
                                                     <option value="date">Date</option>
                                                 </select>
-                                                <button type="button" onClick={() => removeExtraField(idx)} className="text-red-400 hover:text-red-300 p-2"><FiTrash2 /></button>
+                                                <button type="button" onClick={() => removeExtraField(idx)} className="text-red-400 hover:text-red-300 p-2 ml-auto sm:ml-0"><FiTrash2 /></button>
                                             </div>
                                         ))}
                                         {(!formData.extraFields || formData.extraFields.length === 0) && (
@@ -604,7 +756,7 @@ export default function EventsManagement() {
                             </div>
                         </div>
 
-                        <div className="flex justify-end gap-4 pt-6 border-t border-gray-800 mt-6 stuck sticky bottom-0 bg-gray-900/95 p-4 -mx-6 -mb-6 md:-mx-8 md:-mb-8 backdrop-blur rounded-b-2xl">
+                        <div className="flex justify-end gap-4 pt-6 border-t border-gray-800 mt-6 stuck sticky bottom-0 bg-gray-900/95 p-4 -mx-4 -mb-4 md:-mx-8 md:-mb-8 backdrop-blur rounded-b-2xl shadow-2xl z-20">
                             <button 
                                 type="button"
                                 onClick={() => setIsEditing(false)}
