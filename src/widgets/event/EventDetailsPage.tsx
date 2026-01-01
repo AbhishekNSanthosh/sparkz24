@@ -313,12 +313,6 @@ export default function EventPage({ eventId }: { eventId: string }) {
                 delay={0.3}
                 variant="highlight"
               />
-               <InfoCard
-                icon={<FaClock size={18} />}
-                title="Reg Closes"
-                value={event.regFinalDate || "TBA"}
-                delay={0.32}
-              />
               <InfoCard
                 icon={<LuMapPin size={18} />}
                 title="Venue"

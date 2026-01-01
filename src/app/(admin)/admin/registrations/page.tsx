@@ -69,14 +69,21 @@ export default function RegistrationsManagement() {
     const fetchRegistrations = async (eventId: string) => {
         setLoading(true);
         try {
-            // Query users who have registered for this event
-            const q = query(collection(db, "users"), where("registeredEvents", "array-contains", eventId));
+            // Query registrations collection directly
+            const q = query(collection(db, "registrations"), where("eventId", "==", eventId));
             const querySnapshot = await getDocs(q);
             
-            const regs = querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            })) as UserRegistration[];
+            const regs = querySnapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    name: data.leaderName || data.userName || "N/A",
+                    email: data.userEmail || "N/A",
+                    college: data.leaderCollege || "N/A",
+                    phone: data.leaderMobile || "N/A",
+                    ...data // Keep other data for export potentially
+                };
+            }) as UserRegistration[];
             
             setRegistrations(regs);
         } catch (error) {
@@ -92,13 +99,31 @@ export default function RegistrationsManagement() {
 
         const eventName = events.find(e => e.id === selectedEventId)?.title || "Event";
         
-        // Prepare data for export (remove internal IDs if needed, or keep them)
-        const dataToExport = registrations.map(({ name, email, college, phone }) => ({
-            Name: name,
-            Email: email,
-            College: college,
-            Phone: phone || "N/A"
-        }));
+        // Prepare data for export
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        const dataToExport = registrations.map((reg: any) => {
+             const base = {
+                Name: reg.name,
+                Email: reg.email,
+                College: reg.college,
+                Phone: reg.phone,
+                "Transaction ID": reg.transactionId || "N/A",
+                "Status": reg.status || "N/A"
+             };
+             
+             // If team members exist, format them string
+             if (reg.teamMembers && Array.isArray(reg.teamMembers)) {
+                 reg.teamMembers.forEach((m: any, idx: number) => {
+                     /* eslint-disable @typescript-eslint/ban-ts-comment */
+                     // @ts-ignore
+                     base[`Member ${idx + 2} Name`] = m.name;
+                     // @ts-ignore
+                     base[`Member ${idx + 2} Phone`] = m.mobile;
+                 });
+             }
+             
+             return base;
+        });
 
         const wb = XLSX.utils.book_new();
         const ws = XLSX.utils.json_to_sheet(dataToExport);
@@ -190,6 +215,8 @@ export default function RegistrationsManagement() {
                     </div>
                  </div>
              )}
+
+
         </div>
     );
 }
