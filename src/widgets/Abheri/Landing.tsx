@@ -72,6 +72,16 @@ const rulesSections = [
       "Participation implies acceptance of all the above rules.",
     ],
   },
+  {
+    title: "Online Competition",
+    points: [
+      "If registrations exceed 10 teams, a screening round will be conducted through video submissions.",
+      "Bands must submit a recorded performance video to the event coordinator.",
+      "Judging committee will shortlist 10 bands, and the decision shall be final.",
+      "Non-selected bands will receive a full refund of the registration fee."
+    ]
+
+  }
 ];
 
 const chiefGuestImage = "/manjari.png"; // Replace with actual image path/URL

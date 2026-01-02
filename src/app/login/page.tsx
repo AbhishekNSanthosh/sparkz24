@@ -16,7 +16,7 @@ export default function Page() {
     try {
       await login();
       toastSuccess("Successfully logged in!");
-      router.push("/abheri/register");
+      router.back();
     } catch (error) {
       toastError("Failed to login.");
     }
