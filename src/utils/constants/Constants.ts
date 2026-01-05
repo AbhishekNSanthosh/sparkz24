@@ -497,4 +497,4 @@ export const navItems = [
 //     }
 // ];
 
-export const departments = ["All", "CSE", "EEE", "MECH", "CIVIL"];
+export const departments = ["All", "CSE", "EEE", "MECH", "CIVIL","Basic Science & Humanities"];
