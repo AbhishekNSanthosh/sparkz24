@@ -24,6 +24,7 @@ export default function Register() {
   // Dynamic form state
   const [formData, setFormData] = useState<Record<string, any>>({
     leaderName: "",
+    leaderEmail: "",
     leaderMobile: "",
     leaderCollege: "",
     leaderDepartment: "",
@@ -103,13 +104,13 @@ export default function Register() {
     checkDeadline();
   }, [event]);
 
-  // Auth check
-  useEffect(() => {
-    if (!authLoading && !user) {
-        toastError("Please login to register");
-        router.push(`/events/${id}`);
-    }
-  }, [user, authLoading, router, id]);
+  // Auth check - Removed login required feature
+  // useEffect(() => {
+  //   if (!authLoading && !user) {
+  //       toastError("Please login to register");
+  //       router.push(`/events/${id}`);
+  //   }
+  // }, [user, authLoading, router, id]);
 
   // Load from Local Storage
   useEffect(() => {
@@ -213,7 +214,7 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!event || !user) return;
+    if (!event) return;
     
     // Validation
     const min = event.memberMinCount || 1;
@@ -237,9 +238,9 @@ export default function Register() {
       const registrationData = {
         eventId: event.id,
         eventTitle: event.title,
-        userId: user.uid,
-        userEmail: user.email,
-        userName: user.displayName || formData.leaderName,
+        userId: user?.uid || "",
+        userEmail: user?.email || formData.leaderEmail,
+        userName: user?.displayName || formData.leaderName,
         ...formData,
         teamMembers: event.eveType === 'team' ? teamMembers : [], // Ensure no members for individual events
         updatedAt: new Date()
@@ -257,12 +258,14 @@ export default function Register() {
               createdAt: new Date()
           });
 
-          // Update user profile
-          const userRef = doc(db, "users", user.uid);
-          await updateDoc(userRef, {
-              registeredEvents: arrayUnion(event.title) // Or ID, sticking to title as per abheri
-          });
-          await refetchUserProfile();
+          // Update user profile if logged in
+          if (user) {
+              const userRef = doc(db, "users", user.uid);
+              await updateDoc(userRef, {
+                  registeredEvents: arrayUnion(event.title) // Or ID, sticking to title as per abheri
+              });
+              await refetchUserProfile();
+          }
           
           toastSuccess("Registered successfully!");
       }
@@ -345,6 +348,10 @@ export default function Register() {
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-white/70">Mobile <span className="text-red-400">*</span></label>
                                     <input required type="tel" name="leaderMobile" value={formData.leaderMobile} onChange={handleInputChange} placeholder="Mobile Number" className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 outline-none transition-all placeholder:text-white/20" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-white/70">Email <span className="text-red-400">*</span></label>
+                                    <input required type="email" name="leaderEmail" value={formData.leaderEmail} onChange={handleInputChange} placeholder="Email Address" className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500/50 outline-none transition-all placeholder:text-white/20" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-white/70">College <span className="text-red-400">*</span></label>
