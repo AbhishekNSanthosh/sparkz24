@@ -5,6 +5,7 @@ import Header from "@/widgets/common/Header";
 import Footer from "@/widgets/common/Footer";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "@/context/AuthContext";
+import { Analytics } from "@vercel/analytics/next";
 
 const unBounded = Unbounded({
   variable: "--font-unbounded",
@@ -100,7 +101,8 @@ export default function RootLayout({
       <body className={`${unBounded.variable} antialiased font-light`}>
         <AuthProvider>
           {children}
-          <Toaster position="bottom-center"/>
+          <Toaster position="bottom-center" />
+          <Analytics />
         </AuthProvider>
       </body>
     </html>
