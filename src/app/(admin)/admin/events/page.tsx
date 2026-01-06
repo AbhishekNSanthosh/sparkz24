@@ -228,9 +228,9 @@ export default function EventsManagement() {
         if (!formData.coordinators || formData.coordinators.length === 0 || !formData.coordinators[0].name || !formData.coordinators[0].phone) {
             return toastError("At least one Coordinator is required");
         }
-        if (!formData.upi || formData.upi.length === 0 || !formData.upi[0]) {
-             return toastError("At least one UPI ID is required");
-        }
+        // if (!formData.upi || formData.upi.length === 0 || !formData.upi[0]) {
+        //      return toastError("At least one UPI ID is required");
+        // }
 
         if (!formData.id && !posterFile) {
              toastError("Event Poster is required for new events.");
@@ -613,7 +613,7 @@ export default function EventsManagement() {
                                 </div>
                                 <div>
                                     <label className="text-sm text-gray-400 mb-1 flex justify-between items-center">
-                                        <span>UPI IDs <span className="text-red-500">*</span></span>
+                                        <span>UPI IDs (Optional)</span>
                                         <button type="button" onClick={() => addArrayItem('upi')} className="text-xs px-2 py-1 bg-indigo-500/10 text-indigo-400 rounded hover:bg-indigo-500/20 transition-colors">+ Add UPI</button>
                                     </label>
                                     <div className="space-y-2 mt-2">
@@ -621,7 +621,6 @@ export default function EventsManagement() {
                                             <div key={idx} className="flex gap-2">
                                                 <input 
                                                     type="text" 
-                                                    required
                                                     value={u} 
                                                     onChange={(e) => handleArrayInput('upi', e.target.value, idx)}
                                                     placeholder="UPI ID"

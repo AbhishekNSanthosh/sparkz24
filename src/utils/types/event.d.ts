@@ -19,7 +19,7 @@ export type Event = {
     memberMaxCount: number;
     memberMinCount: number;
     isOnline?: boolean;
-    upi:string[]
+    upi?: string[]
     gpay?: string;
     maxParticipation?: string;
     minParticipation?: string;
