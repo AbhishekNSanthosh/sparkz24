@@ -101,7 +101,7 @@ export default function RegistrationsManagement() {
             }
             
           
-            const response = await fetch(`http://localhost:3000/api/external/events/game-developement-workshop--9lAHSjfwjFr3ndxMOH9E/registrations`, {
+            const response = await fetch(`http://graburpass.com/api/external/events/${externalEventId}/registrations`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${apiKey}`,
