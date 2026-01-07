@@ -41,7 +41,7 @@ export default function ISROExhibition() {
   }, []);
 
   return (
-    <section className="relative isolate overflow-hidden bg-slate-950 py-24 sm:py-32">
+    <section id="isro-exhibition" className="relative isolate overflow-hidden bg-slate-950 py-24 sm:py-32">
       {/* Subtle Background Texture */}
        <div className="absolute inset-0 -z-20 opacity-20" 
            style={{ backgroundImage: 'radial-gradient(#0ea5e9 1px, transparent 1px)', backgroundSize: '32px 32px' }}>
@@ -144,7 +144,7 @@ export default function ISROExhibition() {
         </div>
 
         {/* Bottom Section: Full Width Grid */}
-        <div className="mx-auto max-w-7xl">
+        <div className="mx-auto max-w-8xl">
            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                  {exhibitionHighlights.map((item, index) => (
                     <motion.div 

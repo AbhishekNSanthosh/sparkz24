@@ -41,7 +41,7 @@ export default function ITBPExhibition() {
   }, []);
 
   return (
-    <section className="relative isolate overflow-hidden bg-slate-950 py-24 sm:py-32">
+    <section id="itbp-exhibition" className="relative isolate overflow-hidden bg-slate-950 py-24 sm:py-32">
       {/* Subtle Background Texture */}
        <div className="absolute inset-0 -z-20 opacity-20" 
            style={{ backgroundImage: 'radial-gradient(#4f46e5 1px, transparent 1px)', backgroundSize: '32px 32px' }}>
