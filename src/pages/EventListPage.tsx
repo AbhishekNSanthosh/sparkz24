@@ -28,10 +28,15 @@ export default function EventsPage() {
         try {
             const querySnapshot = await getDocs(collection(db, "events"));
             if (!querySnapshot.empty) {
-                const eventsList = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                })) as Event[];
+                const eventsList = querySnapshot.docs.map(doc => {
+                    const data = doc.data();
+                    return {
+                        id: doc.id,
+                        title: data.title,
+                        department: data.department,
+                        imageUrl: data.imageUrl,
+                    };
+                }) as Event[];
                 setEvents(eventsList);
             } else {
                 setEvents([]);
@@ -105,6 +110,17 @@ export default function EventsPage() {
         </motion.header>
 
         {/* Events grid */}
+        {loading ? (
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="rounded-2xl border border-white/5 bg-white/5 overflow-hidden">
+                  <div className="aspect-4/5 w-full bg-white/5 relative overflow-hidden">
+                     <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent skew-x-12 animate-shimmer" />
+                  </div>
+                </div>
+              ))}
+           </div>
+        ) : (
         <Suspense
           fallback={<div className="h-8 w-full bg-white/10 rounded-lg"></div>}
         >
@@ -130,7 +146,7 @@ export default function EventsPage() {
                 >
                   <Link
                     href={`/events/${event.id}`}
-                    className="block rounded-2xl max-w-90 border border-white/10 bg-black/40 backdrop-blur transition-all duration-300hover:border-fuchsia-400/40 hover:shadow-lg hover:shadow-fuchsia-500/15"
+                    className="block rounded-2xl max-w-90 border border-white/10 bg-black/40 backdrop-blur transition-all duration-300 hover:border-fuchsia-400/40 hover:shadow-lg hover:shadow-fuchsia-500/15"
                   >
                     {/* Poster frame */}
                     <div className="relative aspect-4/5 w-full rounded-2xl overflow-hidden bg-black">
@@ -151,6 +167,7 @@ export default function EventsPage() {
             </AnimatePresence>
           </motion.div>
         </Suspense>
+        )}
 
         {/* Decorative particles near header (subtle, not full-screen) */}
         <Particles />
