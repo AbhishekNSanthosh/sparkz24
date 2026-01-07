@@ -22,7 +22,20 @@ const eventPoints = [
   },
 ];
 
-const chiefGuestImage = "/manjari.png"; // Replace with actual image path/URL
+const guests = [
+  {
+    name: "Manjari",
+    role: "Playback Singer | Composer | Hindustani Classical & Ghazal Vocalist",
+    image: "/manjari.png",
+    tag: "Chief Guest & Judge",
+  },
+  {
+    name: "Sudashan",
+    role: "Judge",
+    image: "/sudashan.png", // Placeholder image
+    tag: "Competition Judge",
+  },
+];
 
 export default function BandCompetition() {
   const [mounted, setMounted] = useState(false);
@@ -147,44 +160,46 @@ export default function BandCompetition() {
               </motion.div>
             </motion.div>
 
-            {/* Right Column: Chief Guest Hero */}
+            {/* Right Column: Guest Spotlights (Grid/Stacked) */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="relative ml-auto w-full max-w-sm lg:max-w-md"
+              className="relative ml-auto w-full grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 items-start"
             >
-              <div className="relative rounded-3xl border border-white/10 bg-white/5 backdrop-blur overflow-hidden group">
-                 {/* Decorative background */}
-                 <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-fuchsia-500/10 opacity-50" />
-                 
-                <div className="relative p-2 sm:p-4">
-                  <div className="relative w-full aspect-[4/5] sm:aspect-[3/4] overflow-hidden rounded-2xl">
-                    <Image
-                      src={chiefGuestImage}
-                      alt="Manjari"
-                      fill
-                      className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#04050b] via-transparent to-transparent opacity-90" />
-                    
-                    <div className="absolute bottom-0 left-0 right-0 p-8">
-                       <div className="inline-block px-3 py-1 mb-3 rounded-lg bg-indigo-500/20 border border-indigo-500/30 backdrop-blur-md">
-                        <span className="text-indigo-200 text-xs font-bold tracking-widest uppercase">
-                          Chief Guest Spotlight
-                        </span>
+              {guests.map((guest, index) => (
+                  <div key={index} className="relative rounded-3xl border border-white/10 bg-white/5 backdrop-blur overflow-hidden group">
+                     {/* Decorative background */}
+                     <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-fuchsia-500/10 opacity-50" />
+                     
+                    <div className="relative p-2 sm:p-4">
+                      <div className="relative w-full aspect-4/5 overflow-hidden rounded-2xl bg-slate-900/50">
+                        <Image
+                          src={guest.image}
+                          alt={guest.name}
+                          fill
+                          className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#04050b] via-transparent to-transparent opacity-90" />
+                        
+                        <div className="absolute bottom-0 left-0 right-0 p-6">
+                           <div className="inline-block px-3 py-1 mb-2 rounded-lg bg-indigo-500/20 border border-indigo-500/30 backdrop-blur-md">
+                            <span className="text-indigo-200 text-[10px] font-bold tracking-widest uppercase">
+                              {guest.tag}
+                            </span>
+                          </div>
+                          <h3 className="text-2xl sm:text-3xl font-black text-white mb-1 tracking-tight">
+                            {guest.name}
+                          </h3>
+                          <p className="text-sm text-white/80 font-medium">
+                            {guest.role}
+                          </p>
+                        </div>
                       </div>
-                      <h3 className="text-4xl sm:text-5xl font-black text-white mb-2 tracking-tight">
-                        Manjari
-                      </h3>
-                      <p className="text-lg text-white/80 font-medium max-w-sm">
-                        Playback Singer | Composer | Hindustani Classical & Ghazal Vocalist
-                      </p>
                     </div>
                   </div>
-                </div>
-              </div>
+              ))}
             </motion.div>
           </div>
         </div>

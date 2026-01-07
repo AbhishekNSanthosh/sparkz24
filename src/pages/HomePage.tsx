@@ -4,6 +4,7 @@ import Featured from "@/widgets/home/Featured";
 
 import BandCompetition from "@/widgets/home/BandCompetition";
 import ITBPExhibition from "@/widgets/home/ITBPExhibition";
+import ISROExhibition from "@/widgets/home/ISROExhibition";
 
 export default function HomePage() {
   return (
@@ -11,6 +12,7 @@ export default function HomePage() {
       <Hero />
       <Featured />
       <About />
+      <ISROExhibition/>
       <ITBPExhibition />
       <BandCompetition/>
     </div>

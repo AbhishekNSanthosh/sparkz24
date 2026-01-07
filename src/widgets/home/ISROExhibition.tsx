@@ -3,37 +3,37 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-import { Radar, Mountain, LifeBuoy, Award, MonitorPlay } from "lucide-react";
+import { Rocket, Satellite, Globe, Radio, User } from "lucide-react";
 
 const exhibitionHighlights = [
   {
-    title: "Modern Equipment",
-    description: "Modern weapons, surveillance, and communication equipment.",
-    icon: <Radar className="w-8 h-8 text-indigo-400" />,
+    title: "Launch Vehicles",
+    description: "Models of ISRO launch vehicles and satellites.",
+    icon: <Rocket className="w-8 h-8 text-orange-500" />,
   },
   {
-    title: "High-Altitude Gear",
-    description: "Mountaineering, skiing, and warming warfare gear.",
-    icon: <Mountain className="w-8 h-8 text-blue-400" />,
+    title: "Major Missions",
+    description: "Displays on Chandrayaan, Mangalyaan, Gaganyaan, and Aditya-L1.",
+    icon: <Satellite className="w-8 h-8 text-blue-500" />,
   },
   {
-    title: "Disaster Response",
-    description: "Disaster response and rescue operation demonstrations.",
-    icon: <LifeBuoy className="w-8 h-8 text-red-400" />,
+    title: "Space Applications",
+    description: "Tech for communication, navigation, weather, and disaster management.",
+    icon: <Globe className="w-8 h-8 text-cyan-500" />,
   },
   {
-    title: "Training & Life",
-    description: "Information on ITBP training, lifestyle, and achievements.",
-    icon: <Award className="w-8 h-8 text-amber-400" />,
+    title: "Interactive Panels",
+    description: "Interactive and informative display panels.",
+    icon: <Radio className="w-8 h-8 text-emerald-500" />,
   },
   {
-    title: "Interactive Displays",
-    description: "Interactive displays, models, and audiovisual presentations.",
-    icon: <MonitorPlay className="w-8 h-8 text-emerald-400" />,
+    title: "Career & Research",
+    description: "Insights into career opportunities and research avenues at ISRO.",
+    icon: <User className="w-8 h-8 text-purple-500" />,
   },
 ];
 
-export default function ITBPExhibition() {
+export default function ISROExhibition() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -44,14 +44,14 @@ export default function ITBPExhibition() {
     <section className="relative isolate overflow-hidden bg-slate-950 py-24 sm:py-32">
       {/* Subtle Background Texture */}
        <div className="absolute inset-0 -z-20 opacity-20" 
-           style={{ backgroundImage: 'radial-gradient(#4f46e5 1px, transparent 1px)', backgroundSize: '32px 32px' }}>
+           style={{ backgroundImage: 'radial-gradient(#0ea5e9 1px, transparent 1px)', backgroundSize: '32px 32px' }}>
        </div>
       
       {/* Background Gradients */}
       {mounted && (
         <>
             <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,var(--color-slate-900),transparent)]" />
-            <div className="absolute bottom-0 left-0 -z-10 h-[500px] w-[500px] rounded-full bg-indigo-900/20 blur-[120px]" />
+            <div className="absolute bottom-0 left-0 -z-10 h-[500px] w-[500px] rounded-full bg-orange-900/20 blur-[120px]" />
             <div className="absolute top-0 right-0 -z-10 h-[500px] w-[500px] rounded-full bg-blue-900/10 blur-[120px]" />
         </>
       )}
@@ -68,39 +68,35 @@ export default function ITBPExhibition() {
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="lg:pr-8 relative"
             >
-               {/* Watermark Logo
-               <div className="absolute -top-20 -left-20 -z-10 opacity-[0.03] pointer-events-none">
-                  <Image src="/ITBP_Logo.png" alt="ITBP Watermark" width={500} height={500} className="w-[500px] h-[500px] object-contain" />
-               </div> */}
-
                <div className="mb-8 flex items-center gap-6">
+                 {/* Placeholder for ISRO Logo if available, or just keeping structure */}
                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-white/5 p-2 ring-1 ring-white/10 backdrop-blur-sm shadow-2xl">
-                    <Image src="/ITBP_Logo.png" alt="ITBP Logo" width={80} height={80} className="object-fill h-full w-full" />
+                    <Image src="/ISRO_logo.png" alt="ISRO Logo" width={80} height={80} className="object-contain h-full w-full" />
                  </div>
                  <div className="flex flex-col">
-                    <span className="text-xs font-bold tracking-widest text-indigo-400 uppercase mb-2">Presented By</span>
-                    <span className="text-xl font-bold tracking-tight text-white uppercase leading-none">Indo-Tibetan <br/> Border Police</span>
+                    <span className="text-xs font-bold tracking-widest text-orange-400 uppercase mb-2">Organised By</span>
+                    <span className="text-xl font-bold tracking-tight text-white uppercase leading-none">Indian Space Research <br/> Organisation (ISRO)</span>
                  </div>
                </div>
 
               <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-                 ITBP Expo
+                 ISRO Field Exhibition
               </h2>
               <p className="mt-6 text-lg leading-8 text-slate-300">
-                The ITBP Expo aims to create awareness about the roles, responsibilities, and technological advancements of the Indo-Tibetan Border Police, showcasing contributions to national security and disaster management.
+                A Special Attraction of Techfest “Sparkz”. Explore India’s space missions, technological achievements, and the role of space technology in national development.
               </p>
               
               <div className="mt-8 space-y-6">
-                <div className="border-l-2 border-indigo-500 pl-6">
-                    <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-2">Who Can Attend</h3>
+                <div className="border-l-2 border-orange-500 pl-6">
+                    <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-2">In Association With</h3>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                        School & College Students • Faculty & Researchers • Defense Aspirants & NCC Cadets • General Public
+                        Carmel College of Engineering
                     </p>
                 </div>
                  <div className="border-l-2 border-blue-500 pl-6">
-                    <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-2">Benefits</h3>
+                    <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-2">Who Can Attend</h3>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                        Exposure to defense technologies • Career awareness & inspiration • Learning about national security
+                        Engineering & Science Students • Faculty & Researchers • School Students • Space Science Enthusiasts
                     </p>
                 </div>
               </div>
@@ -117,14 +113,11 @@ export default function ITBPExhibition() {
             >
                 <div className="relative overflow-hidden rounded-3xl bg-slate-900 shadow-2xl ring-1 ring-white/10 max-w-md ml-auto">
                      {/* Main Image */}
-                    <div className="aspect-4/5 sm:aspect-3/4 lg:aspect-4/5 w-full relative">
-                         <Image 
-                            src="/itbp_img.jpeg"
-                            alt="ITBP Exhibition in action"
-                            fill
-                            className="object-cover object-center"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        />
+                    <div className="aspect-4/5 sm:aspect-3/4 lg:aspect-4/5 w-full relative bg-slate-800 flex items-center justify-center">
+                         {/* Placeholder for ISRO Image */}
+                         <Rocket className="w-32 h-32 text-slate-700" />
+                         <div className="absolute inset-0 flex items-center justify-center text-slate-500 font-bold text-lg">ISRO IMAGE</div>
+
                          {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-linear-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
                     </div>
@@ -145,13 +138,13 @@ export default function ITBPExhibition() {
                 </div>
                 
                 {/* Decorative Elements */}
-                 <div className="absolute -top-4 -right-4 -z-10 h-72 w-72 rounded-full bg-indigo-500/20 blur-3xl" />
-                 <div className="absolute -bottom-4 -left-4 -z-10 h-72 w-72 rounded-full bg-blue-500/20 blur-3xl" />
+                 <div className="absolute -top-4 -right-4 -z-10 h-72 w-72 rounded-full bg-orange-500/10 blur-3xl" />
+                 <div className="absolute -bottom-4 -left-4 -z-10 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
             </motion.div>
         </div>
 
         {/* Bottom Section: Full Width Grid */}
-        <div className="mx-auto max-w-348">
+        <div className="mx-auto max-w-7xl">
            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                  {exhibitionHighlights.map((item, index) => (
                     <motion.div 
@@ -162,7 +155,7 @@ export default function ITBPExhibition() {
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                         className="relative overflow-hidden rounded-2xl border border-white/5 bg-white/5 p-8 hover:bg-white/10 transition-colors group cursor-default"
                     >
-                         <div className="absolute top-0 right-0 p-4 opacity-10 font-bold text-6xl text-indigo-500/20 select-none group-hover:scale-110 transition-transform">
+                         <div className="absolute top-0 right-0 p-4 opacity-10 font-bold text-6xl text-orange-500/20 select-none group-hover:scale-110 transition-transform">
                             {index + 1}
                         </div>
                         <div className="mb-4">{item.icon}</div>
