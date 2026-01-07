@@ -68,10 +68,10 @@ export default function Footer() {
 
             <ul className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-1 md:grid-cols-1">
               {[
-                ["Home", "#"],
-                ["Schedule", "#schedule"],
-                ["Sponsors", "#sponsors"],
-                ["Contact", "#contact"],
+                ["Home", "/"],
+                ["Events", "/events"],
+                ["ABHERI", "/abheri"],
+                ["Contact", "/contact"],
               ].map(([label, href]) => (
                 <li key={label}>
                   <Link
@@ -149,22 +149,28 @@ export default function Footer() {
                 </Link>
               </motion.div>
             </div>
-
-            <div className="mt-6 text-xs text-white/40">
-              <p>© 2026 Sparkz. Built loud by the engineering tribe.</p>
-              <p className="mt-2">
-                Made with <span className="text-red-500">♥</span> and way too
-                much coffee
-              </p>
-            </div>
           </div>
         </div>
 
         {/* Bottom tiny legal bar */}
-        <div className="mt-10 border-t border-white/8 pt-6 text-center md:text-left">
-          <p className="text-xs text-white/40">
-            Terms • Privacy • Code of Conduct
-          </p>
+        <div className="mt-10 border-t border-white/8 pt-6">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-xs text-white/40">
+              Terms • Privacy • Code of Conduct
+            </p>
+            <div className="text-xs text-white/40 text-center md:text-right">
+              <p>© 2026 Sparkz.</p>
+              <p className="mt-1">
+                Crafted with ♥ by the {" "}
+                <Link
+                  href="/credits"
+                  className="text-white/70 hover:text-white transition-all duration-300 font-semibold hover:underline decoration-dotted underline-offset-2 animate-pulse hover:animate-none"
+                >
+                  Tech Team
+                </Link>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
