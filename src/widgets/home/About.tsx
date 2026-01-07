@@ -30,7 +30,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative isolate overflow-hidden bg-[#04050b] pt-10 pb-20 text-white sm:py-24"
+      className="relative  isolate overflow-hidden bg-[#04050b] pt-10 pb-20 text-white sm:py-24"
     >
       {/* TOP = PURE BLACK (no glow at the very top) */}
       {mounted && (
@@ -74,7 +74,7 @@ export default function About() {
         </>
       )}
       {/* CONTENT */}
-      <div className="relative z-10  px-[5vw]">
+      <div className="relative z-10 mx-auto max-w-[94rem] px-[5vw]">
         <div className="flex flex-col gap-16 lg:flex-row lg:items-start">
           {/* Left */}
           <motion.div

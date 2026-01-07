@@ -14,14 +14,13 @@ export const navItems = [
         to: "/abheri"
     },
     {
-        title: "About",
-        to: "/#about"
+        title: "ISRO",
+        to: "/#isro-exhibition"
     },
     {
-        title:"Contact",
-        to: "/contact"
+        title: "ITBP",
+        to: "/#itbp-exhibition"
     },
-    
 ]
 
 // export const events: Event[] = [

@@ -77,15 +77,34 @@ export default function Header() {
 
           {/* Right nav + CTA - Desktop Only */}
           <div className="hidden flex-1 items-center justify-end gap-4 text-sm text-white/80 sm:flex">
-            {navItems?.slice(3, 5).map((item, index) => (
-              <Link
-                key={index}
-                href={item?.to}
-                className="rounded-full border border-transparent px-3 py-2 transition hover:border-white/20 hover:bg-white/5 hover:text-white"
-              >
-                {item?.title}
-              </Link>
-            ))}
+            {navItems?.slice(3, 5).map((item, index) => {
+              const isSpecial = ["ABHERI", "ISRO", "ITBP"].includes(item.title);
+              return (
+                <Link
+                  key={index}
+                  href={item?.to}
+                  className={`relative rounded-full border px-3 py-2 transition duration-300 ${
+                    isSpecial
+                      ? "group border-fuchsia-500/30 bg-fuchsia-500/10 hover:bg-fuchsia-500/20 hover:border-fuchsia-500/60 hover:shadow-[0_0_20px_rgba(236,72,153,0.4)]"
+                      : "border-transparent hover:border-white/20 hover:bg-white/5 hover:text-white"
+                  }`}
+                >
+                  {isSpecial ? (
+                    <span className="flex items-center gap-2">
+                      <span className="bg-linear-to-r from-indigo-300 via-fuchsia-300 to-amber-200 bg-clip-text text-transparent font-bold">
+                        {item.title}
+                      </span>
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-fuchsia-500"></span>
+                      </span>
+                    </span>
+                  ) : (
+                    item.title
+                  )}
+                </Link>
+              );
+            })}
             
             {user ? (
               <Link
@@ -129,7 +148,7 @@ export default function Header() {
         <div className="flex flex-col items-center justify-center min-h-screen p-6">
           <nav className="flex flex-col items-center gap-6 w-full max-w-sm">
             {navItems?.map((item, index) => {
-              const isSpecial = item.title === "ABHERI";
+              const isSpecial = ["ABHERI", "ISRO", "ITBP"].includes(item.title);
               return (
                 <Link
                   key={index}

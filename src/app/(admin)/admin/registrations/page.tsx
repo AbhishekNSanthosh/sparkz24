@@ -69,21 +69,66 @@ export default function RegistrationsManagement() {
     const fetchRegistrations = async (eventId: string) => {
         setLoading(true);
         try {
-            // Query registrations collection directly
-            const q = query(collection(db, "registrations"), where("eventId", "==", eventId));
-            const querySnapshot = await getDocs(q);
+            const apiKey = process.env.NEXT_PUBLIC_GRABURPASS_API_KEY;
             
-            const regs = querySnapshot.docs.map(doc => {
-                const data = doc.data();
-                return {
-                    id: doc.id,
-                    name: data.leaderName || data.userName || "N/A",
-                    email: data.userEmail || "N/A",
-                    college: data.leaderCollege || "N/A",
-                    phone: data.leaderMobile || "N/A",
-                    ...data // Keep other data for export potentially
-                };
-            }) as UserRegistration[];
+            if (!apiKey) {
+                console.warn("API Key not found. Please set NEXT_PUBLIC_GRABURPASS_API_KEY in .env");
+            }
+
+            const event = events.find(e => e.id === eventId);
+            if (!event?.regLink) {
+                 toastError("External registration link not found for this event");
+                 setLoading(false);
+                 return;
+            }
+
+            // Extract ID from regLink (assuming format ending in /ID or /ID?params)
+            let externalEventId = "";
+            try {
+                const url = new URL(event.regLink);
+                const pathSegments = url.pathname.split('/').filter(Boolean);
+                externalEventId = pathSegments[pathSegments.length - 1]; // Get last segment
+            } catch (e) {
+                console.error("Error parsing regLink:", e);
+                // Fallback for simple strings if not full URL
+                externalEventId = event.regLink.split('/').pop() || "";
+            }
+
+            if (!externalEventId) {
+                toastError("Could not extract external Event ID");
+                setLoading(false);
+                return;
+            }
+            
+          
+            const response = await fetch(`http://graburpass.com/api/external/events/${externalEventId}/registrations`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log('Registration Data:', data);
+            
+            // API returns { success: true, data: [...] }
+            const registrationsData = data.data || []; 
+
+            // Map the external API data to UserRegistration interface
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const regs = (Array.isArray(registrationsData) ? registrationsData : []).map((reg: any) => ({
+                id: reg.id || reg.attendeeId || Math.random().toString(),
+                name: reg.name || reg.userName || "N/A",
+                email: reg.email || reg.userEmail || "N/A",
+                college: reg.college || reg.leaderCollege || "N/A",
+                phone: reg.phone || reg.details?.phone || reg.leaderMobile || "N/A",
+                ...reg
+            })) as UserRegistration[];
             
             setRegistrations(regs);
         } catch (error) {
@@ -185,13 +230,14 @@ export default function RegistrationsManagement() {
                                 <tr className="bg-gray-800/50">
                                     <th className="p-4 font-semibold text-gray-400 text-sm whitespace-nowrap">Name</th>
                                     <th className="p-4 font-semibold text-gray-400 text-sm whitespace-nowrap">Email</th>
+                                    <th className="p-4 font-semibold text-gray-400 text-sm whitespace-nowrap">Phone</th>
                                     <th className="p-4 font-semibold text-gray-400 text-sm whitespace-nowrap">College</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-800">
                                 {loading ? (
                                     <tr>
-                                        <td colSpan={3} className="p-8 text-center text-gray-500">
+                                        <td colSpan={4} className="p-8 text-center text-gray-500">
                                             Loading registrations...
                                         </td>
                                     </tr>
@@ -200,12 +246,13 @@ export default function RegistrationsManagement() {
                                         <tr key={reg.id} className="hover:bg-gray-800/30">
                                             <td className="p-4 font-medium">{reg.name}</td>
                                             <td className="p-4 text-gray-400">{reg.email}</td>
+                                            <td className="p-4 text-gray-400">{reg.phone}</td>
                                             <td className="p-4 text-gray-400">{reg.college}</td>
                                         </tr>
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={3} className="p-8 text-center text-gray-500">
+                                        <td colSpan={4} className="p-8 text-center text-gray-500">
                                             No registrations found for this event.
                                         </td>
                                     </tr>

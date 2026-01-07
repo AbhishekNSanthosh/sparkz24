@@ -108,7 +108,7 @@ export default function Hero() {
         </>
       )}
 
-      <div className="relative  flex min-h-[92vh] px-[5vw] flex-col gap-12 pt-10  pb-15 sm:pb-24 md:flex-row md:items-center md:gap-10">
+      <div className="relative mx-auto max-w-[94rem] flex min-h-[92vh] px-[5vw] flex-col gap-12 pt-10  pb-15 sm:pb-24 md:flex-row md:items-center md:gap-10">
         {/* Left content */}
         <motion.div
           initial={{ opacity: 0, x: -24 }}
