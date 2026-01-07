@@ -81,8 +81,8 @@ export default function BandCompetition() {
       )}
 
       {/* CONTENT */}
-      <div className="relative z-10 px-[5vw]">
-        <div className="mx-auto max-w-7xl">
+      <div className="relative z-10">
+        <div className="mx-auto max-w-336">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left Column: Content + Highlights */}
             <motion.div
@@ -153,11 +153,11 @@ export default function BandCompetition() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="relative mx-auto w-full max-w-sm lg:max-w-md"
+              className="relative ml-auto w-full max-w-sm lg:max-w-md"
             >
               <div className="relative rounded-3xl border border-white/10 bg-white/5 backdrop-blur overflow-hidden group">
                  {/* Decorative background */}
-                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-fuchsia-500/10 opacity-50" />
+                 <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-fuchsia-500/10 opacity-50" />
                  
                 <div className="relative p-2 sm:p-4">
                   <div className="relative w-full aspect-[4/5] sm:aspect-[3/4] overflow-hidden rounded-2xl">
