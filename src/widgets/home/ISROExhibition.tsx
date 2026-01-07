@@ -133,7 +133,7 @@ export default function ISROExhibition() {
                             </div>
                             <div className="text-right">
                                 <p className="text-sm font-medium text-slate-400">Entry</p>
-                                <p className="text-base font-semibold text-white">Free & Open to All</p>
+                                <p className="text-base font-semibold text-white whitespace-nowrap">Free & Open to All</p>
                             </div>
                         </div>
                     </div>
