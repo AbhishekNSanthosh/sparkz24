@@ -14,12 +14,12 @@ export const navItems = [
         to: "/abheri"
     },
     {
-        title: "ISRO",
-        to: "/#isro-exhibition"
+        title: "About",
+        to: "/#about"
     },
     {
-        title: "ITBP",
-        to: "/#itbp-exhibition"
+        title: "Contact",
+        to: "/contact"
     },
 ]
 
