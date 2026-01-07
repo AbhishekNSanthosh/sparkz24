@@ -113,11 +113,13 @@ export default function ISROExhibition() {
             >
                 <div className="relative overflow-hidden rounded-3xl bg-slate-900 shadow-2xl ring-1 ring-white/10 max-w-md ml-auto">
                      {/* Main Image */}
-                    <div className="aspect-4/5 sm:aspect-3/4 lg:aspect-4/5 w-full relative bg-slate-800 flex items-center justify-center">
-                         {/* Placeholder for ISRO Image */}
-                         <Rocket className="w-32 h-32 text-slate-700" />
-                         <div className="absolute inset-0 flex items-center justify-center text-slate-500 font-bold text-lg">ISRO IMAGE</div>
-
+                    <div className="aspect-4/5 sm:aspect-3/4 lg:aspect-4/5 w-full relative bg-slate-800">
+                         <Image 
+                            src="/isro_img.jpeg" 
+                            alt="ISRO Exhibition" 
+                            fill 
+                            className="object-cover"
+                         />
                          {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-linear-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
                     </div>
