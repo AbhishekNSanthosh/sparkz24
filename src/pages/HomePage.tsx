@@ -1,4 +1,6 @@
 "use client";
+import { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import About from "@/widgets/home/About";
 import Hero from "@/widgets/home/Hero";
 import Featured from "@/widgets/home/Featured";
@@ -6,9 +8,8 @@ import Featured from "@/widgets/home/Featured";
 import BandCompetition from "@/widgets/home/BandCompetition";
 import ITBPExhibition from "@/widgets/home/ITBPExhibition";
 import ISROExhibition from "@/widgets/home/ISROExhibition";
-import { useEffect, useState } from "react";
-import { AnimatePresence } from "framer-motion";
 import Preloader from "@/widgets/home/Preloader";
+import Partners from "@/widgets/home/Partners";
 
 export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -29,9 +30,10 @@ export default function HomePage() {
       <Hero />
       <Featured />
       <About />
-      <ISROExhibition/>
+      <ISROExhibition />
       <ITBPExhibition />
-      <BandCompetition/>
+      <BandCompetition />
+      <Partners />
     </div>
   );
 }

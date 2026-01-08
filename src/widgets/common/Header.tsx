@@ -63,12 +63,15 @@ export default function Header() {
 
           {/* Brand - Centered in Desktop */}
           <div className="flex flex-[1.2] items-center justify-start sm:justify-center">
-            <Link href="/" className="relative flex items-center justify-center transition-transform hover:scale-105">
-              <Image 
-                src="/sparkz.svg" 
-                alt="Sparkz Logo" 
-                width={120} 
-                height={40} 
+            <Link
+              href="/"
+              className="relative flex items-center justify-center transition-transform hover:scale-105"
+            >
+              <Image
+                src="/sparkz.svg"
+                alt="Sparkz Logo"
+                width={120}
+                height={40}
                 className="h-8 w-auto sm:h-10 object-contain drop-shadow-[0_0_15px_rgba(236,72,153,0.5)]"
                 priority
               />
@@ -77,35 +80,58 @@ export default function Header() {
 
           {/* Right nav + CTA - Desktop Only */}
           <div className="hidden flex-1 items-center justify-end gap-4 text-sm text-white/80 sm:flex">
-            {navItems?.slice(3, 5).map((item, index) => (
-              <Link
-                key={index}
-                href={item?.to}
-                className="rounded-full border border-transparent px-3 py-2 transition hover:border-white/20 hover:bg-white/5 hover:text-white"
-              >
-                {item?.title}
-              </Link>
-            ))}
-            
+            {navItems?.slice(3, 5).map((item, index) => {
+              const isSpecial = ["ABHERI", "ISRO", "ITBP"].includes(item.title);
+              return (
+                <Link
+                  key={index}
+                  href={item?.to}
+                  className={`relative rounded-full border px-3 py-2 transition duration-300 ${
+                    isSpecial
+                      ? "group border-fuchsia-500/30 bg-fuchsia-500/10 hover:bg-fuchsia-500/20 hover:border-fuchsia-500/60 hover:shadow-[0_0_20px_rgba(236,72,153,0.4)]"
+                      : "border-transparent hover:border-white/20 hover:bg-white/5 hover:text-white"
+                  }`}
+                >
+                  {isSpecial ? (
+                    <span className="flex items-center gap-2">
+                      <span className="bg-linear-to-r from-indigo-300 via-fuchsia-300 to-amber-200 bg-clip-text text-transparent font-bold">
+                        {item.title}
+                      </span>
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-fuchsia-500"></span>
+                      </span>
+                    </span>
+                  ) : (
+                    item.title
+                  )}
+                </Link>
+              );
+            })}
+
             {user ? (
               <Link
                 href="/profile"
                 className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
               >
                 {user.photoURL ? (
-                    <img src={user.photoURL} alt="Profile" className="w-5 h-5 rounded-full" />
+                  <img
+                    src={user.photoURL}
+                    alt="Profile"
+                    className="w-5 h-5 rounded-full"
+                  />
                 ) : (
-                    <UserIcon size={18} />
+                  <UserIcon size={18} />
                 )}
                 <span>Profile</span>
               </Link>
             ) : (
-                <button
+              <button
                 onClick={handleLoginClick}
                 className="inline-flex overflow-hidden items-center justify-center bg-linear-to-r from-indigo-500 via-fuchsia-500 to-amber-400 gap-2 rounded-full px-4 py-2 text-sm font-semibold text-white transition-all hover:from-indigo-600 hover:via-fuchsia-600 hover:to-amber-500 hover:scale-[1.02] active:scale-95 cursor-pointer"
-                >
+              >
                 Login
-                </button>
+              </button>
             )}
           </div>
 
@@ -142,15 +168,15 @@ export default function Header() {
                   }`}
                 >
                   {isSpecial ? (
-                     <span className="flex items-center justify-center gap-2">
-                        <span className="bg-linear-to-r from-indigo-300 via-fuchsia-300 to-amber-200 bg-clip-text text-transparent font-bold">
-                            {item.title}
-                        </span>
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-fuchsia-500"></span>
-                        </span>
-                     </span>
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="bg-linear-to-r from-indigo-300 via-fuchsia-300 to-amber-200 bg-clip-text text-transparent font-bold">
+                        {item.title}
+                      </span>
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fuchsia-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-fuchsia-500"></span>
+                      </span>
+                    </span>
                   ) : (
                     item.title
                   )}
@@ -159,27 +185,44 @@ export default function Header() {
             })}
 
             {user ? (
-               <Link
-               href="/profile"
-               onClick={() => setIsMenuOpen(false)}
-               className="w-full mt-6 py-4 text-lg font-semibold text-white rounded-2xl border border-white/20 bg-white/10 hover:bg-white/20 transition-all flex items-center justify-center gap-2"
-             >
+              <Link
+                href="/profile"
+                onClick={() => setIsMenuOpen(false)}
+                className="w-full mt-6 py-4 text-lg font-semibold text-white rounded-2xl border border-white/20 bg-white/10 hover:bg-white/20 transition-all flex items-center justify-center gap-2"
+              >
                 {user.photoURL ? (
-                    <img src={user.photoURL} alt="Profile" className="w-6 h-6 rounded-full" />
+                  <img
+                    src={user.photoURL}
+                    alt="Profile"
+                    className="w-6 h-6 rounded-full"
+                  />
                 ) : (
-                    <UserIcon size={20} />
+                  <UserIcon size={20} />
                 )}
-               Profile
-             </Link>
+                Profile
+              </Link>
             ) : (
-                <button
+              <button
                 onClick={handleLoginClick}
                 className="w-full mt-6 py-4 text-lg font-semibold text-white rounded-2xl bg-linear-to-r from-indigo-500 via-fuchsia-500 to-amber-400 hover:from-indigo-600 hover:via-fuchsia-600 hover:to-amber-500 transition-all hover:scale-[1.02] active:scale-95"
-                >
+              >
                 Login
-                </button>
+              </button>
             )}
           </nav>
+
+          {/* Made with Love - Tech Team */}
+          <div className="mt-auto pt-8 text-center">
+            <p className="text-xs text-white/40">
+              <Link
+                href="/credits"
+                onClick={() => setIsMenuOpen(false)}
+                className="text-white/70 hover:text-white transition-all duration-300 font-semibold hover:underline decoration-dotted underline-offset-2 animate-pulse hover:animate-none"
+              >
+                Tech Team
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </>

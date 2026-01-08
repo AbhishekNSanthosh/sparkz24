@@ -31,8 +31,8 @@ const guests = [
   },
   {
     name: "Sudashan",
-    role: "Judge",
-    image: "/sudashan.png", // Placeholder image
+    role: "Playback Singer",
+    image: "/sudarshan.jpg",
     tag: "Competition Judge",
   },
 ];
@@ -108,7 +108,8 @@ export default function BandCompetition() {
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[13px] font-bold uppercase tracking-widest backdrop-blur">
                   <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                  ABHERI - <span className="text-[9px]">Music Band Competition</span>
+                  ABHERI -{" "}
+                  <span className="text-[9px]">Music Band Competition</span>
                 </div>
 
                 <h2 className="mt-6 text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">
@@ -118,27 +119,35 @@ export default function BandCompetition() {
                     with ABHERI
                   </span>
                 </h2>
-                
+
                 <p className="mt-4 text-lg text-indigo-100/60 leading-relaxed max-w-xl">
-                  Unleash your rhythm, captivate the crowd, and battle for glory in the ultimate inter-college band showdown.
+                  Unleash your rhythm, captivate the crowd, and battle for glory
+                  in the ultimate inter-college band showdown.
                 </p>
               </div>
 
-               {/* Highlights Grid (Now on Left) */}
+              {/* Highlights Grid (Now on Left) */}
               <div className="grid sm:grid-cols-2 gap-4">
-                 {eventPoints.map((point, i) => (
-                  <div key={i} className={`p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors duration-300 ${i === 2 ? "sm:col-span-2" : ""}`}>
-                     <div className="flex items-center gap-3 mb-2">
-                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold">
-                          {i + 1}
-                        </div>
-                        <h3 className="font-bold text-indigo-100">{point.title}</h3>
-                     </div>
-                     <p className="text-sm text-white/60 leading-relaxed pl-9">
-                        {point.body}
-                     </p>
+                {eventPoints.map((point, i) => (
+                  <div
+                    key={i}
+                    className={`p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors duration-300 ${
+                      i === 2 ? "sm:col-span-2" : ""
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold">
+                        {i + 1}
+                      </div>
+                      <h3 className="font-bold text-indigo-100">
+                        {point.title}
+                      </h3>
+                    </div>
+                    <p className="text-sm text-white/60 leading-relaxed pl-9">
+                      {point.body}
+                    </p>
                   </div>
-                 ))}
+                ))}
               </div>
 
               <motion.div
@@ -169,36 +178,39 @@ export default function BandCompetition() {
               className="relative ml-auto w-full grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 items-start"
             >
               {guests.map((guest, index) => (
-                  <div key={index} className="relative rounded-3xl border border-white/10 bg-white/5 backdrop-blur overflow-hidden group">
-                     {/* Decorative background */}
-                     <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-fuchsia-500/10 opacity-50" />
-                     
-                    <div className="relative p-2 sm:p-4">
-                      <div className="relative w-full aspect-4/5 overflow-hidden rounded-2xl bg-slate-900/50">
-                        <Image
-                          src={guest.image}
-                          alt={guest.name}
-                          fill
-                          className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#04050b] via-transparent to-transparent opacity-90" />
-                        
-                        <div className="absolute bottom-0 left-0 right-0 p-6">
-                           <div className="inline-block px-3 py-1 mb-2 rounded-lg bg-indigo-500/20 border border-indigo-500/30 backdrop-blur-md">
-                            <span className="text-indigo-200 text-[10px] font-bold tracking-widest uppercase">
-                              {guest.tag}
-                            </span>
-                          </div>
-                          <h3 className="text-2xl sm:text-3xl font-black text-white mb-1 tracking-tight">
-                            {guest.name}
-                          </h3>
-                          <p className="text-sm text-white/80 font-medium">
-                            {guest.role}
-                          </p>
+                <div
+                  key={index}
+                  className="relative rounded-3xl border border-white/10 bg-white/5 backdrop-blur overflow-hidden group"
+                >
+                  {/* Decorative background */}
+                  <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-fuchsia-500/10 opacity-50" />
+
+                  <div className="relative p-2 sm:p-4">
+                    <div className="relative w-full aspect-4/5 overflow-hidden rounded-2xl bg-slate-900/50">
+                      <Image
+                        src={guest.image}
+                        alt={guest.name}
+                        fill
+                        className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#04050b] via-transparent to-transparent opacity-90" />
+
+                      <div className="absolute bottom-0 left-0 right-0 p-6">
+                        <div className="inline-block px-3 py-1 mb-2 rounded-lg bg-indigo-500/20 border border-indigo-500/30 backdrop-blur-md">
+                          <span className="text-indigo-200 text-[10px] font-bold tracking-widest uppercase">
+                            {guest.tag}
+                          </span>
                         </div>
+                        <h3 className="text-2xl sm:text-3xl font-black text-white mb-1 tracking-tight">
+                          {guest.name}
+                        </h3>
+                        <p className="text-sm text-white/80 font-medium">
+                          {guest.role}
+                        </p>
                       </div>
                     </div>
                   </div>
+                </div>
               ))}
             </motion.div>
           </div>

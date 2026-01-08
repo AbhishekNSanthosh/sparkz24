@@ -16,6 +16,57 @@ const loader = ({ src, width, quality }: ImageLoaderProps) => {
   return `${src}?w=${width}&q=${quality || 50}`; // Default quality to 75 if not provided
 };
 
+// Event Card Component with image loading state
+function EventCard({ event, idx }: { event: Event; idx: number }) {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  return (
+    <motion.div
+      key={event.id}
+      layout
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12 }}
+      transition={{
+        duration: 0.28,
+        ease: [0.16, 1, 0.3, 1],
+        delay: idx * 0.03,
+      }}
+      whileHover={{ y: -6 }}
+      className="group"
+    >
+      <Link
+        href={`/events/${event.id}`}
+        className="block rounded-2xl max-w-90 border border-white/10 bg-black/40 backdrop-blur transition-all duration-300 hover:border-fuchsia-400/40 hover:shadow-lg hover:shadow-fuchsia-500/15"
+      >
+        {/* Poster frame */}
+        <div className="relative aspect-4/5 w-full rounded-2xl overflow-hidden bg-black">
+          {/* Skeleton loader */}
+          {!imageLoaded && (
+            <div className="absolute inset-0 bg-white/5">
+              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent skew-x-12 animate-shimmer" />
+            </div>
+          )}
+
+          <Image
+            src={event.imageUrl}
+            alt={event.title}
+            loader={loader}
+            fill
+            sizes="(100vw - 2rem) / 3 * 100vw / 100vw"
+            quality={75}
+            className={`object-contain rounded-2xl transition-all duration-500 ${
+              imageLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            priority={idx < 3}
+            onLoad={() => setImageLoaded(true)}
+          />
+        </div>
+      </Link>
+    </motion.div>
+  );
+}
+
 // ... (rest of imports)
 
 export default function EventsPage() {
@@ -25,44 +76,44 @@ export default function EventsPage() {
 
   useEffect(() => {
     const fetchEvents = async () => {
-        try {
-            const querySnapshot = await getDocs(collection(db, "events"));
-            if (!querySnapshot.empty) {
-                const eventsList = querySnapshot.docs.map(doc => {
-                    const data = doc.data();
-                    return {
-                        id: doc.id,
-                        title: data.title,
-                        department: data.department,
-                        imageUrl: data.imageUrl,
-                    };
-                }) as Event[];
-                setEvents(eventsList);
-            } else {
-                setEvents([]);
-            }
-        } catch (error) {
-            console.error("Error fetching events:", error);
-            setEvents([]); 
-        } finally {
-            setLoading(false);
+      try {
+        const querySnapshot = await getDocs(collection(db, "events"));
+        if (!querySnapshot.empty) {
+          const eventsList = querySnapshot.docs.map((doc) => {
+            const data = doc.data();
+            return {
+              id: doc.id,
+              title: data.title,
+              department: data.department,
+              imageUrl: data.imageUrl,
+            };
+          }) as Event[];
+          setEvents(eventsList);
+        } else {
+          setEvents([]);
         }
+      } catch (error) {
+        console.error("Error fetching events:", error);
+        setEvents([]);
+      } finally {
+        setLoading(false);
+      }
     };
-    
+
     fetchEvents();
   }, []);
 
   const filteredEvents = useMemo(() => {
-      let data = events;
-      // If DB is empty and loading is done, maybe we fallback to defaults?
-      // No, sticking to DB source of truth is cleaner. The admin must Seed.
-      // However, to avoid "breaking" the site for the user right now, I will start with defaultEvents as initial state?
-      // No, empty state is better to verify it works.
-      
-      if (selectedDept !== "All") {
-          data = data.filter((event) => event.department === selectedDept);
-      }
-      return data;
+    let data = events;
+    // If DB is empty and loading is done, maybe we fallback to defaults?
+    // No, sticking to DB source of truth is cleaner. The admin must Seed.
+    // However, to avoid "breaking" the site for the user right now, I will start with defaultEvents as initial state?
+    // No, empty state is better to verify it works.
+
+    if (selectedDept !== "All") {
+      data = data.filter((event) => event.department === selectedDept);
+    }
+    return data;
   }, [events, selectedDept]);
 
   return (
@@ -111,62 +162,33 @@ export default function EventsPage() {
 
         {/* Events grid */}
         {loading ? (
-           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[...Array(8)].map((_, i) => (
-                <div key={i} className="rounded-2xl border border-white/5 bg-white/5 overflow-hidden">
-                  <div className="aspect-4/5 w-full bg-white/5 relative overflow-hidden">
-                     <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent skew-x-12 animate-shimmer" />
-                  </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={i}
+                className="rounded-2xl border border-white/5 bg-white/5 overflow-hidden"
+              >
+                <div className="aspect-4/5 w-full bg-white/5 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent skew-x-12 animate-shimmer" />
                 </div>
-              ))}
-           </div>
+              </div>
+            ))}
+          </div>
         ) : (
-        <Suspense
-          fallback={<div className="h-8 w-full bg-white/10 rounded-lg"></div>}
-        >
-          <motion.div
-            layout
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+          <Suspense
+            fallback={<div className="h-8 w-full bg-white/10 rounded-lg"></div>}
           >
-            <AnimatePresence>
-              {filteredEvents.map((event, idx) => (
-                <motion.div
-                  key={event.id}
-                  layout
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -12 }}
-                  transition={{
-                    duration: 0.28,
-                    ease: [0.16, 1, 0.3, 1],
-                    delay: idx * 0.03,
-                  }}
-                  whileHover={{ y: -6 }}
-                  className="group"
-                >
-                  <Link
-                    href={`/events/${event.id}`}
-                    className="block rounded-2xl max-w-90 border border-white/10 bg-black/40 backdrop-blur transition-all duration-300 hover:border-fuchsia-400/40 hover:shadow-lg hover:shadow-fuchsia-500/15"
-                  >
-                    {/* Poster frame */}
-                    <div className="relative aspect-4/5 w-full rounded-2xl overflow-hidden bg-black">
-                      <Image
-                        src={event.imageUrl}
-                        alt={event.title}
-                        loader={loader}
-                        fill
-                        sizes="(100vw - 2rem) / 3 * 100vw / 100vw"
-                        quality={75}
-                        className="object-contain  rounded-2xl transition-transform duration-500"
-                        priority={idx < 3}
-                      />
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
-        </Suspense>
+            <motion.div
+              layout
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+            >
+              <AnimatePresence>
+                {filteredEvents.map((event, idx) => (
+                  <EventCard key={event.id} event={event} idx={idx} />
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          </Suspense>
         )}
 
         {/* Decorative particles near header (subtle, not full-screen) */}
