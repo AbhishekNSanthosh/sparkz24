@@ -15,38 +15,53 @@ export default function FeaturedEvents() {
   const [events, setEvents] = useState<Event[]>([]);
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     const fetchFeaturedEvents = async () => {
-        try {
-            // Try fetching featured events first
-            const q = query(collection(db, "events"), where("featured", "==", true), limit(5));
-            const snapshot = await getDocs(q);
-            
-            let fetchedEvents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Event));
+      try {
+        // Try fetching featured events first
+        const q = query(
+          collection(db, "events"),
+          where("featured", "==", true),
+          limit(5)
+        );
+        const snapshot = await getDocs(q);
 
-            // Fallback if no featured events, just get few recent
-            if (fetchedEvents.length === 0) {
-                 const qAll = query(collection(db, "events"), limit(5));
-                 const snapAll = await getDocs(qAll);
-                 fetchedEvents = snapAll.docs.map(doc => ({ id: doc.id, ...doc.data() } as Event));
-            }
-             
-            setEvents(fetchedEvents);
+        let fetchedEvents = snapshot.docs.map(
+          (doc) => ({ id: doc.id, ...doc.data() } as Event)
+        );
 
-        } catch (err) {
-            console.error("Failed to fetch featured events", err);
+        // Fallback if no featured events, just get few recent
+        if (fetchedEvents.length === 0) {
+          const qAll = query(collection(db, "events"), limit(5));
+          const snapAll = await getDocs(qAll);
+          fetchedEvents = snapAll.docs.map(
+            (doc) => ({ id: doc.id, ...doc.data() } as Event)
+          );
         }
-    }
+
+        setEvents(fetchedEvents);
+      } catch (err) {
+        console.error("Failed to fetch featured events", err);
+      }
+    };
     fetchFeaturedEvents();
   }, []);
 
   const total = events.length;
-  const getIndex = useCallback((i: number) => {
+  const getIndex = useCallback(
+    (i: number) => {
       if (total === 0) return 0;
-      return (i + total) % total
-  }, [total]);
+      return (i + total) % total;
+    },
+    [total]
+  );
 
   const isInView = useInView(sectionRef, {
     amount: 0.1, // at least 10% visible
@@ -86,11 +101,20 @@ export default function FeaturedEvents() {
       className="relative isolate overflow-hidden bg-[#04050b] py-10 sm:py-15 "
       ref={sectionRef}
     >
-      {/* Matching Hero ambient effects */}
-      <div className="pointer-events-none absolute left-0 top-0 h-80 w-80 rounded-full bg-indigo-600/20 blur-[140px]" />
-      <div className="pointer-events-none absolute right-0 bottom-0 h-96 w-96 rounded-full bg-fuchsia-500/20 blur-[150px]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(79,70,229,0.1),transparent_50%)]" />
-      <div className="pointer-events-none absolute inset-0 opacity-15 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-size-[100px_100px]" />
+      {/* Background Effects */}
+      {mounted && (
+        <>
+          {/* Gradient Glows */}
+          <div className="pointer-events-none absolute left-[-10%] top-[20%] h-96 w-96 rounded-full bg-indigo-600/20 blur-[140px]" />
+          <div className="hidden sm:block pointer-events-none absolute right-[-5%] top-[30%] h-96 w-96 rounded-full bg-fuchsia-500/20 blur-[150px]" />
+
+          {/* Subtle Grid Pattern */}
+          <div className="hidden sm:block pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-size-[100px_100px] opacity-30" />
+
+          {/* Radial Gradients */}
+          <div className="hidden sm:block pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_40%_40%,rgba(79,70,229,0.1),transparent_50%),radial-gradient(circle_at_60%_60%,rgba(236,72,153,0.08),transparent_45%)]" />
+        </>
+      )}
 
       <div className="relative px-[5vw]">
         <motion.h2
@@ -131,14 +155,21 @@ export default function FeaturedEvents() {
                   }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
-                  className={`relative ${isCenter ? "z-30 w-[70vw] sm:w-72" : "z-10 hidden sm:block w-64"} flex-shrink-0`}
+                  className={`relative ${
+                    isCenter
+                      ? "z-30 w-[70vw] sm:w-72"
+                      : "z-10 hidden sm:block w-64"
+                  } flex-shrink-0`}
                   whileHover={isCenter ? { scale: 1.08, y: -30 } : {}}
                   onMouseEnter={() => isCenter && setPaused(true)}
                   onMouseLeave={() => isCenter && setPaused(false)}
                   onFocus={() => isCenter && setPaused(true)}
                   onBlur={() => isCenter && setPaused(false)}
                 >
-                  <Link href={`/events/${event.id}`} className="group block w-full">
+                  <Link
+                    href={`/events/${event.id}`}
+                    className="group block w-full"
+                  >
                     <div
                       className={`relative aspect-4/5 w-full overflow-hidden rounded-3xl border
                         ${

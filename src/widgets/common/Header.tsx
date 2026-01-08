@@ -33,10 +33,34 @@ export default function Header() {
           <div className="hidden flex-1 items-center gap-4 text-sm text-white/80 sm:flex sm:gap-6">
             {navItems?.slice(0, 3).map((item, index) => {
               const isSpecial = item.title === "ABHERI";
+              const isHashLink = item.to.startsWith("/#");
+
               return (
                 <Link
                   key={index}
                   href={item?.to}
+                  onClick={(e) => {
+                    if (isHashLink) {
+                      e.preventDefault();
+                      const targetId = item.to.substring(2); // Remove /#
+                      const element = document.getElementById(targetId);
+                      if (element) {
+                        const headerOffset = 80; // Height of sticky header
+                        const elementPosition =
+                          element.getBoundingClientRect().top;
+                        const offsetPosition =
+                          elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: "smooth",
+                        });
+                      } else {
+                        // If element not found, navigate to home first
+                        window.location.href = item.to;
+                      }
+                    }
+                  }}
                   className={`relative rounded-full border px-3 py-2 transition duration-300 ${
                     isSpecial
                       ? "group border-fuchsia-500/30 bg-fuchsia-500/10 hover:bg-fuchsia-500/20 hover:border-fuchsia-500/60 hover:shadow-[0_0_20px_rgba(236,72,153,0.4)]"
@@ -82,10 +106,33 @@ export default function Header() {
           <div className="hidden flex-1 items-center justify-end gap-4 text-sm text-white/80 sm:flex">
             {navItems?.slice(3, 5).map((item, index) => {
               const isSpecial = ["ABHERI", "ISRO", "ITBP"].includes(item.title);
+              const isHashLink = item.to.startsWith("/#");
+
               return (
                 <Link
                   key={index}
                   href={item?.to}
+                  onClick={(e) => {
+                    if (isHashLink) {
+                      e.preventDefault();
+                      const targetId = item.to.substring(2);
+                      const element = document.getElementById(targetId);
+                      if (element) {
+                        const headerOffset = 80;
+                        const elementPosition =
+                          element.getBoundingClientRect().top;
+                        const offsetPosition =
+                          elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: "smooth",
+                        });
+                      } else {
+                        window.location.href = item.to;
+                      }
+                    }
+                  }}
                   className={`relative rounded-full border px-3 py-2 transition duration-300 ${
                     isSpecial
                       ? "group border-fuchsia-500/30 bg-fuchsia-500/10 hover:bg-fuchsia-500/20 hover:border-fuchsia-500/60 hover:shadow-[0_0_20px_rgba(236,72,153,0.4)]"
@@ -156,11 +203,36 @@ export default function Header() {
           <nav className="flex flex-col items-center gap-6 w-full max-w-sm">
             {navItems?.map((item, index) => {
               const isSpecial = item.title === "ABHERI";
+              const isHashLink = item.to.startsWith("/#");
+
               return (
                 <Link
                   key={index}
                   href={item?.to}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={(e) => {
+                    if (isHashLink) {
+                      e.preventDefault();
+                      const targetId = item.to.substring(2);
+                      const element = document.getElementById(targetId);
+                      if (element) {
+                        const headerOffset = 80;
+                        const elementPosition =
+                          element.getBoundingClientRect().top;
+                        const offsetPosition =
+                          elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: "smooth",
+                        });
+                        setIsMenuOpen(false);
+                      } else {
+                        window.location.href = item.to;
+                      }
+                    } else {
+                      setIsMenuOpen(false);
+                    }
+                  }}
                   className={`w-full text-center py-4 text-lg font-medium rounded-2xl border transition-all hover:scale-[1.02] ${
                     isSpecial
                       ? "text-white border-fuchsia-500/40 bg-fuchsia-500/10 shadow-[0_0_15px_rgba(236,72,153,0.2)]"

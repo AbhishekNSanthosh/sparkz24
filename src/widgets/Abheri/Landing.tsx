@@ -79,10 +79,9 @@ const rulesSections = [
       "If registrations exceed 10 teams, a screening round will be conducted through video submissions.",
       "Bands must submit a recorded performance video to the event coordinator.",
       "Judging committee will shortlist 10 bands, and the decision shall be final.",
-      "Non-selected bands will receive a full refund of the registration fee."
-    ]
-
-  }
+      "Non-selected bands will receive a full refund of the registration fee.",
+    ],
+  },
 ];
 
 const chiefGuestImage = "/manjari.png"; // Replace with actual image path/URL
@@ -155,8 +154,8 @@ export default function AbheriPage() {
                 <span className="text-orange-400">20 Jan 2026</span>
               </h1>
               <p className="text-xl text-white/70 max-w-2xl mx-auto">
-                Unleash your band's energy at Sparkz '26 – Prize pool up to ₹60,000
-                | Teams of 6-10 | Reg: ₹1,000
+                Unleash your band's energy at Sparkz '26 – Prize pool up to
+                ₹60,000 | Teams of 6-10 | Reg: ₹1,000
               </p>
               <Link
                 href="/abheri/register"
@@ -177,7 +176,7 @@ export default function AbheriPage() {
         <div className="absolute inset-0 bg-linear-to-b from-[#04050b] via-[#04050b]/90 to-black" />
         {mounted && (
           <>
-             {/* Dynamic background elements */}
+            {/* Dynamic background elements */}
             <div className="hidden sm:block pointer-events-none absolute left-[-10%] top-[-10%] h-[600px] w-[600px] rounded-full bg-orange-500/10 blur-[180px]" />
             <div className="hidden sm:block pointer-events-none absolute right-[-10%] bottom-[-10%] h-[500px] w-[500px] rounded-full bg-indigo-500/10 blur-[150px]" />
           </>
@@ -191,38 +190,101 @@ export default function AbheriPage() {
               transition={{ duration: 0.8 }}
             >
               <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-                 {/* Image Side */}
+                {/* Image Side */}
                 <div className="w-full lg:w-1/2">
-                   <div className="relative mx-auto w-full max-w-sm lg:max-w-md aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 shadow-2xl shadow-orange-500/10 group">
-                      <Image
-                        src={chiefGuestImage}
-                        alt="Manjari"
-                        fill
-                        className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#04050b] via-transparent to-transparent opacity-80" />
-                   </div>
+                  <div className="relative mx-auto w-full max-w-sm lg:max-w-md aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 shadow-2xl shadow-orange-500/10 group">
+                    <Image
+                      src={chiefGuestImage}
+                      alt="Manjari"
+                      fill
+                      className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#04050b] via-transparent to-transparent opacity-80" />
+                  </div>
                 </div>
 
-                 {/* Content Side */}
+                {/* Content Side */}
                 <div className="w-full lg:w-1/2 space-y-8 text-center lg:text-left">
-                   <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/30 bg-orange-500/10 px-4 py-2 text-[13px] font-bold uppercase tracking-widest backdrop-blur">
-                      <span className="h-2 w-2 rounded-full bg-orange-400 animate-pulse" />
-                      Chief Guest Spotlight
-                   </div>
-                   
-                   <h2 className="text-4xl font-black leading-tight sm:text-5xl lg:text-7xl">
-                      <span className="text-white">Manjari</span>
-                   </h2>
+                  <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/30 bg-orange-500/10 px-4 py-2 text-[13px] font-bold uppercase tracking-widest backdrop-blur">
+                    <span className="h-2 w-2 rounded-full bg-orange-400 animate-pulse" />
+                    Chief Guest Spotlight
+                  </div>
 
-                   <div className="space-y-4">
-                      <p className="text-xl text-indigo-100/80 font-medium leading-relaxed">
-                        Renowned Playback Singer, Composer, and Hindustani Classical & Ghazal Vocalist.
-                      </p>
-                      <p className="text-lg text-white/50 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                         Gracing the stage of Spark at Abheri 2026. Witness a mesmerizing performance by one of the most versatile voices in the industry.
-                      </p>
-                   </div>
+                  <h2 className="text-4xl font-black leading-tight sm:text-5xl lg:text-7xl">
+                    <span className="text-white">Manjari</span>
+                  </h2>
+
+                  <div className="space-y-4">
+                    <p className="text-xl text-indigo-100/80 font-medium leading-relaxed">
+                      Renowned Playback Singer, Composer, and Hindustani
+                      Classical & Ghazal Vocalist.
+                    </p>
+                    <p className="text-lg text-white/50 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                      Gracing the stage of Spark at Abheri 2026. Witness a
+                      mesmerizing performance by one of the most versatile
+                      voices in the industry.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Competition Judge Section - Sudarshan */}
+      <section className="relative isolate overflow-hidden pb-20 pt-10 sm:pt-14">
+        <div className="absolute inset-0 bg-linear-to-b from-black via-[#04050b]/90 to-[#04050b]" />
+        {mounted && (
+          <>
+            {/* Dynamic background elements */}
+            <div className="hidden sm:block pointer-events-none absolute left-[-10%] top-[-10%] h-[600px] w-[600px] rounded-full bg-fuchsia-500/10 blur-[180px]" />
+            <div className="hidden sm:block pointer-events-none absolute right-[-10%] bottom-[-10%] h-[500px] w-[500px] rounded-full bg-indigo-500/10 blur-[150px]" />
+          </>
+        )}
+        <div className="relative z-10 px-[5vw]">
+          <div className="mx-auto max-w-7xl">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="flex flex-col lg:flex-row-reverse items-center gap-12 lg:gap-20">
+                {/* Image Side */}
+                <div className="w-full lg:w-1/2">
+                  <div className="relative mx-auto w-full max-w-sm lg:max-w-md aspect-[4/5] sm:aspect-3/4 lg:aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 shadow-2xl shadow-fuchsia-500/10 group">
+                    <Image
+                      src="/sudarshan.jpg"
+                      alt="Sudarshan"
+                      fill
+                      className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#04050b] via-transparent to-transparent opacity-80" />
+                  </div>
+                </div>
+
+                {/* Content Side */}
+                <div className="w-full lg:w-1/2 space-y-8 text-center lg:text-left">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-fuchsia-500/30 bg-fuchsia-500/10 px-4 py-2 text-[13px] font-bold uppercase tracking-widest backdrop-blur">
+                    <span className="h-2 w-2 rounded-full bg-fuchsia-400 animate-pulse" />
+                    Competition Judge
+                  </div>
+
+                  <h2 className="text-4xl font-black leading-tight sm:text-5xl lg:text-7xl">
+                    <span className="text-white">Sudarshan</span>
+                  </h2>
+
+                  <div className="space-y-4">
+                    <p className="text-xl text-indigo-100/80 font-medium leading-relaxed">
+                      Renowned Playback Singer
+                    </p>
+                    <p className="text-lg text-white/50 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                      Bringing his expertise and musical prowess to judge the
+                      performances at Abheri 2026. Experience the thrill of
+                      being evaluated by one of the industry's finest voices.
+                    </p>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -247,7 +309,10 @@ export default function AbheriPage() {
               className="text-center space-y-8 mb-16"
             >
               <h2 className="text-4xl font-black sm:text-5xl">
-                Rules & <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-fuchsia-400">Regulations</span>
+                Rules &{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-fuchsia-400">
+                  Regulations
+                </span>
               </h2>
               <p className="text-xl text-white/70 max-w-2xl mx-auto">
                 Know the guidelines to rock the stage without a hitch.
@@ -276,7 +341,9 @@ export default function AbheriPage() {
                         <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-300 font-bold text-xs mt-0.5 border border-indigo-500/20">
                           {pIdx + 1}
                         </div>
-                        <p className="text-white/70 leading-relaxed text-base">{point}</p>
+                        <p className="text-white/70 leading-relaxed text-base">
+                          {point}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -304,36 +371,56 @@ export default function AbheriPage() {
               className="text-center space-y-12"
             >
               <div className="space-y-6">
-                <h2 className="text-4xl font-black sm:text-5xl">Ready to <span className="text-orange-400">Jam?</span></h2>
+                <h2 className="text-4xl font-black sm:text-5xl">
+                  Ready to <span className="text-orange-400">Jam?</span>
+                </h2>
                 <div className="inline-flex flex-wrap justify-center gap-4">
-                   <span className="px-6 py-2 rounded-full bg-white/5 border border-white/10 text-white/80 text-sm font-medium">
-                      Reg Fee: <span className="text-white font-bold">₹1,000</span> / team
-                   </span>
-                   <span className="px-6 py-2 rounded-full bg-white/5 border border-white/10 text-white/80 text-sm font-medium">
-                      Date: <span className="text-white font-bold">20 Jan 2026</span>
-                   </span>
+                  <span className="px-6 py-2 rounded-full bg-white/5 border border-white/10 text-white/80 text-sm font-medium">
+                    Reg Fee:{" "}
+                    <span className="text-white font-bold">₹1,000</span> / team
+                  </span>
+                  <span className="px-6 py-2 rounded-full bg-white/5 border border-white/10 text-white/80 text-sm font-medium">
+                    Date:{" "}
+                    <span className="text-white font-bold">20 Jan 2026</span>
+                  </span>
                 </div>
               </div>
               <div className="grid gap-6 md:grid-cols-2 max-w-3xl mx-auto">
                 {[
-                  { title: "Faculty Coordinator", name: "Ashin Sabu", phone: "+91 9487752512" },
-                  { title: "Student Coordinator", name: "Jacs J Jacob", phone: "+91 8590204413" }
+                  {
+                    title: "Faculty Coordinator",
+                    name: "Ashin Sabu",
+                    phone: "+91 9487752512",
+                  },
+                  {
+                    title: "Student Coordinator",
+                    name: "Jacs J Jacob",
+                    phone: "+91 8590204413",
+                  },
                 ].map((contact, i) => (
-                   <div key={i} className="p-6 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors">
-                      <h3 className="text-sm font-bold text-orange-400 uppercase tracking-widest mb-2">
-                        {contact.title}
-                      </h3>
-                      <p className="text-xl font-bold text-white mb-1">{contact.name}</p>
-                      <a href={`tel:${contact.phone.replace(/ /g, '')}`} className="text-white/60 hover:text-white transition-colors">
-                        {contact.phone}
-                      </a>
-                   </div>
+                  <div
+                    key={i}
+                    className="p-6 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors"
+                  >
+                    <h3 className="text-sm font-bold text-orange-400 uppercase tracking-widest mb-2">
+                      {contact.title}
+                    </h3>
+                    <p className="text-xl font-bold text-white mb-1">
+                      {contact.name}
+                    </p>
+                    <a
+                      href={`tel:${contact.phone.replace(/ /g, "")}`}
+                      className="text-white/60 hover:text-white transition-colors"
+                    >
+                      {contact.phone}
+                    </a>
+                  </div>
                 ))}
               </div>
               <Link
                 href="/abheri/register"
                 // target="_blank"
-               
+
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-gradient-to-r from-orange-500/20 via-amber-400/15 to-orange-500/20 px-8 py-3 text-sm font-bold uppercase tracking-widest text-white/90 backdrop-blur hover:border-white/30 hover:bg-white/5 transition-all duration-300 w-full md:w-auto"
               >
