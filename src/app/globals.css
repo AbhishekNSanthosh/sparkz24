@@ -16,6 +16,7 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-unbounded: var(--font-unbounded); /* <— you're using this, so add it */
+  --font-outfit: var(--font-outfit);
   --color-primary:#DFFF1A;
 }
 
