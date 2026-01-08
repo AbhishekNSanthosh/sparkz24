@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Unbounded } from "next/font/google";
+import { Unbounded, Outfit } from "next/font/google";
 import "./globals.css";
 import Header from "@/widgets/common/Header";
 import Footer from "@/widgets/common/Footer";
@@ -11,6 +11,13 @@ const unBounded = Unbounded({
   variable: "--font-unbounded",
   subsets: ["latin"],
   display: "swap",
+});
+
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -98,7 +105,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${unBounded.variable} antialiased font-light`}>
+      <body className={`${unBounded.variable} ${outfit.variable} antialiased font-light`}>
         <AuthProvider>
           {children}
           <Toaster position="bottom-center" />

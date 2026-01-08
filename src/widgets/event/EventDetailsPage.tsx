@@ -168,6 +168,7 @@ function PrizeCard({
 export default function EventPage({ eventId }: { eventId: string }) {
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -207,7 +208,7 @@ export default function EventPage({ eventId }: { eventId: string }) {
         */}
         <main className="relative z-10 lg:flex max-w-7xl mx-auto">
           {/* LEFT PANEL - Sticky on Desktop */}
-          <section className="w-full lg:w-[45%] xl:w-[45%] lg:h-screen lg:sticky lg:top-0 pt-4 sm:p-6 flex flex-col gap-5 overflow-y-auto no-scrollbar">
+          <section className="w-full lg:w-[45%] xl:w-[45%] lg:h-screen lg:sticky mb-7.5 lg:top-0 pt-4 sm:p-6 flex flex-col gap-5 overflow-y-auto no-scrollbar">
             {/* Poster Image */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -299,9 +300,21 @@ export default function EventPage({ eventId }: { eventId: string }) {
                 )}
               </div>
 
-              <p className="text-base md:text-lg text-white/70 leading-relaxed max-w-3xl border-l-2 border-indigo-500/30 pl-4">
-                {event.description}
-              </p>
+              <div className="max-w-3xl border-l-2 border-indigo-500/30 pl-4">
+                <p className="text-base md:text-lg text-white/70 leading-relaxed inline">
+                  {isExpanded || !event.description || event.description.length <= 150
+                    ? event.description
+                    : `${event.description.slice(0, 150)}...`}
+                </p>
+                {event.description && event.description.length > 150 && (
+                  <button
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="ml-2 text-indigo-400 hover:text-indigo-300 font-medium text-sm transition-colors cursor-pointer focus:outline-hidden"
+                  >
+                    {isExpanded ? "Read Less" : "Read More"}
+                  </button>
+                )}
+              </div>
             </motion.div>
 
             {/* Info Grid (Bento) */}
