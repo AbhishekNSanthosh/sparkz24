@@ -224,7 +224,7 @@ export default function EventsManagement() {
         if (!formData.date) return toastError("Event Date is required");
         if (!formData.regFinalDate) return toastError("Registration Closing Date is required");
         if (!formData.registrationFee) return toastError("Registration Fee is required");
-        if (!formData.firstPrize) return toastError("First Prize is required");
+
         if (!formData.coordinators || formData.coordinators.length === 0 || !formData.coordinators[0].name || !formData.coordinators[0].phone) {
             return toastError("At least one Coordinator is required");
         }
@@ -632,11 +632,10 @@ export default function EventsManagement() {
                                     </div>
                                 </div>
                                 <div className="space-y-2 mt-4">
-                                    <label className="block text-sm text-gray-400 mb-1">Prizes <span className="text-red-500">*</span> (1st Prize Required)</label>
+                                    <label className="block text-sm text-gray-400 mb-1">Prizes (Optional)</label>
                                     <div className="grid grid-cols-3 gap-2">
                                         <input 
                                             type="text" 
-                                            required
                                             placeholder="1st Prize"
                                             value={formData.firstPrize} 
                                             onChange={(e) => setFormData({...formData, firstPrize: e.target.value})}
