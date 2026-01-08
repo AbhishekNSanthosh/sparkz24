@@ -25,7 +25,7 @@ const eventPoints = [
 const guests = [
   {
     name: "Manjari",
-    role: "Playback Singer | Composer | Hindustani Classical & Ghazal Vocalist",
+    role: "Playback Singer | Composer",
     image: "/manjari.png",
     tag: "Chief Guest & Judge",
   },
@@ -50,46 +50,18 @@ export default function BandCompetition() {
       id="band-competition"
       className="relative isolate overflow-hidden bg-[#04050b] pt-10 pb-20 text-white sm:py-24"
     >
-      {/* TOP = PURE BLACK (no glow at the very top) */}
+      {/* Background Effects */}
       {mounted && (
         <>
-          <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-[#04050b] via-transparent to-transparent h-64" />
+          {/* Gradient Glows */}
+          <div className="pointer-events-none absolute left-[-10%] top-[20%] h-96 w-96 rounded-full bg-indigo-600/20 blur-[140px]" />
+          <div className="hidden sm:block pointer-events-none absolute right-[-5%] top-[30%] h-96 w-96 rounded-full bg-fuchsia-500/20 blur-[150px]" />
 
-          {/* GLOW STARTS LOWER & FLOWS DOWN — seamless from previous sections */}
-          <div className="pointer-events-none absolute left-[-10%] top-[10%] h-96 w-96 rounded-full bg-indigo-600/25 blur-[140px]" />
-          <div className="hidden sm:block pointer-events-none absolute right-[-5%] top-[15%] h-96 w-96 rounded-full bg-fuchsia-500/25 blur-[150px]" />
-          <div className="hidden sm:block pointer-events-none absolute inset-x-0 top-[20%] h-full bg-linear-to-b from-indigo-600/12 via-fuchsia-500/10 to-amber-400/8 blur-3xl opacity-70" />
+          {/* Subtle Grid Pattern */}
+          <div className="hidden sm:block pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-size-[100px_100px] opacity-30" />
 
-          {/* Stylish Patterns: Enhanced with musical motifs */}
-          <div className="hidden sm:block pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(79,70,229,0.15),transparent_45%),radial-gradient(circle_at_70%_70%,rgba(236,72,153,0.12),transparent_40%)]" />
-          <div className="hidden sm:block pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_transparent_1px)] bg-size-[140px_140px] opacity-20" />
-          <div className="hidden sm:block pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(14,165,233,0.08),transparent_40%),linear-gradient(240deg,rgba(236,72,153,0.08),transparent_35%)] opacity-60" />
-
-          {/* Circuit overlay with wave patterns for music theme */}
-          <div className="hidden sm:block pointer-events-none absolute inset-0 mix-blend-screen opacity-25">
-            <div className="hidden sm:block absolute inset-0 bg-[linear-gradient(90deg,rgba(56,189,248,0.12)_1px,transparent_1px),linear-gradient(0deg,rgba(56,189,248,0.08)_1px,transparent_1px),linear-gradient(135deg,rgba(94,234,212,0.08)_1px,transparent_1px),linear-gradient(45deg,rgba(251,191,36,0.1)_2px,transparent_2px)] bg-size-[180px_180px,180px_180px,220px_220px,100px_100px]" />
-          </div>
-
-          {/* Floating chips — music note inspired */}
-          {[
-            { className: "right-[12%] top-[20%] h-10 w-10", color: "fuchsia" },
-            {
-              className: "left-1/2 top-[55%] -translate-x-1/2 h-12 w-12",
-              color: "amber",
-            },
-            { className: "left-[10%] top-[70%] h-8 w-8", color: "indigo" },
-          ].map((chip, i) => (
-            <motion.div
-              key={i}
-              className={`pointer-events-none absolute ${chip.className} rounded-xl border border-${chip.color}-300/50 bg-${chip.color}-400/15 blur-[1px]`}
-              animate={{ y: [-10, 15, -10], rotate: [-8, 8, -8] }}
-              transition={{
-                duration: 7 + i,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
+          {/* Radial Gradients */}
+          <div className="hidden sm:block pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_40%_40%,rgba(79,70,229,0.1),transparent_50%),radial-gradient(circle_at_60%_60%,rgba(236,72,153,0.08),transparent_45%)]" />
         </>
       )}
 
@@ -193,18 +165,19 @@ export default function BandCompetition() {
                         fill
                         className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#04050b] via-transparent to-transparent opacity-90" />
+                      {/* Stronger gradient overlay to create space for text */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#04050b] via-[#04050b]/80 to-transparent" />
 
-                      <div className="absolute bottom-0 left-0 right-0 p-6">
+                      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
                         <div className="inline-block px-3 py-1 mb-2 rounded-lg bg-indigo-500/20 border border-indigo-500/30 backdrop-blur-md">
                           <span className="text-indigo-200 text-[10px] font-bold tracking-widest uppercase">
                             {guest.tag}
                           </span>
                         </div>
-                        <h3 className="text-2xl sm:text-3xl font-black text-white mb-1 tracking-tight">
+                        <h3 className="text-xl sm:text-2xl font-black text-white mb-1 tracking-tight">
                           {guest.name}
                         </h3>
-                        <p className="text-sm text-white/80 font-medium">
+                        <p className="text-xs sm:text-[13px] text-white/80 font-normal">
                           {guest.role}
                         </p>
                       </div>
