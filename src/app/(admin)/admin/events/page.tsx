@@ -509,9 +509,9 @@ export default function EventsManagement() {
                                     <div className="col-span-2">
                                         <label className="block text-sm text-gray-400 mb-1">Reg Ends Time <span className="text-red-500">*</span></label>
                                         <div className="flex items-center gap-2 bg-black/50 border border-gray-700 rounded-lg px-4 py-2 w-full sm:w-1/2">
-                                            <input 
+                                             <input 
                                               type="number" min="0" max="23"
-                                              value={regCloseTime.hours}
+                                              value={isNaN(regCloseTime.hours) ? '' : regCloseTime.hours}
                                               onChange={e => setRegCloseTime({...regCloseTime, hours: Number(e.target.value)})}
                                               className="w-full bg-transparent text-center outline-none text-lg font-mono"
                                               placeholder="HH"
@@ -519,7 +519,7 @@ export default function EventsManagement() {
                                             <span className="text-gray-500">:</span>
                                              <input 
                                               type="number" min="0" max="59"
-                                              value={regCloseTime.minutes}
+                                              value={isNaN(regCloseTime.minutes) ? '' : regCloseTime.minutes}
                                               onChange={e => setRegCloseTime({...regCloseTime, minutes: Number(e.target.value)})}
                                               className="w-full bg-transparent text-center outline-none text-lg font-mono"
                                               placeholder="MM"
@@ -546,7 +546,7 @@ export default function EventsManagement() {
                                         <label className="block text-sm text-gray-400 mb-1">Min Members</label>
                                         <input 
                                             type="number" 
-                                            value={formData.memberMinCount} 
+                                            value={!isNaN(Number(formData.memberMinCount)) ? formData.memberMinCount : ''} 
                                             onChange={(e) => setFormData({...formData, memberMinCount: parseInt(e.target.value)})}
                                             className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
                                         />
@@ -555,7 +555,7 @@ export default function EventsManagement() {
                                         <label className="block text-sm text-gray-400 mb-1">Max Members</label>
                                         <input 
                                             type="number" 
-                                            value={formData.memberMaxCount} 
+                                            value={!isNaN(Number(formData.memberMaxCount)) ? formData.memberMaxCount : ''} 
                                             onChange={(e) => setFormData({...formData, memberMaxCount: parseInt(e.target.value)})}
                                             className="w-full bg-black/50 border border-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
                                         />
