@@ -24,28 +24,110 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://sparkz.carmelcet.in/"),
 
   title: {
-    default: "Sparkz 2026",
+    default: "Sparkz 2026 - Carmel Engineering College Techfest",
     template: "%s | Sparkz 2026",
   },
 
   description:
-    "Sparkz is a multi-day technical and cultural fest featuring competitions, workshops, hackathons, and exciting events across departments.",
+    "Sparkz 2026 is the premier technical and cultural festival of Carmel College of Engineering and Technology, Alappuzha, Kerala. Join us for hackathons, coding competitions, workshops, cultural events, and more at Punnapra's biggest techfest.",
 
   keywords: [
+    // Event name variations
     "Sparkz",
-    "college fest",
+    "Sparkz 2026",
+    "Sparkz Fest",
+    "Sparkz Festival",
+    "Sparkz Techfest",
+
+    // College name variations
+    "Carmel College of Engineering and Technology",
+    "Carmel Engineering College",
+    "CCET",
+    "Carmel College",
+    "Carmel Engineering",
+    "Carmel College Alappuzha",
+    "Carmel College Punnapra",
+
+    // Location variations
+    "Alappuzha",
+    "Alappuzha techfest",
+    "Alappuzha college fest",
+    "Punnapra",
+    "Punnapra techfest",
+    "Punnapra college fest",
+    "Kerala techfest",
+    "Kerala college fest",
+    "Alappuzha engineering college",
+    "Punnapra engineering college",
+
+    // Event type variations
     "technical fest",
+    "tech fest",
+    "techfest",
+    "college fest",
+    "college festival",
+    "engineering fest",
+    "engineering festival",
+    "cultural fest",
+    "cultural festival",
+    "technical and cultural fest",
+
+    // Department variations
+    "computer science",
+    "computer science fest",
+    "CS fest",
+    "CSE fest",
+    "computer science engineering",
+    "IT fest",
+    "information technology",
+    "ECE fest",
+    "electronics fest",
+    "mechanical engineering fest",
+    "civil engineering fest",
+
+    // Event activities
     "hackathon",
     "coding competition",
+    "programming contest",
+    "workshop",
+    "technical workshop",
+    "coding workshop",
+    "robotics",
+    "robotics competition",
+    "project expo",
+    "paper presentation",
+    "technical quiz",
+    "gaming competition",
+    "esports",
+
+    // General tech keywords
+    "tech events India",
     "engineering events",
-    "carmel college of engineering and technology",
-    "ccet",
-    "tech fest India",
+    "student fest",
+    "college events",
+    "technical events",
+    "innovation fest",
+    "technology festival",
+    "coding events",
+    "developer events",
+
+    // Location-specific
+    "Kerala engineering college events",
+    "South India techfest",
+    "Alappuzha events",
+    "college events Kerala",
+
+    // Year-specific
+    "2026 techfest",
+    "2026 college fest",
+    "techfest 2026",
   ],
 
-  authors: [{ name: "Sparkz Tech Team" }],
-  creator: "Sparkz Tech Team",
-  publisher: "Sparkz",
+  authors: [
+    { name: "Sparkz Tech Team - Carmel College of Engineering and Technology" },
+  ],
+  creator: "Carmel College of Engineering and Technology",
+  publisher: "Sparkz - CCET Alappuzha",
 
   robots: {
     index: true,
@@ -63,32 +145,37 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: "https://sparkz.carmelcet.in/",
-    siteName: "Sparkz 2026",
-    title: "Sparkz 2026",
+    siteName: "Sparkz 2026 - Carmel Engineering College Techfest",
+    title: "Sparkz 2026 | Carmel College of Engineering Alappuzha Techfest",
     description:
-      "Join Sparkz 2026 — a celebration of innovation, technology, and creativity with exciting events and competitions.",
+      "Join Sparkz 2026 at Carmel College of Engineering and Technology, Alappuzha (Punnapra) — Kerala's premier technical and cultural festival featuring hackathons, coding competitions, workshops, robotics, and cultural events.",
     images: [
       {
-        url: "/og-image.png", // place in /public
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Sparkz 2026 Fest Poster",
+        alt: "Sparkz 2026 - Carmel Engineering College Techfest Poster",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Sparkz 2026 | Technical & Cultural Fest",
+    title: "Sparkz 2026 | Carmel Engineering College Alappuzha Techfest",
     description:
-      "Join Sparkz 2026 — competitions, hackathons, workshops, and more.",
+      "Join Sparkz 2026 at Carmel College of Engineering, Alappuzha — hackathons, coding competitions, workshops, and cultural events.",
     images: ["/og-image.png"],
-    creator: "@sparkzfest", // optional
+    creator: "@sparkzfest",
   },
 
   icons: {
-    icon: [{ url: "/favicon.ico" }, { url: "/icon.png", type: "image/png" }],
+    icon: [
+      { url: "/sparkz.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico" },
+      { url: "/icon.png", type: "image/png" },
+    ],
     apple: [{ url: "/apple-touch-icon.png" }],
+    shortcut: [{ url: "/sparkz.svg" }],
   },
 
   category: "technology",
@@ -105,7 +192,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${unBounded.variable} ${outfit.variable} antialiased font-light`}>
+      <body
+        className={`${unBounded.variable} ${outfit.variable} antialiased font-light`}
+      >
         <AuthProvider>
           {children}
           <Toaster position="bottom-center" />
