@@ -25,25 +25,58 @@ export default function FeaturedEvents() {
   useEffect(() => {
     const fetchFeaturedEvents = async () => {
       try {
-        // Try fetching featured events first
-        const q = query(
+        let fetchedEvents: Event[] = [];
+
+        // 1. First, fetch the rc-car-racing event specifically
+        const rcCarQuery = query(
+          collection(db, "events"),
+          where("__name__", "==", "rc-car-racing"),
+          limit(1)
+        );
+        const rcCarSnapshot = await getDocs(rcCarQuery);
+
+        if (!rcCarSnapshot.empty) {
+          const rcCarEvent = {
+            id: rcCarSnapshot.docs[0].id,
+            ...rcCarSnapshot.docs[0].data(),
+          } as Event;
+          fetchedEvents.push(rcCarEvent);
+        }
+
+        // 2. Fetch featured events
+        const featuredQuery = query(
           collection(db, "events"),
           where("featured", "==", true),
           limit(5)
         );
-        const snapshot = await getDocs(q);
+        const featuredSnapshot = await getDocs(featuredQuery);
 
-        let fetchedEvents = snapshot.docs.map(
-          (doc) => ({ id: doc.id, ...doc.data() } as Event)
-        );
+        featuredSnapshot.docs.forEach((doc) => {
+          const event = { id: doc.id, ...doc.data() } as Event;
+          // Avoid duplicates
+          if (!fetchedEvents.some((e) => e.id === event.id)) {
+            fetchedEvents.push(event);
+          }
+        });
 
-        // Fallback if no featured events, just get few recent
-        if (fetchedEvents.length === 0) {
-          const qAll = query(collection(db, "events"), limit(5));
-          const snapAll = await getDocs(qAll);
-          fetchedEvents = snapAll.docs.map(
-            (doc) => ({ id: doc.id, ...doc.data() } as Event)
+        // 3. If we still need more events, fetch some recent ones
+        if (fetchedEvents.length < 5) {
+          const recentQuery = query(
+            collection(db, "events"),
+            limit(8) // Fetch more to ensure we have enough after filtering
           );
+          const recentSnapshot = await getDocs(recentQuery);
+
+          recentSnapshot.docs.forEach((doc) => {
+            const event = { id: doc.id, ...doc.data() } as Event;
+            // Avoid duplicates and limit total to 6-7 events
+            if (
+              !fetchedEvents.some((e) => e.id === event.id) &&
+              fetchedEvents.length < 7
+            ) {
+              fetchedEvents.push(event);
+            }
+          });
         }
 
         setEvents(fetchedEvents);
