@@ -13,7 +13,7 @@ const rulesSections = [
     title: "Eligibility",
     points: [
       "The competition is open to bonafide students of recognized colleges.",
-      "Each band must consist of 6 to 10 members (minimum 2 vocals and 3 instruments).",
+      "Each band must consist of 5 to 10 members.",
       "All participants must carry a valid college ID card.",
       "(2 or 3 passed-out students from the same college can also perform with the band, provided they submit any kind of proof that they belonged to the same college when asked.)",
       "A participant may represent only one band in the competition.",
@@ -157,15 +157,12 @@ export default function AbheriPage() {
                 Unleash your band's energy at Sparkz '26 – Prize pool up to
                 ₹60,000 | Teams of 6-10 | Reg: ₹1,000
               </p>
-              <Link
-                href="/abheri/register"
-                // target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-gradient-to-r from-indigo-500/20 via-fuchsia-500/15 to-amber-400/20 px-8 py-3 text-sm font-bold uppercase tracking-widest text-white/90 backdrop-blur hover:border-white/30 hover:bg-white/5 transition-all duration-300"
+              <button
+                disabled
+                className="cursor-not-allowed opacity-50 inline-flex items-center gap-2 rounded-full border border-white/20 bg-gradient-to-r from-indigo-500/20 via-fuchsia-500/15 to-amber-400/20 px-8 py-3 text-sm font-bold uppercase tracking-widest text-white/90 backdrop-blur"
               >
-                Register Now
-                <span className="text-xs">→</span>
-              </Link>
+                Registration Closed
+              </button>
             </motion.div>
           </div>
         </div>
@@ -417,16 +414,12 @@ export default function AbheriPage() {
                   </div>
                 ))}
               </div>
-              <Link
-                href="/abheri/register"
-                // target="_blank"
-
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-gradient-to-r from-orange-500/20 via-amber-400/15 to-orange-500/20 px-8 py-3 text-sm font-bold uppercase tracking-widest text-white/90 backdrop-blur hover:border-white/30 hover:bg-white/5 transition-all duration-300 w-full md:w-auto"
+              <button
+                disabled
+                className="cursor-not-allowed opacity-50 inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-gradient-to-r from-orange-500/20 via-amber-400/15 to-orange-500/20 px-8 py-3 text-sm font-bold uppercase tracking-widest text-white/90 backdrop-blur w-full md:w-auto"
               >
-                Register Your Band
-                <span className="text-xs">→</span>
-              </Link>
+                Registration Closed
+              </button>
             </motion.div>
           </div>
         </div>
